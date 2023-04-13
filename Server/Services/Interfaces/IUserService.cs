@@ -8,7 +8,7 @@ namespace Services.Interfaces
 {
     public interface IUserService
     {
-        public Task<Result<T>> RegisterAsync<T>(RegisterModel model, string callbackUrl) where T : UserModel;
+        public Task<Result<TModel>> RegisterAsync<TModel>(RegisterModel model, string callbackUrl) where TModel : UserModel;
         public Task<Result> LoginAsync(string email, string password);
         public Task<Result> DeleteAsync(ClaimsPrincipal principal);
         public Task<Result> ForgotPasswordAsync(string email, string callbackUrl);

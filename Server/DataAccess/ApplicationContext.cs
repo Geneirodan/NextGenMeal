@@ -21,7 +21,7 @@ namespace DataAccess
         private const string CONNECTION_STRING = "Server=GUREN;Database=NextGenMeal;Trusted_Connection=True;Trust Server Certificate=true";
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {
-            //Database.EnsureDeleted();
+            Database.EnsureDeleted();
             Database.EnsureCreated();
         }
 

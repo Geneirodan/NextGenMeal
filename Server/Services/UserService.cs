@@ -50,7 +50,7 @@ namespace Services
         {
             var user = await userManager.FindByIdAsync(id);
             if (user is null)
-                return Result.Fail(string.Empty);
+                return Result.Fail(Errors.NotFound);
             var result = await userManager.ConfirmEmailAsync(user, code);
             return HandleResult(result);
         }
@@ -96,7 +96,7 @@ namespace Services
 
         public async Task LogoutAsync() => await signInManager.SignOutAsync();
 
-        public async Task<Result<T>> RegisterAsync<T>(RegisterModel model, string callbackUrl) where T : UserModel
+        public async Task<Result<TModel>> RegisterAsync<TModel>(RegisterModel model, string callbackUrl) where TModel : UserModel
         {
 
             var user = model.Create();
@@ -109,7 +109,7 @@ namespace Services
                     var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
                     callbackUrl += $"?id={user.Id}&code={UrlEncoder.Default.Encode(code)}";
                     _ = emailSender.SendEmailAsync(model.Email!, EmailTemplates.Register, callbackUrl);
-                    return Result.Ok(user.Adapt<T>());
+                    return Result.Ok(user.Adapt<TModel>());
                 }
             }
             return HandleResult(result);

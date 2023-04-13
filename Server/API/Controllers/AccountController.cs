@@ -59,10 +59,10 @@ namespace API.Controllers
             return await RegisterAsync<EmployeeModel>(request, callbackUrl);
         }
 
-        private async Task<ActionResult<T>> RegisterAsync<T>(RegisterRequest request, string callbackUrl) where T : UserModel
+        private async Task<ActionResult<TModel>> RegisterAsync<TModel>(RegisterRequest request, string callbackUrl) where TModel : UserModel
         {
             var model = request.CreateModel();
-            var result = await userService.RegisterAsync<T>(model, callbackUrl);
+            var result = await userService.RegisterAsync<TModel>(model, callbackUrl);
             return HandleCreatedResult(result);
         }
 
@@ -91,7 +91,9 @@ namespace API.Controllers
         public async Task<ActionResult<string?>> RoleAsync() => await userService.GetRole(User);
 
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status302Found)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> ConfirmEmailAsync(string id, string code)
         {
             var result = await userService.ConfirmEmailAsync(id, code);

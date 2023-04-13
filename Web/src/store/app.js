@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
-import {getRole} from "./user";
+
+import {getRole} from "./user/thunks";
 
 // Slice
 const slice = createSlice({

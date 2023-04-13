@@ -1,6 +1,5 @@
 import React from 'react'
 import {useDispatch, useSelector} from 'react-redux'
-import {logout, userSelectors} from "../../store/user";
 import {useTranslation} from 'react-i18next';
 import {AppBar, IconButton, Menu, MenuItem, Select, Stack, Toolbar, Typography} from "@mui/material";
 import Button from "@mui/material/Button";
@@ -8,6 +7,8 @@ import {useNavigate} from "react-router-dom";
 import {languages} from "../../utils/i18n";
 import LoginIcon from '@mui/icons-material/Login';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import {userSelectors} from "../../store/user/selectors";
+import {logout} from "../../store/user/thunks";
 
 const LanguageSelect = () => {
     const {i18n} = useTranslation();

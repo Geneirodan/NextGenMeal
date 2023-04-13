@@ -16,7 +16,7 @@ export const authAPI = {
         await del(`${controller}/Logout`),
 
     register: async (name, email, password, confirmPassword) =>
-        await post(`${controller}/Register`, {name, email, password, confirmPassword}, {callbackUrl: "/confirm"}),
+        await post(`${controller}/Register`, {name, email, password, confirmPassword}, {callbackUrl: "/register/confirm"}),
 
     confirmEmail: async (id, code) =>
         await get(`${controller}/Info`, {id, code}),
