@@ -18,7 +18,21 @@ export const sendRequest = async (url, method, {data = null, params = null}) => 
         ...init,
             body: JSON.stringify(data)
     }
-    return await fetch(input, init);
+    try{
+        return await fetch(input, init);
+    }
+    catch {
+        return {
+            ok:false,
+            json: async () => ({
+                errors: {
+                    "Common": [
+                        "Can't establish connection with server. Try again later"
+                    ]
+                }
+            })
+        }
+    }
 }
 
 export const get = async (url, params = null) => await sendRequest(url, "GET", {params})

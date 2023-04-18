@@ -12,7 +12,6 @@ i18n.use(LanguageDetector)
         initImmediate: false,
         debug: true,
         fallbackLng: 'en',
-        saveMissing: true,
         interpolation: {
             escapeValue: false,
         }

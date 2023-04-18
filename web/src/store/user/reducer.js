@@ -15,11 +15,11 @@ export const slice = createSlice({
     fail: (state, action) => {
       state.errors = action.payload.errors;
     },
-    loginSuccess: (state, action) => {
+    infoSuccess: (state, action) => {
       state.info = action.payload;
     },
     logoutSuccess: (state, action) => {
-      state.info = null;
+      state.authorized = false;
       state.role = null;
     },
     registerSuccess: (state, action) => {

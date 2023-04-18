@@ -1,4 +1,4 @@
-export const userSelectors = {
+export default {
   confirmed: state => state.user.confirmed,
   errors: state => state.user.errors,
   info: state => state.user.info,

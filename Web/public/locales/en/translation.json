@@ -1,10 +1,17 @@
 {
+  "Profile": "Profile",
+  "My Orders": "My Orders",
   "Caterings": "Caterings",
+  "Orders": "Orders",
+  "Customers": "Customers",
+  "Services": "Services",
+  "Logout": "Logout",
   "Mobile App": "Mobile App",
   "Terminals": "Terminals",
   "Make order": "Make order",
-  "Account": "Account",
   "Login": "Login",
+  "Email": "Email",
+  "Password": "Password",
   "Forgot password?": "Forgot password?",
   "Log in": "Log in",
   "Continue with Google": "Continue with Google",
@@ -12,9 +19,8 @@
   "Create one": "Create one",
   "Register": "Register",
   "Name": "Name",
-  "Email": "Email",
-  "Password": "Password",
-  "Confirm password": "",
+  "Confirm password": "Confirm password",
+  "Sign up": "Sign up",
   "Name is required": "Name is required",
   "Enter a valid email": "Enter a valid email",
   "Email is required": "Email is required",
@@ -23,5 +29,6 @@
   "Password should contain at least 1 digit": "Password should contain at least 1 digit",
   "Password should be of minimum 8 characters length": "Password should be of minimum 8 characters length",
   "Password is required": "Password is required",
-  "Confirm your password": "Confirm your password"
+  "Confirm your password": "Confirm your password",
+  "Can't establish connection with server. Try again later": "Can't establish connection with server. Try again later"
 }

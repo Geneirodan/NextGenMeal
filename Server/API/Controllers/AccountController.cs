@@ -1,14 +1,11 @@
 ﻿using API.Requests.Account;
 using API.Requests.Account.Register;
-using DataAccess.Entities.Users;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
 using Services.Models.Users;
 using Settings.Constants;
-using System.Security.Claims;
 
 namespace API.Controllers
 {
@@ -18,12 +15,7 @@ namespace API.Controllers
     {
         private readonly IUserService userService;
 
-        public AccountController(IUserService userService,
-                                 UserManager<User> userManager,
-                                 RoleManager<IdentityRole> roleManager)
-        {
-            this.userService = userService;
-        }
+        public AccountController(IUserService userService) => this.userService = userService;
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -59,7 +51,8 @@ namespace API.Controllers
             return await RegisterAsync<EmployeeModel>(request, callbackUrl);
         }
 
-        private async Task<ActionResult<TModel>> RegisterAsync<TModel>(RegisterRequest request, string callbackUrl) where TModel : UserModel
+        private async Task<ActionResult<TModel>> RegisterAsync<TModel>(RegisterRequest request, string callbackUrl)
+            where TModel : UserModel
         {
             var model = request.CreateModel();
             var result = await userService.RegisterAsync<TModel>(model, callbackUrl);

@@ -1,7 +1,7 @@
 import {Box, CircularProgress} from "@mui/material";
 import React from "react";
 
-export const Preloader = props => {
+export const Preloader = () => {
   const preloaderStyle = {
     display: "flex",
     alignItems: "center",

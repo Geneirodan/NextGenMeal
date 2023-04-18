@@ -17,7 +17,7 @@ namespace API.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<List<CateringModel>>> GetAsync(string serviceId) => await CateringService.GetAsync(serviceId);
+        public async Task<ActionResult<PagedArrayModel<CateringModel>>> GetAsync(string serviceId) => await CateringService.GetAsync(serviceId);
 
     }
 }

@@ -2,10 +2,10 @@ import React from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {useTranslation} from "react-i18next";
 import { useQueryParam } from 'use-query-params';
-
 import {confirmEmail} from "../store/user/thunks";
 import {userSelectors} from "../store/user/selectors";
 import {Preloader} from "../components/common/Preloader";
+
 export const ConfirmPage = () => {
   const dispatch = useDispatch()
   const {t} = useTranslation();

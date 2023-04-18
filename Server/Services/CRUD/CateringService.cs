@@ -1,4 +1,5 @@
-﻿using DataAccess;
+﻿using Azure;
+using DataAccess;
 using DataAccess.Entities;
 using Services.Interfaces.CRUD;
 using Services.Models;
@@ -11,6 +12,7 @@ namespace Services.CRUD
         {
         }
 
-        public async Task<List<CateringModel>> GetAsync(string serviceId) => await GetAsync(x => x.ServiceId == serviceId);
+        public async Task<PagedArrayModel<CateringModel>> GetAsync(string serviceId, int page = 1) =>
+            await base.GetAsync(page, x => x.ServiceId == serviceId, x => x.Name);
     }
 }

@@ -96,7 +96,8 @@ namespace Services
 
         public async Task LogoutAsync() => await signInManager.SignOutAsync();
 
-        public async Task<Result<TModel>> RegisterAsync<TModel>(RegisterModel model, string callbackUrl) where TModel : UserModel
+        public async Task<Result<TModel>> RegisterAsync<TModel>(RegisterModel model, string callbackUrl)
+            where TModel : UserModel
         {
 
             var user = model.Create();
@@ -124,10 +125,11 @@ namespace Services
             return HandleResult(result);
         }
 
-        public async Task<T?> GetUser<T>(ClaimsPrincipal principal) where T : UserModel
+        public async Task<TModel?> GetUser<TModel>(ClaimsPrincipal principal)
+            where TModel : UserModel
         {
             var user = await userManager.GetUserAsync(principal);
-            return user?.Adapt<T>();
+            return user?.Adapt<TModel>();
         }
         public async Task<string?> GetRole(ClaimsPrincipal principal)
         {

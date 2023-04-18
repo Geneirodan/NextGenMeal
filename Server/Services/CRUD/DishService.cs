@@ -11,6 +11,7 @@ namespace Services.CRUD
         {
         }
 
-        public async Task<List<DishModel>> GetAsync(int cateringId) => await GetAsync(x => x.CateringId == cateringId);
+        public async Task<PagedArrayModel<DishModel>> GetAsync(int cateringId, int page = 1) =>
+            await base.GetAsync(page, x => x.CateringId == cateringId, x => x.Price);
     }
 }

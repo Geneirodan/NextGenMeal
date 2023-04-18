@@ -10,15 +10,23 @@ using System.Linq.Expressions;
 
 namespace Services.CRUD
 {
-    public abstract class CrudService<TModel, TEntity> : ICrudService<TModel> where TModel : EntityModel where TEntity : Entity
+    public abstract class CrudService<TModel, TEntity> : ICrudService<TModel>
+        where TModel : EntityModel
+        where TEntity : Entity
     {
         protected readonly ApplicationContext context;
 
         public CrudService(ApplicationContext context) => this.context = context;
-        public virtual async Task<List<TModel>> GetAsync(Expression<Func<TEntity, bool>> predicate)
+        public virtual async Task<PagedArrayModel<TModel>> GetAsync(int page,
+                                                                Expression<Func<TEntity, bool>> predicate,
+                                                                Expression<Func<TEntity, object>> keySelector,
+                                                                bool isDesc = false)
         {
-            var entities = await context.Set<TEntity>().Where(predicate).ToListAsync();
-            return entities.Adapt<List<TModel>>();
+            var query = context.Set<TEntity>().Where(predicate);
+            query = isDesc ? query.OrderByDescending(keySelector) : query.OrderBy(keySelector);
+            var entities = await query.Skip(page * Utils.ItemsPerPage).Take(Utils.ItemsPerPage).ToListAsync();
+            var models = entities.Adapt<List<TModel>>();
+            return new PagedArrayModel<TModel>(models, query.Count());
         }
         public virtual async Task<Result<TModel>> AddAsync(TModel model)
         {

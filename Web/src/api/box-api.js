@@ -1,20 +1,17 @@
-import {instance} from "./api";
+import {del, get, post, put} from "./api";
 
 let controller = 'Box';
 export const boxAPI = {
-    get() {
-        return instance.get(`${controller}`)
-    },
-    add(price, description, terminalId) {
-        const data = {price, description, terminalId};
-        return instance.post(`${controller}`, data)
-    },
-    edit(id, price, description, terminalId) {
-        const data = {id, price, description, terminalId};
-        return instance.put(`${controller}`, data)
-    },
-    delete(id) {
-        let params = {id}
-        return instance.delete(`${controller}`, {params})
-    },
+
+    get: async () =>
+        await get(`${controller}`),
+
+    add: async (price, description, terminalId) =>
+        await post(`${controller}`, {price, description, terminalId}),
+
+    edit: async (id, price, description, terminalId) =>
+        await put(`${controller}`, {id, price, description, terminalId}),
+
+    delete: async id =>
+        await del(`${controller}`, {id}),
 }

@@ -20,7 +20,7 @@ namespace API.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<List<OrderModel>>> GetAsync() => await orderService.GetAsync(User);
+        public async Task<ActionResult<PagedArrayModel<OrderModel>>> GetAsync() => await orderService.GetAsync(User);
         [HttpPost]
         [Authorize(Roles = Roles.Customer)]
         [ProducesResponseType(StatusCodes.Status201Created)]

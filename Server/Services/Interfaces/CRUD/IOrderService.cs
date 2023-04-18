@@ -6,6 +6,6 @@ namespace Services.Interfaces.CRUD
 {
     public interface IOrderService : ICrudService<OrderModel>
     {
-        public Task<List<OrderModel>> GetAsync(ClaimsPrincipal principal);
+        public Task<PagedArrayModel<OrderModel>> GetAsync(ClaimsPrincipal principal, int page = 1);
     }
 }

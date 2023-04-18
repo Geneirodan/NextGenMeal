@@ -17,6 +17,7 @@ namespace API.Controllers
         [HttpGet]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<List<DishModel>>> GetAsync(int cateringId) => await DishService.GetAsync(cateringId);
+        public async Task<ActionResult<PagedArrayModel<DishModel>>> GetAsync(int cateringId, int page = 1) =>
+            await DishService.GetAsync(cateringId, page);
     }
 }

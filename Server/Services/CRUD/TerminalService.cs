@@ -11,6 +11,7 @@ namespace Services.CRUD
     {
         public TerminalService(ApplicationContext context) : base(context) { }
 
-        public async Task<List<TerminalModel>> GetAsync(int cateringId) => await GetAsync(x => x.CateringId == cateringId);
+        public async Task<PagedArrayModel<TerminalModel>> GetAsync(int cateringId, int page = 1) =>
+            await GetAsync(page, x => x.CateringId == cateringId, x => x.SerialNumber);
     }
 }

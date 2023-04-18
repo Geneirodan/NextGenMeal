@@ -12,11 +12,14 @@ namespace API.Controllers
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public class BoxController : CrudController<BoxModel, BoxRequest>
     {
-        private IBoxService BoxService => (service as IBoxService)!;
         public BoxController(IBoxService service) : base(service) { }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<List<BoxModel>>> GetAsync(int terminalId) => await BoxService.GetAsync(terminalId);
+        public async Task<ActionResult<PagedArrayModel<BoxModel>>> GetAsync(int terminalId)
+        {
+            var boxService = service as IBoxService;
+            return await boxService!.GetAsync(terminalId);
+        }
     }
 }

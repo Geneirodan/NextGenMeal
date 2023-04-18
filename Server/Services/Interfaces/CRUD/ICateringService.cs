@@ -5,6 +5,6 @@ namespace Services.Interfaces.CRUD
 {
     public interface ICateringService : ICrudService<CateringModel>
     {
-        public Task<List<CateringModel>> GetAsync(string serviceId);
+        public Task<PagedArrayModel<CateringModel>> GetAsync(string serviceId, int page = 1);
     }
 }

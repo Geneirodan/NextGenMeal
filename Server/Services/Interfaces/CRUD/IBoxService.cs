@@ -4,6 +4,6 @@ namespace Services.Interfaces.CRUD
 {
     public interface IBoxService : ICrudService<BoxModel>
     {
-        public Task<List<BoxModel>> GetAsync(int terminalId);
+        public Task<PagedArrayModel<BoxModel>> GetAsync(int terminalId, int page = 1);
     }
 }

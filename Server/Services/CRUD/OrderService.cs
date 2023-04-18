@@ -15,14 +15,9 @@ namespace Services.CRUD
     public class OrderService : CrudService<OrderModel, Order>, IOrderService
     {
         private readonly UserManager<User> userManager;
-        private readonly IDishService dishService;
-        public OrderService(ApplicationContext context, UserManager<User> userManager, IDishService dishService) : base(context)
-        {
-            this.userManager = userManager;
-            this.dishService = dishService;
-        }
+        public OrderService(ApplicationContext context, UserManager<User> userManager) : base(context) => this.userManager = userManager;
 
-        public async Task<List<OrderModel>> GetAsync(ClaimsPrincipal principal)
+        public async Task<PagedArrayModel<OrderModel>> GetAsync(ClaimsPrincipal principal, int page = 1)
         {
             var user = await userManager.GetUserAsync(principal);
             Expression<Func<Order, bool>> predicate = user switch
@@ -31,7 +26,7 @@ namespace Services.CRUD
                 null => throw new NullReferenceException(),
                 _ => x => x.CustomerId == user.Id,
             };
-            return await GetAsync(predicate);
+            return await base.GetAsync(page, predicate, x => x.Time);
         }
 
         public override async Task<Result<OrderModel>> AddAsync(OrderModel model)

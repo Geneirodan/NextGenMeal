@@ -8,11 +8,9 @@ export const PasswordTextField = props => <CustomTextField name="password" type=
 export const ConfirmPasswordTextField = props => <CustomTextField name="confirmPassword" type="password" {...props}/>
 
 const CustomTextField = props => {
-    const {t} = useTranslation();
     return <TextField
         id={props.name}
         name={props.name}
-        label={t(props.name)}
         value={props.formik.values[props.name]}
         onChange={props.formik.handleChange}
         error={props.formik.touched[props.name] && Boolean(props.formik.errors[props.name])}
