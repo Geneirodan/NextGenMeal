@@ -21,6 +21,7 @@ namespace Services.Interfaces
         public Task<Result> ChangeNameAsync(string name, ClaimsPrincipal principal);
         public Task<TModel?> GetUser<TModel>(ClaimsPrincipal principal)
             where TModel : UserModel;
+        public string? GetUserId(ClaimsPrincipal principal);
         public Task<string?> GetRole(ClaimsPrincipal principal);
         public AuthenticationProperties ConfigureExternalAuthenticationProperties(string provider, string redirectUrl);
         public Task<Result> GoogleAuth();

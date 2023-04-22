@@ -1,6 +1,6 @@
 ﻿using DataAccess.Entities.Users;
 using Mapster;
-using Settings.Constants;
+using Utils.Constants;
 
 namespace Services.Models.Register
 {

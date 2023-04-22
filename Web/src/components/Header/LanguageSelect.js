@@ -15,7 +15,7 @@ export const LanguageSelect = () => {
         </MenuItem>;
     return <Select color="inherit"
                    variant="standard"
-                   value={i18n.language}
+                   value={i18n.resolvedLanguage}
                    onChange={onChange}
                    disableUnderline={true}
                    sx={{

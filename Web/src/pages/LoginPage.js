@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useFormik} from 'formik';
 import {Navigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
@@ -22,5 +22,6 @@ export const LoginPage = () => {
     };
     const formik = useFormik({initialValues, validationSchema, onSubmit});
 
+    //useEffect(() => () => formik.resetForm(), [])
     return role ? <Navigate to={"/"}/> : <LoginPageComponent formik={formik} errors={errors} t={t}/>;
 };

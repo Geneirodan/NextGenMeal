@@ -6,11 +6,16 @@
         public int Portion { get; set; }
         public string Name { get; set; } = null!;
         public string Description { get; set; } = null!;
-        public List<string> Tags { get; set; } = null!;
+        public string Type { get; set; } = null!;
 
         public int CateringId { get; set; }
-        public Catering Catering { get; set; } = null!;
+        public virtual Catering Catering { get; set; } = null!;
 
-        public List<OrderDish> OrderDishes { get; set; } = null!;
+        public virtual List<OrderDish> OrderDishes { get; set; } = null!;
+
+        public override string GetOwnerId()
+        {
+            return Catering.GetOwnerId();
+        }
     }
 }

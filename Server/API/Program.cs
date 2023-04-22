@@ -60,7 +60,10 @@ services.ConfigureApplicationCookie(options =>
         return Task.CompletedTask;
     };
 });
-
+services.Configure<CookiePolicyOptions>(options =>
+{
+    options.MinimumSameSitePolicy = SameSiteMode.Lax;
+});
 services.AddEndpointsApiExplorer()
         .AddSwaggerGen()
         .AddTransient<IEmailSender, EmailSender>()
@@ -85,7 +88,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseExceptionHandler()
    .UseHttpsRedirection()
-   .UseCors(builder => builder.WithOrigins("http://localhost:3000")
+   .UseCors(builder => builder.WithOrigins("https://localhost:3004")
                               .AllowAnyHeader()
                               .AllowAnyMethod()
                               .AllowCredentials())

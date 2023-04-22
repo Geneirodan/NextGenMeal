@@ -7,9 +7,9 @@ using Microsoft.Extensions.Configuration;
 using Services.Interfaces;
 using Services.Models.Register;
 using Services.Models.Users;
-using Settings.Constants;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
+using Utils.Constants;
 using static Services.Utils;
 
 namespace Services
@@ -188,27 +188,35 @@ namespace Services
 
         private static async Task InitializeAsync(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
         {
-            string AdminEmail = configuration["Admin:Email"]!;
-            string AdminPassword = configuration["Admin:Password"]!;
-            if (await roleManager.FindByNameAsync(Roles.Admin) is null)
-                await roleManager.CreateAsync(new IdentityRole(Roles.Admin));
-
-            if (await roleManager.FindByNameAsync(Roles.Customer) is null)
-                await roleManager.CreateAsync(new IdentityRole(Roles.Customer));
-
-            if (await roleManager.FindByNameAsync(Roles.Employee) is null)
-                await roleManager.CreateAsync(new IdentityRole(Roles.Employee));
-
-            if (await userManager.FindByEmailAsync(AdminEmail) is null)
+            string adminEmail = configuration["Admin:Email"]!;
+            string adminPassword = configuration["Admin:Password"]!;
+            await AddRole(roleManager, Roles.Admin);
+            await AddRole(roleManager, Roles.Customer);
+            await AddRole(roleManager, Roles.Employee);
+            await AddRole(roleManager, Roles.Service);
+            if (await userManager.FindByEmailAsync(adminEmail) is null)
             {
-                var admin = new User { Email = AdminEmail, UserName = AdminEmail, Name = Roles.Admin };
-                var result = await userManager.CreateAsync(admin, AdminPassword);
+                var admin = new User {
+                    Email = adminEmail,
+                    UserName = adminEmail,
+                    Name = Roles.Admin
+                };
+                var result = await userManager.CreateAsync(admin, adminPassword);
                 if (result.Succeeded)
                 {
-                    await userManager.ConfirmEmailAsync(admin, await userManager.GenerateEmailConfirmationTokenAsync(admin));
+                    string token = await userManager.GenerateEmailConfirmationTokenAsync(admin);
+                    await userManager.ConfirmEmailAsync(admin, token);
                     await userManager.AddToRoleAsync(admin, Roles.Admin);
                 }
             }
+
+            static async Task AddRole(RoleManager<IdentityRole> roleManager, string role)
+            {
+                if (await roleManager.FindByNameAsync(role) is null)
+                    await roleManager.CreateAsync(new IdentityRole(role));
+            }
         }
+
+        public string? GetUserId(ClaimsPrincipal principal) => userManager.GetUserId(principal);
     }
 }

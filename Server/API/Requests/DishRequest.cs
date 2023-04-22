@@ -13,7 +13,7 @@ namespace API.Requests
         [Required]
         public string Description { get; set; } = null!;
         [Required]
-        public List<string> Tags { get; set; } = null!;
+        public string Type { get; set; } = null!;
         [Required]
         public int CateringId { get; set; }
     }

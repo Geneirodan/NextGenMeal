@@ -11,12 +11,16 @@ namespace DataAccess.Entities
         public bool IsBox { get; set; }
 
         public string CustomerId { get; set; } = null!;
-        public Customer Customer { get; set; } = null!;
+        public virtual Customer Customer { get; set; } = null!;
 
         public int CateringId { get; set; }
-        public Catering Catering { get; set; } = null!;
+        public virtual Catering Catering { get; set; } = null!;
 
-        public List<OrderDish> OrderDishes { get; set; } = null!;
+        public virtual List<OrderDish> OrderDishes { get; set; } = null!;
 
+        public override string GetOwnerId()
+        {
+            return CustomerId;
+        }
     }
 }

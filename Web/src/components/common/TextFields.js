@@ -1,20 +1,26 @@
-import {TextField} from "@mui/material";
+import {CircularProgress, IconButton, TextField} from "@mui/material";
 import React from "react";
-import {useTranslation} from "react-i18next";
+import SearchIcon from '@mui/icons-material/Search';
 
-export const EmailTextField = props => <CustomTextField name="email" {...props}/>
-export const NameTextField = props => <CustomTextField name="name" {...props}/>
-export const PasswordTextField = props => <CustomTextField name="password" type="password" {...props}/>
-export const ConfirmPasswordTextField = props => <CustomTextField name="confirmPassword" type="password" {...props}/>
+export const SearchTextField = ({onClick, ...restProps}) => {
+    return <CustomTextField
+        name="query"
+        InputProps={{
+            endAdornment: restProps.formik.isSubmitting ? <CircularProgress/> : (
+                <IconButton variant="contained" position="start" type="submit">
+                    <SearchIcon/>
+                </IconButton>
+            ),
+        }} {...restProps}/>
+}
 
-const CustomTextField = props => {
+export const CustomTextField = ({formik, name, ...restProps}) => {
     return <TextField
-        id={props.name}
-        name={props.name}
-        value={props.formik.values[props.name]}
-        onChange={props.formik.handleChange}
-        error={props.formik.touched[props.name] && Boolean(props.formik.errors[props.name])}
-        helperText={props.formik.touched[props.name] && props.formik.errors[props.name]}
-        {...props}
+        name={name}
+        value={formik.values[name]}
+        onChange={formik.handleChange}
+        error={formik.touched[name] && Boolean(formik.errors[name])}
+        helperText={formik.touched[name] && formik.errors[name]}
+        {...restProps}
     />;
 };

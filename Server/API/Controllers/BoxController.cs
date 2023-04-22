@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces.CRUD;
 using Services.Models;
-using Settings.Constants;
+using Utils.Constants;
 
 namespace API.Controllers
 {
@@ -16,10 +16,10 @@ namespace API.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<PagedArrayModel<BoxModel>>> GetAsync(int terminalId)
+        public async Task<ActionResult<PagedArrayModel<BoxModel>>> GetAsync(int terminalId, int page = 1, string query = "")
         {
             var boxService = service as IBoxService;
-            return await boxService!.GetAsync(terminalId);
+            return await boxService!.GetAsync(terminalId, page, query);
         }
     }
 }

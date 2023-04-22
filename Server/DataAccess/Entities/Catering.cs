@@ -10,13 +10,17 @@ namespace DataAccess.Entities
         public string State { get; set; } = null!;
 
         public string ServiceId { get; set; } = null!;
-        public Service Service { get; set; } = null!;
+        public virtual Service Service { get; set; } = null!;
 
-        public List<Employee> Employees { get; set; } = null!;
-        public List<Dish> Dishes { get; set; } = null!;
-        public List<Order> Orders { get; set; } = null!;
+        public virtual List<Employee> Employees { get; set; } = null!;
+        public virtual List<Dish> Dishes { get; set; } = null!;
+        public virtual List<Order> Orders { get; set; } = null!;
 
-        public int TerminalId { get; set; }
-        public Terminal Terminal { get; set; } = null!;
+        public virtual Terminal Terminal { get; set; } = null!;
+
+        public override string GetOwnerId()
+        {
+            return ServiceId;
+        }
     }
 }

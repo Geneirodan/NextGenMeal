@@ -34,6 +34,7 @@ export const RegisterPage = () => {
     };
     const formik = useFormik({initialValues, validationSchema, onSubmit});
 
+    useEffect(() => () => formik.resetForm(), [])
     return isRegistered
         ? <Navigate to={"/register/confirm"}/>
         : role

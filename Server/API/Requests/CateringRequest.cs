@@ -12,7 +12,5 @@ namespace API.Requests
         public string City { get; set; } = null!;
         [Required]
         public string State { get; set; } = null!;
-        [Required]
-        public string ServiceId { get; set; } = null!;
     }
 }

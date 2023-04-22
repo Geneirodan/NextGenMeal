@@ -1,16 +1,14 @@
 import {instance} from "./api";
 
-let controller = 'Dish';
 export const dishAPI = {
     get() {
-        return instance.get(`${controller}`)
+        return instance.get(`Dish`)
     },
     add(cateringId, time, isBox, orderDishes) {
-        const data = {cateringId, time, isBox, orderDishes};
-        return instance.post(`${controller}`, data)
+        return instance.post(`Dish`, {cateringId, time, isBox, orderDishes})
     },
     delete(id) {
         let params = {id}
-        return instance.delete(`${controller}`, {params})
+        return instance.delete(`Dish`, {params})
     },
 }

@@ -2,10 +2,10 @@
 using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Services.Interfaces.CRUD;
+using Services.Interfaces;
 using Services.Models;
-using Settings.Constants;
 using System.ComponentModel.DataAnnotations;
+using Utils.Constants;
 
 namespace API.Controllers
 {
@@ -20,9 +20,10 @@ namespace API.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<PagedArrayModel<OrderModel>>> GetAsync() => await orderService.GetAsync(User);
+        public async Task<ActionResult<PagedArrayModel<OrderModel>>> GetAsync(int page = 1) =>
+            await orderService.GetAsync(User, page);
         [HttpPost]
-        [Authorize(Roles = Roles.Customer)]
+        [Authorize(Roles = Roles.CustomerEmployee)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -34,12 +35,13 @@ namespace API.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = Roles.CustomerEmployee)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async virtual Task<IActionResult> DeleteAsync([Required] int id)
         {
-            var result = await orderService.DeleteAsync(id);
+            var result = await orderService.DeleteAsync(User, id);
             return HandleResult(result);
         }
     }

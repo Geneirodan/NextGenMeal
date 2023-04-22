@@ -21,6 +21,8 @@
   "Name": "Ім'я",
   "Confirm password": "Підтвердіть пароль",
   "Sign up": "Зареєструватися",
+  "Terminal": "Термінал",
+  "Search": "Пошук",
   "Name is required": "Введіть ім'я",
   "Enter a valid email": "Введіть валідну пошту",
   "Email is required": "Введіть ел. пошту",
@@ -29,6 +31,5 @@
   "Password should contain at least 1 digit": "Пароль має містити хоча б одну цифру",
   "Password should be of minimum 8 characters length": "Пароль має бути не коротше 8 символів",
   "Password is required": "Введіть пароль",
-  "Confirm your password": "Підтвердіть пароль",
-  "Can't establish connection with server. Try again later": "Не виходить налагодити з'єднання із сервером"
+  "Confirm your password": "Підтвердіть пароль"
 }

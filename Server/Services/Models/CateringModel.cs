@@ -8,6 +8,6 @@
         public string State { get; set; } = null!;
 
         public string ServiceId { get; set; } = null!;
-        public int TerminalId { get; set; }
+        public TerminalModel? Terminal { get; set; }
     }
 }

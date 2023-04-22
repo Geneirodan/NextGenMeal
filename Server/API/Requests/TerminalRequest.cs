@@ -1,5 +1,4 @@
-﻿using Services.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace API.Requests
 {
@@ -8,6 +7,6 @@ namespace API.Requests
         [Required]
         public string SerialNumber { get; set; } = null!;
         [Required]
-        public int CateringId { get; set; }
+        public int Id { get; set; }
     }
 }

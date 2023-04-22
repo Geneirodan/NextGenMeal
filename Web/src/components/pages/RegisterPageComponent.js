@@ -1,11 +1,6 @@
 import {Button, Container, Stack, Typography} from "@mui/material";
 import {Errors} from "../common/Errors";
-import {
-    ConfirmPasswordTextField,
-    EmailTextField,
-    NameTextField,
-    PasswordTextField
-} from "../common/TextFields";
+import {CustomTextField} from "../common/TextFields";
 import React from "react";
 
 export const RegisterPageComponent = ({errors, formik, t}) => <form onSubmit={formik.handleSubmit}>
@@ -15,10 +10,10 @@ export const RegisterPageComponent = ({errors, formik, t}) => <form onSubmit={fo
                 {t("Register")}
             </Typography>
             <Errors errors={errors} t={t}/>
-            <NameTextField formik={formik} label={t("Name")}/>
-            <EmailTextField formik={formik} label={t("Email")}/>
-            <PasswordTextField formik={formik} label={t("Password")}/>
-            <ConfirmPasswordTextField formik={formik} label={t("Confirm password")}/>
+            <CustomTextField name="name" formik={formik} label={t("Name")}/>
+            <CustomTextField name="email" formik={formik} label={t("Email")}/>
+            <CustomTextField name="password" type="password" formik={formik} label={t("Password")}/>
+            <CustomTextField name="confirmPassword" type="password" formik={formik} label={t("Confirm password")}/>
             <Stack spacing={2}>
                 <Button variant="contained" type="submit">
                     {t("Sign up")}

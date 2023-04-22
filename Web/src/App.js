@@ -10,7 +10,8 @@ import {RegisterPage} from "./pages/RegisterPage";
 import {ConfirmPage} from "./pages/ConfirmPage";
 import {Preloader} from "./components/common/Preloader";
 import {CustomersPage} from "./pages/Admin/CustomersPage";
-
+import {CateringsPage} from "./pages/service/CateringsPage";
+import {MenuPage} from "./pages/service/menu/MenuPage"
 const TempMain = () => <div>Dima is chort</div>;
 
 export const App = () => {
@@ -29,6 +30,8 @@ export const App = () => {
                 <Route path='/login' element={<LoginPage/>}/>
                 <Route path='/register' element={<RegisterPage/>}/>
                 <Route path='/test' element={<CustomersPage/>}/>
+                <Route path='/service/caterings/:cateringId/menu' element={<MenuPage/>}/>
+                <Route path='/service/caterings' element={<CateringsPage/>}/>
                 <Route path='*' render={() => <div>404 NOT FOUND</div>}/>
             </Routes>
         </Box>

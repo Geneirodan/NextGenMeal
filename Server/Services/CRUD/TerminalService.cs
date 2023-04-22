@@ -1,6 +1,8 @@
 ﻿using DataAccess;
 using DataAccess.Entities;
 using DataAccess.Entities.Users;
+using Mapster;
+using Microsoft.AspNetCore.Identity;
 using Services.Interfaces.CRUD;
 using Services.Models;
 using System;
@@ -9,9 +11,15 @@ namespace Services.CRUD
 {
     public class TerminalService : CrudService<TerminalModel, Terminal>, ITerminalService
     {
-        public TerminalService(ApplicationContext context) : base(context) { }
 
-        public async Task<PagedArrayModel<TerminalModel>> GetAsync(int cateringId, int page = 1) =>
-            await GetAsync(page, x => x.CateringId == cateringId, x => x.SerialNumber);
+        public TerminalService(ApplicationContext context, UserManager<User> userManager) : base(context, userManager)
+        {
+        }
+
+        public async Task<TerminalModel?> GetAsync(int cateringId)
+        {
+            var terminal = await context.Terminals.FindAsync(cateringId);
+            return terminal?.Adapt<TerminalModel>();
+        }
     }
 }

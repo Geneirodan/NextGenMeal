@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
 using Services.Models.Users;
-using Settings.Constants;
+using Utils.Constants;
 
 namespace API.Controllers
 {

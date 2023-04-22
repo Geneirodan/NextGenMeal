@@ -1,4 +1,4 @@
-﻿namespace Settings.Constants
+﻿namespace Utils.Constants
 {
     public static class Errors
     {

@@ -1,1 +1,0 @@
-export const CateringsPage = () => <div>CateringsPage</div>

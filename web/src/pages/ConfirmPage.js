@@ -9,7 +9,7 @@ import {Preloader} from "../components/common/Preloader";
 export const ConfirmPage = () => {
   const dispatch = useDispatch()
   const {t} = useTranslation();
-  const [id, setEmail] = useQueryParam("id")
+  const [id, setId] = useQueryParam("id")
   const [code, setCode] = useQueryParam("code")
   const confirmed = useSelector(userSelectors.confirmed)
   console.log({id,code})

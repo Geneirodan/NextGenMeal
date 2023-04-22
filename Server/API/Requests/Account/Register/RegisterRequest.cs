@@ -1,7 +1,7 @@
 ﻿using Mapster;
 using Services.Models.Register;
-using Settings.Constants;
 using System.ComponentModel.DataAnnotations;
+using Utils.Constants;
 
 namespace API.Requests.Account.Register
 {

@@ -1,14 +1,14 @@
 ﻿using API.Requests;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces.CRUD;
 using Services.Models;
-using System.ComponentModel.DataAnnotations;
 
 namespace API.Controllers
 {
     [ApiController]
-    //[Authorize]
+    [Authorize]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [Route(Routes.CrudRoute)]
     public abstract class CrudController<TModel, TRequest> : BaseController
@@ -26,7 +26,7 @@ namespace API.Controllers
         public async virtual Task<ActionResult<TModel>> AddAsync([FromBody] TRequest request)
         {
             var model = request.Adapt<TModel>();
-            var result = await service.AddAsync(model);
+            var result = await service.AddAsync(User, model);
             return HandleResult(result);
         }
 
@@ -37,7 +37,7 @@ namespace API.Controllers
         public async virtual Task<IActionResult> EditAsync(int id, [FromBody] TRequest request)
         {
             var model = request.Adapt<TModel>();
-            var result = await service.EditAsync(model);
+            var result = await service.EditAsync(User, model);
             return HandleResult(result);
         }
 
@@ -47,7 +47,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async virtual Task<IActionResult> DeleteAsync(int id)
         {
-            var result = await service.DeleteAsync(id);
+            var result = await service.DeleteAsync(User, id);
             return HandleResult(result);
         }
     }

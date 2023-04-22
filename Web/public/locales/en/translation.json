@@ -21,6 +21,8 @@
   "Name": "Name",
   "Confirm password": "Confirm password",
   "Sign up": "Sign up",
+  "Terminal": "",
+  "Search": "",
   "Name is required": "Name is required",
   "Enter a valid email": "Enter a valid email",
   "Email is required": "Email is required",
@@ -29,6 +31,5 @@
   "Password should contain at least 1 digit": "Password should contain at least 1 digit",
   "Password should be of minimum 8 characters length": "Password should be of minimum 8 characters length",
   "Password is required": "Password is required",
-  "Confirm your password": "Confirm your password",
-  "Can't establish connection with server. Try again later": "Can't establish connection with server. Try again later"
+  "Confirm your password": "Confirm your password"
 }

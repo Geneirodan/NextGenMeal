@@ -18,7 +18,7 @@ export const authAPI = {
         await post(`Account/Register`, {name, email, password, confirmPassword}, {callbackUrl: "/register/confirm"}),
 
     confirmEmail: async (id, code) =>
-        await get(`Account/Info`, {id, code}),
+        await get(`Account/ConfirmEmail`, {id, code}),
 
     delete: async () =>
         await del(`Account/Delete`),
