@@ -1,7 +1,6 @@
 export class PagedArray {
-    constructor({items, totalCount}) {
+    constructor({items, totalCount} = {items: [], totalCount: 0}) {
         this.items = items
-        this.page = 1
         this.totalCount = totalCount
     }
 }

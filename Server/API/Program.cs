@@ -88,7 +88,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseExceptionHandler()
    .UseHttpsRedirection()
-   .UseCors(builder => builder.WithOrigins("https://localhost:3004")
+   .UseCors(builder => builder.WithOrigins("https://localhost:3000")
                               .AllowAnyHeader()
                               .AllowAnyMethod()
                               .AllowCredentials())

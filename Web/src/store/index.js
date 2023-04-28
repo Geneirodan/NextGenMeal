@@ -1,15 +1,20 @@
 import {combineReducers} from "redux";
 import thunkMiddleware from "redux-thunk";
-import { configureStore } from '@reduxjs/toolkit';
-import user from './user/reducer'
+import {configureStore} from '@reduxjs/toolkit';
+import login from './account/login'
+import register from './account/register'
 import app from './app'
-import service from './service/reducer'
-let reducer = combineReducers({
-    app,
-    user,
-    service,
-})
+import caterings from './service/caterings'
+import menu from './service/menu'
+
 export default configureStore({
-    reducer,
+    reducer: combineReducers({
+        app,
+        login,
+        register,
+        [caterings.name]: caterings.reducer,
+        [menu.name]: menu.reducer,
+        //[boxes.name]: boxes.reducer,
+    }),
     middleware: [thunkMiddleware]
 });

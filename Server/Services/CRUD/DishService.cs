@@ -20,9 +20,10 @@ namespace Services.CRUD
             var enumerable = context.Set<Dish>()
                                     .Where(x => x.CateringId == cateringId && x.Name.Contains(query))
                                     .OrderBy(x => x.Price)
-                                    .AsEnumerable()
-                                    .Where(x => types.Contains(x.Type));
-            var entities = enumerable.Skip(page * Utils.ItemsPerPage)
+                                    .AsEnumerable();
+            if(types.Count() > 0)
+                enumerable = enumerable.Where(x => types.Contains(x.Type));
+            var entities = enumerable.Skip((page-1) * Utils.ItemsPerPage)
                                      .Take(Utils.ItemsPerPage)
                                      .ToList();
             var models = entities.Adapt<List<DishModel>>();

@@ -1,4 +1,4 @@
-import {CircularProgress, IconButton, TextField} from "@mui/material";
+import {IconButton, TextField} from "@mui/material";
 import React from "react";
 import SearchIcon from '@mui/icons-material/Search';
 
@@ -6,7 +6,7 @@ export const SearchTextField = ({onClick, ...restProps}) => {
     return <CustomTextField
         name="query"
         InputProps={{
-            endAdornment: restProps.formik.isSubmitting ? <CircularProgress/> : (
+            endAdornment: (
                 <IconButton variant="contained" position="start" type="submit">
                     <SearchIcon/>
                 </IconButton>

@@ -18,9 +18,6 @@ namespace DataAccess.Entities
 
         public virtual List<OrderDish> OrderDishes { get; set; } = null!;
 
-        public override string GetOwnerId()
-        {
-            return CustomerId;
-        }
+        public override string? GetOwnerId() => CustomerId;
     }
 }

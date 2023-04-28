@@ -18,9 +18,6 @@ namespace DataAccess.Entities
 
         public virtual Terminal Terminal { get; set; } = null!;
 
-        public override string GetOwnerId()
-        {
-            return ServiceId;
-        }
+        public override string? GetOwnerId() => ServiceId;
     }
 }

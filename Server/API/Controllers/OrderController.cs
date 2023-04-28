@@ -22,6 +22,17 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<PagedArrayModel<OrderModel>>> GetAsync(int page = 1) =>
             await orderService.GetAsync(User, page);
+
+        [HttpGet("Optimal")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<List<OrderDishModel>> GetOptimal(int maxPrice, [FromQuery] Dictionary<string, int> types)
+        {
+            types.Remove("maxPrice");
+            var result = orderService.GetOptimal(maxPrice, types);
+            return HandleResult(result);
+        }
+
         [HttpPost]
         [Authorize(Roles = Roles.CustomerEmployee)]
         [ProducesResponseType(StatusCodes.Status201Created)]

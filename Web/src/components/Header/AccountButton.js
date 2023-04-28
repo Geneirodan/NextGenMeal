@@ -1,8 +1,7 @@
 import {useDispatch, useSelector} from "react-redux";
-import {userSelectors} from "../../store/user/selectors";
+import {selectors, signOut} from "../../store/account/login";
 import {useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
-import {logout} from "../../store/user/thunks";
 import {AccountComponent} from "./AccountComponent";
 import {LoginButton} from "./LoginButton";
 import React from "react";
@@ -14,14 +13,14 @@ const menuItem = class {
     }
 }
 export const AccountButton = () => {
-    const role = useSelector(userSelectors.role)
+    const role = useSelector(selectors.role)
     const navigate = useNavigate()
     const {t} = useTranslation();
     const dispatch = useDispatch()
 
     const menuItemOnClick = route => () => navigate(route);
     const logoutCallback = () => {
-        dispatch(logout())
+        dispatch(signOut())
     }
     const profileItem = new menuItem(t("Profile"), "/profile")
     const menuItems = {

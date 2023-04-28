@@ -4,6 +4,6 @@
     {
         public int Id { get; set; }
 
-        public abstract string GetOwnerId();
+        public abstract string? GetOwnerId();
     }
 }

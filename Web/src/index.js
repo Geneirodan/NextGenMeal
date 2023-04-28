@@ -11,8 +11,8 @@ import '@fontsource/roboto/700.css';
 import store from "./store";
 import {BrowserRouter} from "react-router-dom";
 import {Provider} from "react-redux";
-import { QueryParamProvider } from 'use-query-params';
-import { ReactRouter6Adapter } from 'use-query-params/adapters/react-router-6';
+import {QueryParamProvider} from 'use-query-params';
+import {ReactRouter6Adapter} from 'use-query-params/adapters/react-router-6';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

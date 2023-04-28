@@ -7,9 +7,6 @@
         public int TerminalId { get; set; }
         public virtual Terminal Terminal { get; set; } = null!;
 
-        public override string GetOwnerId()
-        {
-            return Terminal.GetOwnerId();
-        }
+        public override string? GetOwnerId() => Terminal?.GetOwnerId();
     }
 }

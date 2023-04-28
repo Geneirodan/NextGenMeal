@@ -1,8 +1,14 @@
-import React from "react";
+import React, {useEffect} from 'react';
+import {useFormik} from 'formik';
+import {Navigate, NavLink} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {emailValidation, passwordValidation} from "../../utils/validation";
+import * as yup from "yup";
+import {selectors, signIn} from "../../store/account/login";
+import {useTranslation} from "react-i18next";
 import {Button, Container, Stack, SvgIcon, Typography} from "@mui/material";
 import {Errors} from "../common/Errors";
-import {CustomTextField} from "../common/TextFields";
-import {NavLink} from "react-router-dom";
+import {CustomTextField} from "../common/inputs/TextFields";
 import {ReactComponent as GoogleIcon} from "../../img/google.svg"
 
 export const LoginPageComponent = React.memo(
@@ -42,3 +48,17 @@ export const LoginPageComponent = React.memo(
         </form>
     )
 );
+export const LoginPage = () => {
+    const errors = useSelector(selectors.errors)
+    const role = useSelector(selectors.role)
+    const dispatch = useDispatch()
+    const {t} = useTranslation()
+    const initialValues = {email: '', password: ''};
+    const validationSchema = yup.object({email: emailValidation(t), password: passwordValidation(t)});
+    const onSubmit = (values) => {
+        dispatch(signIn(values));
+    };
+    const formik = useFormik({initialValues, validationSchema, onSubmit});
+    useEffect(() => () => formik.resetForm(), [])
+    return role ? <Navigate to={"/"}/> : <LoginPageComponent formik={formik} errors={errors} t={t}/>;
+};

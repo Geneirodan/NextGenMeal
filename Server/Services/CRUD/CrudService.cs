@@ -33,7 +33,9 @@ namespace Services.CRUD
         {
             var query = context.Set<TEntity>().Where(predicate);
             query = isDesc ? query.OrderByDescending(keySelector) : query.OrderBy(keySelector);
-            var entities = await query.Skip((page - 1) * Utils.ItemsPerPage).Take(Utils.ItemsPerPage).ToListAsync();
+            var entities = await query.Skip((page - 1) * Utils.ItemsPerPage)
+                                      .Take(Utils.ItemsPerPage)
+                                      .ToListAsync();
             var models = entities.Adapt<List<TModel>>();
             return new PagedArrayModel<TModel>(models, query.Count());
         }
@@ -47,7 +49,7 @@ namespace Services.CRUD
             if (proxy.GetOwnerId() != userId)
                 return Result.Fail(Errors.Forbidden);
             await context.SaveChangesAsync();
-            var response = entity.Adapt<TModel>();
+            var response = proxy.Adapt<TModel>();
             return Result.Ok(response);
         }
 
@@ -67,15 +69,12 @@ namespace Services.CRUD
         public virtual async Task<Result> EditAsync(ClaimsPrincipal user, TModel model)
         {
             var userId = userManager.GetUserId(user);
-            var entity = await context.FindAsync<TEntity>(model.Id);
-            if (entity is null)
-                return Result.Fail(Errors.NotFound);
-            if (entity.GetOwnerId() != userId)
+            var entity = model.Adapt<TEntity>();
+            var proxy = context.Set<TEntity>().CreateProxy();
+            context.Entry(proxy).CurrentValues.SetValues(entity);
+            context.Update(proxy);
+            if (proxy.GetOwnerId() != userId)
                 return Result.Fail(Errors.Forbidden);
-            entity = model.Adapt<TEntity>();
-            if (entity.GetOwnerId() != userId)
-                return Result.Fail(Errors.Forbidden);
-            context.Update(entity);
             await context.SaveChangesAsync();
             return Result.Ok();
         }

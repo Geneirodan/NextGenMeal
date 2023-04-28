@@ -1,4 +1,5 @@
-﻿using DataAccess;
+﻿using Azure;
+using DataAccess;
 using DataAccess.Entities;
 using DataAccess.Entities.Users;
 using FluentResults;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Services.Interfaces;
+using Services.Interfaces.CRUD;
 using Services.Models;
 using System.Linq;
 using System.Linq.Expressions;
@@ -20,11 +22,13 @@ namespace Services.CRUD
         private readonly ApplicationContext context;
         private readonly UserManager<User> userManager;
         private readonly IConfiguration configuration;
-        public OrderService(ApplicationContext context, UserManager<User> userManager, IConfiguration configuration)
+        private readonly IDishService dishService;
+        public OrderService(ApplicationContext context, UserManager<User> userManager, IConfiguration configuration, IDishService dishService)
         {
             this.context = context;
             this.userManager = userManager;
             this.configuration = configuration;
+            this.dishService = dishService;
         }
 
         public async Task<PagedArrayModel<OrderModel>> GetAsync(ClaimsPrincipal principal, int page)
@@ -70,6 +74,52 @@ namespace Services.CRUD
             context.Remove(order);
             await context.SaveChangesAsync();
             return Result.Ok();
+        }
+
+        public Result<List<OrderDishModel>> GetOptimal(int maxPrice, Dictionary<string, int> types)
+        {
+            try
+            {
+                static decimal GoalFunc(TagDish td) => td.Dishes.First().Price * td.Type.Value;
+                List<TagDish> tagDishes = new();
+                List<TagDish> invariant = new();
+                foreach (var type in types)
+                {
+                    var tagDish = new TagDish(type)
+                    {
+                        Dishes = context.Dishes.Where(d => d.Type == type.Key).OrderByDescending(d => d.Price)
+                    };
+                    tagDishes.Add(tagDish);
+                }
+                while (tagDishes.Sum(GoalFunc) > maxPrice)
+                {
+                    tagDishes = tagDishes.OrderByDescending(GoalFunc).ToList();
+                    var first = tagDishes.First();
+                    if (first.Dishes.Count() == 1)
+                    {
+                        invariant.Add(first);
+                        tagDishes.RemoveAt(0);
+                    }
+                    else
+                        first.Dishes.Skip(1);
+                }
+                invariant.AddRange(tagDishes);
+                if (invariant.Sum(GoalFunc) > maxPrice)
+                    return Result.Fail(Errors.NotFound);
+                return invariant.Select(i =>
+                {
+                    Dish dish = i.Dishes.First();
+                    return new OrderDishModel { OrderId = 0, DishId = dish.Id, Dish = dish.Adapt<DishModel>(), Quantity = i.Type.Value };
+                }).ToList();
+            }
+            catch (InvalidOperationException)
+            {
+                return Result.Fail(Errors.NotFound);
+            }
+        }
+        internal record TagDish(KeyValuePair<string, int> Type)
+        {
+            public IOrderedQueryable<Dish> Dishes { get; set; } = null!;
         }
     }
 }

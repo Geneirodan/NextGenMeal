@@ -6,9 +6,6 @@
         public virtual List<Box> Boxes { get; set; } = null!;
         public virtual Catering Catering { get; set;} = null!;
 
-        public override string GetOwnerId()
-        {
-            return Catering.GetOwnerId();
-        }
+        public override string? GetOwnerId() => Catering?.GetOwnerId();
     }
 }
