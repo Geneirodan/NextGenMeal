@@ -3,13 +3,13 @@ import {useFormik} from 'formik';
 import {useTranslation} from "react-i18next";
 import {Navigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {confirmPasswordValidation, emailValidation, nameValidation, passwordValidation} from "../../utils/validation";
+import {confirmPasswordValidation, emailValidation, stringRequired, passwordValidation} from "../../utils/validation";
 import * as yup from "yup";
 import {register, selectors} from "../../store/account/register";
 import {selectors as authSelectors} from "../../store/account/login"
 import {Button, Container, Stack, Typography} from "@mui/material";
 import {Errors} from "../common/Errors";
-import {CustomTextField} from "../common/inputs/TextFields";
+import {CustomTextField} from "../common/inputs/CustomTextField";
 
 
 export const RegisterPageComponent = ({errors, formik, t}) => <form onSubmit={formik.handleSubmit}>
@@ -45,7 +45,7 @@ export const RegisterPage = () => {
         confirmPassword: ""
     }
     const validationSchema = yup.object({
-        name: nameValidation(t),
+        name: stringRequired(t),
         email: emailValidation(t),
         password: passwordValidation(t),
         confirmPassword: confirmPasswordValidation(t)

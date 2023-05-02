@@ -8,7 +8,7 @@ import {selectors, signIn} from "../../store/account/login";
 import {useTranslation} from "react-i18next";
 import {Button, Container, Stack, SvgIcon, Typography} from "@mui/material";
 import {Errors} from "../common/Errors";
-import {CustomTextField} from "../common/inputs/TextFields";
+import {CustomTextField} from "../common/inputs/CustomTextField";
 import {ReactComponent as GoogleIcon} from "../../img/google.svg"
 
 export const LoginPageComponent = React.memo(

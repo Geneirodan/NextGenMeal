@@ -22,7 +22,7 @@ namespace Services.CRUD
                                                     || x.City.Contains(query)
                                                     || x.State.Contains(query)
                                                     || x.Street.Contains(query)),
-                                keySelector: x => x.Name);
+                                keySelector: x => x.Id);
 
         public async Task<PagedArrayModel<CateringModel>> GetAsync(ClaimsPrincipal principal, int page, string query)
         {

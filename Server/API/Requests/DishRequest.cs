@@ -7,7 +7,7 @@ namespace API.Requests
         [Required]
         public decimal Price { get; set; }
         [Required]
-        public int Portion { get; set; }
+        public decimal Portion { get; set; }
         [Required]
         public string Name { get; set; } = null!;
         [Required]

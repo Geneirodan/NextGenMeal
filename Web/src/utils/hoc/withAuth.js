@@ -1,7 +1,7 @@
 import React from "react";
 import {Navigate} from "react-router-dom";
 import {useSelector} from "react-redux";
-import {selectors} from "../store/account/login";
+import {selectors} from "../../store/account/login";
 
 export const withAuth = WrappedComponent =>
     (props) => {

@@ -4,6 +4,7 @@ import {AppBar, Stack, Toolbar, Typography} from "@mui/material";
 import Button from "@mui/material/Button";
 import {useNavigate} from "react-router-dom";
 import {LanguageSelect} from "./LanguageSelect";
+import {MeasureSelect} from "./MeasureSelect";
 import {AccountButton} from "./AccountButton";
 
 export const Header = () => {
@@ -33,7 +34,8 @@ export const Header = () => {
                     {t("Make order")}
                 </Button>
             </Stack>
-            <Stack direction="row" ustifyContent="flex-end" spacing={3}>
+            <Stack direction="row" justifyContent="flex-end" spacing={3}>
+                <MeasureSelect pl={3}/>
                 <AccountButton/>
                 <LanguageSelect pl={3}/>
             </Stack>

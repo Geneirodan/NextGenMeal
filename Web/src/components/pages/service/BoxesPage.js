@@ -1,45 +1,47 @@
 import {withRole} from "../../../utils/hoc/withAuth";
-import {addCatering, getCaterings, selector} from "../../../store/service/caterings"
 import {useDispatch, useSelector} from "react-redux";
 import React, {useCallback, useEffect, useState} from "react";
+import {useParams} from "react-router-dom";
+import {addBox, getBoxes, selector, setUpdated} from "../../../store/service/boxes";
 import {SearchComponent} from "../../common/SearchComponent";
-import {CateringListItem} from "../../common/listItems/CateringListItem";
+import {BoxListItem} from "../../common/listItems/BoxListItem";
+import {BoxEditDialog} from "../../common/dialogs/BoxEditDialog";
 import {ListContainer} from "../../common/ListContainer";
-import {addDish, setUpdated} from "../../../store/service/caterings";
-import {CateringEditDialog} from "../../common/dialogs/CateringEditDialog";
 import {Link} from "@mui/material";
 import {useTranslation} from "react-i18next";
 
-export const CateringsPage = withRole("Service")(() => {
+export const BoxesPage = withRole("Service")(() => {
     const {t} = useTranslation()
-    const {items, totalCount} = useSelector(selector("caterings"))
+    const {terminalId} = useParams()
+    const {items, totalCount} = useSelector(selector("boxes"))
     const updated = useSelector(selector("updated"))
     const dispatch = useDispatch()
-    const [filter, setFilter] = useState({})
+    const [filter, setFilter] = useState({terminalId})
     const [loading, setLoading] = useState(false)
     const [open, setOpen] = useState(false)
     const onClick = useCallback(() => setOpen(true), [])
     const onClose = useCallback(() => setOpen(false), [])
-    const itemCallback = useCallback(catering => <CateringListItem catering={catering}/>, [])
+    const itemCallback = useCallback(box => <BoxListItem box={box}/>, [])
     const onSubmit = values => {
-        dispatch(addCatering(values))
+        dispatch(addBox(values))
         onClose()
     }
-    const editDialog = <CateringEditDialog catering={{}} open={open} onClose={onClose} onSubmit={onSubmit}/>
+    const editDialog = <BoxEditDialog box={{terminalId}} open={open} onClose={onClose} onSubmit={onSubmit}/>
     const searchComponent = <SearchComponent filter={filter} setFilter={setFilter}/>
     useEffect(() => {
         setLoading(true)
-        dispatch(getCaterings(filter))
+        dispatch(getBoxes(filter))
         updated && dispatch(setUpdated(false))
     }, [filter, updated])
     useEffect(() => setLoading(false), [items])
     return <ListContainer filter={filter}
-                          setFilter={setFilter}
                           filters={[searchComponent]}
-                          onClick={onClick}
+                          setFilter={setFilter}
                           items={items}
                           loading={loading}
-                          editDialog={editDialog}
                           itemCallback={itemCallback}
-                          totalCount={totalCount}/>
+                          totalCount={totalCount}
+                          onClick={onClick}
+                          editDialog={editDialog}
+                          emptyLabel={t("No boxes found")}/>
 })

@@ -3,7 +3,7 @@
     public class Dish : Entity
     {
         public decimal Price { get; set; }
-        public int Portion { get; set; }
+        public decimal Portion { get; set; }
         public string Name { get; set; } = null!;
         public string Description { get; set; } = null!;
         public string Type { get; set; } = null!;

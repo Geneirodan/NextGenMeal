@@ -1,13 +1,14 @@
 import {Stack, Typography} from "@mui/material";
 import React from "react";
+import {useTranslation} from "react-i18next";
 
-export const renderError = t => error => <Typography variant="body1" align="center">
-    {t(error)}
-</Typography>
-
-export const Errors = props => {
-    if (props.errors && props.errors["Common"])
+export const Errors = ({errors}) => {
+    const {t} = useTranslation()
+    if (errors && errors["Common"])
         return <Stack spacing={2}>
-            {props.errors["Common"].map(renderError(props.t))}
+            {errors["Common"].map(error =>
+                <Typography variant="body1" align="center">
+                    {t(error)}
+                </Typography>)}
         </Stack>;
 };

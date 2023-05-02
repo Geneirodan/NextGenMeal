@@ -11,8 +11,8 @@ import {ConfirmPage} from "./components/pages/ConfirmPage";
 import {Preloader} from "./components/common/Preloader";
 import {CustomersPage} from "./components/pages/Admin/CustomersPage";
 import {CateringsPage} from "./components/pages/service/CateringsPage";
-import {MenuPage} from "./components/pages/service/menu/MenuPage"
-import {BoxesPage} from "./components/pages/service/boxes/BoxesPage";
+import {MenuPage} from "./components/pages/service/MenuPage"
+import {BoxesPage} from "./components/pages/service/BoxesPage";
 
 const TempMain = () => <div>Dima is chort</div>;
 const Temp404 = () => <div>404 NOT FOUND</div>
@@ -32,7 +32,7 @@ export const App = () => {
                 <Route path='/login' element={<LoginPage/>}/>
                 <Route path='/register' element={<RegisterPage/>}/>
                 <Route path='/test' element={<CustomersPage/>}/>
-                <Route path='/service/caterings/:cateringId/boxes' element={<BoxesPage/>}/>
+                <Route path='/service/caterings/:terminalId/boxes' element={<BoxesPage/>}/>
                 <Route path='/service/caterings/:cateringId/menu' element={<MenuPage/>}/>
                 <Route path='/service/caterings' element={<CateringsPage/>}/>
                 <Route path='*' element={<Temp404/>}/>

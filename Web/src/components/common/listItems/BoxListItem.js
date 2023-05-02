@@ -1,57 +1,52 @@
 import {Box, Card, IconButton, Stack, Typography} from "@mui/material";
-import {DishEditDialog} from "../dialogs/DishEditDialog";
 import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import React, {memo, useCallback, useState} from "react";
 import {useDispatch} from "react-redux";
-import {deleteDish, editDish} from "../../../store/service/menu";
-import {useTranslation} from "react-i18next";
-import {useMeasurements} from "../../../utils/hook/UseMeasurements";
-import DeleteIcon from "@mui/icons-material/Delete";
+import {deleteBox, editBox} from "../../../store/service/boxes";
+import {BoxEditDialog} from "../dialogs/BoxEditDialog";
 
-const DishListComponent = memo(
-    ({dish, onEdit, onDelete, onClose, open, onSubmit}) => {
-        const {t} = useTranslation()
-        const {m} = useMeasurements()
+const BoxListComponent = memo(
+    ({box, onEdit, onDelete, onClose, open, onSubmit}) => {
         return <Card sx={{padding: 1}}>
             <Stack direction="row" alignItems="center">
                 <Box sx={{flexGrow: 1}}>
                     <Typography>
-                        {dish.name}
+                        {box.name}
                     </Typography>
                     <Typography>
-                        {`$${(dish.price)}, ${m(dish.portion)}, ${(dish.type)}`}
+                        {'$' + box.price}
                     </Typography>
                     <Typography>
-                        {dish.description}
+                        {box.description}
                     </Typography>
                 </Box>
-                <DishEditDialog dish={dish} open={open} onClose={onClose} onSubmit={onSubmit}/>
+                <BoxEditDialog box={box} open={open} onClose={onClose} onSubmit={onSubmit}/>
                 <IconButton onClick={onEdit}>
                     <EditIcon/>
                 </IconButton>
-                <IconButton onClick={onDelete(dish)}>
+                <IconButton onClick={onDelete(box)}>
                     <DeleteIcon/>
                 </IconButton>
             </Stack>
         </Card>;
     }
 )
-export const DishListItem = ({dish}) => {
+export const BoxListItem = ({box}) => {
     const dispatch = useDispatch()
     const [open, setOpen] = useState(false)
     const onEdit = useCallback(() => setOpen(true), [])
     const onClose = useCallback(() => setOpen(false), [])
-    const {measurements, toCI} = useMeasurements()
     const onSubmit = useCallback(values => {
-            values.portion = toCI(values.portion, measurements.get())
-            dispatch(editDish(values))
+            dispatch(editBox(values))
             onClose()
         },
         [dispatch, onClose])
     const onDelete = useCallback(({id}) =>
             () => {
-                dispatch(deleteDish(id))
+                dispatch(deleteBox(id))
             },
         [dispatch])
-    return <DishListComponent dish={dish} open={open} onClose={onClose} onClick={onEdit} onSubmit={onSubmit} onDelete={onDelete}/>
+    return <BoxListComponent box={box} open={open} onClose={onClose} onEdit={onEdit} onDelete={onDelete}
+                             onSubmit={onSubmit}/>
 }

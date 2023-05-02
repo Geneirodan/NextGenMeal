@@ -1,10 +1,8 @@
-// noinspection JSAssignmentUsedAsCondition
-
-import {fileURLToPath, pathToFileURL, URL as URL$1} from 'url';
+import { URL as URL$1, fileURLToPath, pathToFileURL } from 'url';
 import fs from 'fs';
 import path from 'path';
-import moduleExports, {Module} from 'module';
-import {EOL} from 'os';
+import moduleExports, { Module } from 'module';
+import { EOL } from 'os';
 import assert from 'assert';
 
 const SAFE_TIME = 456789e3;
@@ -1274,7 +1272,8 @@ class VirtualFS extends ProxiedFS {
     while (depth < segments.length && segments[depth] === `..`)
       depth += 1;
     const finalSegments = segments.slice(depth);
-    return ppath.join(base, component, String(depth), ...finalSegments);
+    const fullVirtualPath = ppath.join(base, component, String(depth), ...finalSegments);
+    return fullVirtualPath;
   }
   static resolveVirtual(p) {
     const match = p.match(VIRTUAL_REGEXP);
@@ -1710,7 +1709,8 @@ function resolvePackageTargetString(target, subpath, match, packageJSONUrl, base
       } catch {
       }
       if (!isURL) {
-        return pattern ? RegExpPrototypeSymbolReplace(patternRegEx, target, () => subpath) : target + subpath;
+        const exportTarget = pattern ? RegExpPrototypeSymbolReplace(patternRegEx, target, () => subpath) : target + subpath;
+        return exportTarget;
       }
     }
     throwInvalidPackageTarget(match, target, packageJSONUrl, internal, base);

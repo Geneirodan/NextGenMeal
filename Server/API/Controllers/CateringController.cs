@@ -41,5 +41,12 @@ namespace API.Controllers
             adaptedRequest.ServiceId = userService.GetUserId(User)!;
             return base.AddAsync(adaptedRequest);
         }
+
+        public override Task<IActionResult> EditAsync(int id, [FromBody] CateringRequest request)
+        {
+            var adaptedRequest = request.Adapt<ServiceCateringRequest>();
+            adaptedRequest.ServiceId = userService.GetUserId(User)!;
+            return base.EditAsync(id, adaptedRequest);
+        }
     }
 }

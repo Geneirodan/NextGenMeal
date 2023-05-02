@@ -17,14 +17,19 @@ export const TypeSelect = ({filter, setFilter}) => {
         if (type && type.length > 0)
             setFilter({...filter, types: type})
         else {
-            delete filter.types
+            if(filter.types)
+                delete filter.types
             setFilter({...filter})
         }
     }, [type])
     const onChange = useCallback((e, value) => setType(value), [])
     const RenderInput = params => <TextField name="type" label={t("Types")} {...params}/>;
 
-    return <Autocomplete multiple value={type} options={types} onChange={onChange} filterSelectedOptions
+    return <Autocomplete multiple
+                         value={type}
+                         options={types}
+                         onChange={onChange}
+                         filterSelectedOptions
                          renderInput={RenderInput}/>
 
 }

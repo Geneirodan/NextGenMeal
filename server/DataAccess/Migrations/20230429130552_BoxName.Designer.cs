@@ -4,6 +4,7 @@ using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20230429130552_BoxName")]
+    partial class BoxName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -108,8 +111,8 @@ namespace DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Portion")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("Portion")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
@@ -269,12 +272,12 @@ namespace DataAccess.Migrations
                         {
                             Id = "0",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "22315b09-2ca5-4109-a2f6-7428eb22d090",
+                            ConcurrencyStamp = "068c3809-59cb-41b9-bb0c-46bbeba564eb",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             Name = "Deleted user",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "154f1b71-02e0-4c88-9e7b-2a5e17532cdb",
+                            SecurityStamp = "9b9f1710-34f8-4eef-b0e4-eda14a20f385",
                             TwoFactorEnabled = false
                         });
                 });

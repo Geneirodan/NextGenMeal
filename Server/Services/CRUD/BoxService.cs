@@ -16,7 +16,7 @@ namespace Services.CRUD
 
         public async Task<PagedArrayModel<BoxModel>> GetAsync(int terminalId, int page, string query) =>
             await GetAsync(page: page,
-                           predicate: x => x.TerminalId == terminalId && x.Description.Contains(query),
+                           predicate: x => x.TerminalId == terminalId && x.Name.Contains(query),
                            keySelector: x => x.Id);
     }
 }

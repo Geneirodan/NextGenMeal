@@ -1,5 +1,5 @@
 import React from "react"
-import {Preloader} from "../components/common/Preloader";
+import {Preloader} from "../../components/common/Preloader";
 
 export const withSuspense = WrappedComponent =>
     props => {
