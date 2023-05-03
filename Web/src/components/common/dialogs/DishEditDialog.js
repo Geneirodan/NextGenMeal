@@ -16,7 +16,7 @@ export const DishEditDialog = ({dish, open, onClose, onSubmit}) => {
     const types = useSelector(selector("types"))
     const errors = useSelector(selector("errors"))
     const {t} = useTranslation()
-    const title = dish ? t("Add dish") : t("Edit dish")
+    const title = dish.id ? t("Edit dish") : t("Add dish")
     let initialValues = {
         price: null,
         portion: null,

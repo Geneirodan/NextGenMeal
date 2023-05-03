@@ -1,6 +1,6 @@
 import {useTranslation} from "react-i18next";
 import {useDispatch, useSelector} from "react-redux";
-import {getCaterings, selector} from "../../../../store/customer/order";
+import {getCaterings, selectedDishesSuccess, selector} from "../../../../store/customer/order";
 import React, {useCallback, useEffect, useState} from "react";
 import {CateringListButton} from "../../../common/listItems/CateringListButton";
 import {SearchComponent} from "../../../common/SearchComponent";
@@ -24,6 +24,7 @@ export const Step2 = ({nextStep, formik}) => {
         dispatch(getCaterings(filter))
     }, [filter])
     useEffect(() => setLoading(false), [items])
+    useEffect(() => () => dispatch(selectedDishesSuccess([])), [])
     return <ListContainer filter={filter}
                           filters={[searchComponent]}
                           setFilter={setFilter}

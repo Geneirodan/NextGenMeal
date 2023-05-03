@@ -14,7 +14,7 @@ import {Step4} from "./Step4";
 import StarIcon from '@mui/icons-material/Star';
 import {OptimalDialog} from "./OptimalDialog";
 import {useDispatch, useSelector} from "react-redux";
-import {getOptimalDishes, selector} from "../../../../store/customer/order";
+import {getOptimalDishes, selectedDishesSuccess, selector} from "../../../../store/customer/order";
 import * as yup from "yup";
 import {stringRequired} from "../../../../utils/validation";
 import {Errors} from "../../../common/Errors";
@@ -31,7 +31,7 @@ const ErrorsSnackbar = ({errors, onClose, open}) => {
 
 export const OrderPage = withRole("Customer")(() => {
     const {t} = useTranslation()
-    const optimalDishes = useSelector(selector("optimalDishes"))
+    const selectedDishes = useSelector(selector("selectedDishes"))
     const [activeStep, setActiveStep] = React.useState(0)
     const dispatch = useDispatch()
     const [open, setOpen] = useState(false)
@@ -50,9 +50,7 @@ export const OrderPage = withRole("Customer")(() => {
         orderDishes: yup.array().required(t('Required')).min(1, t('Required'))
     });
     const handleNext = () => setActiveStep((prevState) => prevState + 1)
-    const handleBack = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep - 1);
-    };
+    const handleBack = () => setActiveStep((prevActiveStep) => prevActiveStep - 1);
     const onSubmit = useCallback(values => {
         console.info(values)
     }, [])
@@ -66,12 +64,17 @@ export const OrderPage = withRole("Customer")(() => {
     }, [formik])
     useEffect(() => {
         formik.setValues({
+            serviceId: formik.values.serviceId,
             cateringId: formik.values.cateringId,
-            orderDishes: optimalDishes
+            orderDishes: selectedDishes
         })
-    }, [optimalDishes])
-    useEffect(() => console.info(formik.values), [formik])
+    }, [selectedDishes])
     const [disableNext, setDisableNext] = useState(true)
+    useEffect(() => {
+        setDisableNext(!formik.values.orderDishes.length)
+        console.info(formik.values);
+    }, [formik])
+
     const stepsComponents = [
         <Step1 nextStep={handleNext} formik={formik}/>,
         <Step2 nextStep={handleNext} formik={formik}/>,

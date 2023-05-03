@@ -7,13 +7,13 @@ import {SearchComponent} from "../../../common/SearchComponent";
 import {TypeSelect} from "../../../common/TypeSelect";
 import {ListContainer} from "../../../common/ListContainer";
 
-export const Step3 = ({formik, setDisableNext}) => {
+export const Step3 = ({formik}) => {
     const {t} = useTranslation();
     const {items, totalCount} = useSelector(dishSelector("dishes"))
     const [filter, setFilter] = useState({cateringId: formik.values.cateringId})
     const [loading, setLoading] = useState(false)
     const dispatch = useDispatch()
-    const itemCallback = useCallback(dish => <DishListButton dish={dish} formik={formik} setDisableNext={setDisableNext}/>, [])
+    const itemCallback = useCallback(dish => <DishListButton dish={dish} formik={formik}/>, [])
     const searchComponent = <SearchComponent filter={filter} setFilter={setFilter}/>
     const typeSelect = <TypeSelect filter={filter} setFilter={setFilter}/>
     useEffect(() => {

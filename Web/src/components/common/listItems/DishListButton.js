@@ -1,70 +1,69 @@
 import {Box, Card, IconButton, Stack, Typography} from "@mui/material";
-import React, {memo, useCallback, useEffect, useState} from "react";
+import React, {memo, useCallback, useState} from "react";
 import {useMeasurements} from "../../../utils/hook/UseMeasurements";
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import {addDish, removeDish, selector} from "../../../store/customer/order";
+import {useDispatch, useSelector} from "react-redux";
 
-export const DishListComponent = ({dish, onAdd, onRemove, quantity, readonly = false}) => {
-    const {m} = useMeasurements()
-    return <Card sx={{padding: 1}}>
-        <Stack direction="row" alignItems="center">
-            <Box sx={{flexGrow: 1}}>
-                <Typography>
-                    {dish.name}
-                </Typography>
-                <Typography>
-                    {`$${(dish.price)}, ${m(dish.portion)}, ${(dish.type)}`}
-                </Typography>
-                <Typography>
-                    {dish.description}
-                </Typography>
-            </Box>
-            {readonly || <IconButton onClick={onAdd}>
-                <AddIcon/>
-            </IconButton>}
-            {quantity &&
-                <>
+export const DishListComponent = memo(
+    ({dish, onAdd, onRemove, quantity, readonly = false}) => {
+        const {m} = useMeasurements()
+        return <Card sx={{padding: 1}}>
+            <Stack direction="row" alignItems="center">
+                <Box sx={{flexGrow: 1}}>
                     <Typography>
-                        {quantity}
+                        {dish.name}
                     </Typography>
-                    {readonly || <IconButton onClick={onRemove}>
-                        <RemoveIcon/>
-                    </IconButton>}
-                </>
-            }
-        </Stack>
-    </Card>;
-};
+                    <Typography>
+                        {`$${(dish.price)}, ${m(dish.portion)}, ${(dish.type)}`}
+                    </Typography>
+                    <Typography>
+                        {dish.description}
+                    </Typography>
+                </Box>
+                {readonly || <IconButton onClick={onAdd}>
+                    <AddIcon/>
+                </IconButton>}
+                {quantity &&
+                    <>
+                        <Typography>
+                            {quantity}
+                        </Typography>
+                        {readonly || <IconButton onClick={onRemove}>
+                            <RemoveIcon/>
+                        </IconButton>}
+                    </>
+                }
+            </Stack>
+        </Card>
+    }
+)
 
-export const DishListButton = memo(
-    ({dish, formik}) => {
-        // const [index, setIndex] = useState(orderDishes.findIndex(orderDish => orderDish.dishId === dish.id))
-        const [quantity, setQuantity] = useState(0)
+export const DishListButton = (
+    ({dish}) => {
+        const dispatch = useDispatch()
+        const selectedDishes = useSelector(selector("selectedDishes"))
         const [orderDish, setOrderDish] = useState({
-            quantity: 0,
+            quantity: selectedDishes[dish.id.toString()] ? selectedDishes[dish.id.toString()].quantity : 0,
             dishId: dish.id,
             dish: dish
         })
+        const [quantity, setQuantity] = useState()
         const onAdd = useCallback(() => {
-            const {orderDishes} = formik.values
-            if (orderDish.quantity === 0) {
-                formik.setFieldValue('orderDishes', [...orderDishes, orderDish])
-            }
             orderDish.quantity++
-            setQuantity(orderDish.quantity)
-        }, [orderDish.quantity, formik])
-        const onRemove = useCallback(() => {
-            const {orderDishes} = formik.values
             if (orderDish.quantity === 1) {
-                formik.setFieldValue('orderDishes', orderDishes.filter(item => item !== orderDish))
+                dispatch(addDish({...orderDish}))
             }
-            orderDish.quantity--
             setQuantity(orderDish.quantity)
-        }, [orderDish.quantity, formik])
-        useEffect(() => {
-            const {orderDishes} = formik.values
-            //orderDishes = orderDishes.find(item => item.dishId !== dish.id)
-        }, [quantity])
-        return <DishListComponent dish={dish} onAdd={onAdd} quantity={quantity} onRemove={onRemove}/>;
+        }, [orderDish])
+        const onRemove = useCallback(() => {
+            orderDish.quantity--
+            if (orderDish.quantity === 0) {
+                dispatch(removeDish({...orderDish}))
+            }
+            setQuantity(orderDish.quantity)
+        }, [orderDish])
+        return <DishListComponent dish={dish} onAdd={onAdd} quantity={orderDish.quantity} onRemove={onRemove}/>;
     }
 )

@@ -56,7 +56,6 @@ export const getRole = () => async dispatch => {
 }
 
 export const signIn = ({email, password}) => async dispatch => {
-    dispatch(fail(null))
     const response = await authAPI.login(email, password)
     if (response.ok)
         dispatch(getRole())

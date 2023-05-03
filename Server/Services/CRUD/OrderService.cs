@@ -1,5 +1,4 @@
-﻿using Azure;
-using DataAccess;
+﻿using DataAccess;
 using DataAccess.Entities;
 using DataAccess.Entities.Users;
 using FluentResults;
@@ -7,15 +6,16 @@ using Mapster;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Services.Interfaces;
 using Services.Interfaces.CRUD;
 using Services.Models;
 using Services.Models.Users;
-using System;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Security.Claims;
 using Utils.Constants;
+using static Services.CRUD.OrderService;
 
 namespace Services.CRUD
 {
@@ -24,13 +24,16 @@ namespace Services.CRUD
         private readonly ApplicationContext context;
         private readonly UserManager<User> userManager;
         private readonly IConfiguration configuration;
-        private readonly IDishService dishService;
-        public OrderService(ApplicationContext context, UserManager<User> userManager, IConfiguration configuration, IDishService dishService)
+        private readonly ILogger<OrderService> logger;
+        public OrderService(ApplicationContext context,
+                            UserManager<User> userManager,
+                            IConfiguration configuration,
+                            ILogger<OrderService> logger)
         {
             this.context = context;
             this.userManager = userManager;
             this.configuration = configuration;
-            this.dishService = dishService;
+            this.logger = logger;
         }
 
         public async Task<PagedArrayModel<OrderModel>> GetAsync(ClaimsPrincipal principal, int page)
@@ -73,7 +76,7 @@ namespace Services.CRUD
             if (order is null)
                 return Result.Fail(Errors.NotFound);
             var user = await userManager.GetUserAsync(principal);
-            if(user is Customer)
+            if (user is Customer)
             {
                 var timeoutMins = double.Parse(configuration["Order:DeleteTimeout"]!);
                 var timeout = TimeSpan.FromMinutes(timeoutMins);
@@ -92,6 +95,7 @@ namespace Services.CRUD
                 static decimal GoalFunc(TagDish td) => td.Dishes.First().Price * td.Type.Value;
                 List<TagDish> tagDishes = new();
                 List<TagDish> invariant = new();
+                logger.LogInformation("First Filtering");
                 foreach (var type in types)
                 {
                     var tagDish = new TagDish(type)
@@ -101,7 +105,9 @@ namespace Services.CRUD
                                                .OrderByDescending(d => d.Price)
                     };
                     tagDishes.Add(tagDish);
+                    logger.LogInformation("Type: {type}, Dish: {dish}", type, JsonConvert.SerializeObject(tagDish.Dishes.First().Adapt<DishModel>()));
                 }
+                logger.LogInformation("Second Filtering");
                 while (tagDishes.Sum(GoalFunc) > maxPrice)
                 {
                     tagDishes = tagDishes.OrderByDescending(GoalFunc).ToList();
@@ -113,11 +119,17 @@ namespace Services.CRUD
                         tagDishes.RemoveAt(0);
                     }
                     else
-                        first.Dishes.Skip(1);
+                        first.Dishes = first.Dishes.Skip(1).OrderByDescending(d => d.Price);
+                    logger.LogInformation("Type: {type}, Dish: {dish}", first.Type, JsonConvert.SerializeObject(first.Dishes.First().Adapt<DishModel>()));
                 }
                 invariant.AddRange(tagDishes);
                 if (maxPrice < 0)
                     return Result.Fail(Errors.NotFound);
+                string goalFunction = "";
+                foreach(var variant in invariant)
+                    goalFunction += $" + {variant.Dishes.First().Price} x {variant.Type.Value}";
+                goalFunction = $"{goalFunction[3..]} = {invariant.Sum(GoalFunc)}";
+                logger.LogInformation("Goal Function: {func}", goalFunction);
                 return invariant.Select(i =>
                 {
                     Dish dish = i.Dishes.First();
@@ -137,11 +149,11 @@ namespace Services.CRUD
         public async Task<PagedArrayModel<ServiceModel>> GetServicesAsync(int page, string query, string? country)
         {
             var enumerable = context.Set<Service>().Where(x => x.Name.Contains(query));
-            if(country is not null)
+            if (country is not null)
                 enumerable = enumerable.Where(x => x.Country == country);
-            var entities = await enumerable.OrderByDescending(x => x.Name).Skip((page-1) * Utils.ItemsPerPage).Take(Utils.ItemsPerPage).ToListAsync();
+            var entities = await enumerable.OrderByDescending(x => x.Name).Skip((page - 1) * Utils.ItemsPerPage).Take(Utils.ItemsPerPage).ToListAsync();
             var models = entities.Adapt<List<ServiceModel>>();
             return new PagedArrayModel<ServiceModel>(models, enumerable.Count());
         }
-    } 
+    }
 }

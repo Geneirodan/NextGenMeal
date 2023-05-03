@@ -1,10 +1,12 @@
 ﻿using DataAccess.Entities.Users;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.Contracts;
 
 namespace DataAccess.Entities
 {
     public class Order : Entity
     {
+        [Precision(18, 2)]
         public decimal Price { get; set; }
         public string Status { get; set; } = null!;
         public DateTime Time { get; set; }

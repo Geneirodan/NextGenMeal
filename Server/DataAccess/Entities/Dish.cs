@@ -1,8 +1,12 @@
-﻿namespace DataAccess.Entities
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace DataAccess.Entities
 {
     public class Dish : Entity
     {
+        [Precision(18, 2)]
         public decimal Price { get; set; }
+        [Precision(18, 2)]
         public decimal Portion { get; set; }
         public string Name { get; set; } = null!;
         public string Description { get; set; } = null!;

@@ -29,7 +29,7 @@ export const MenuPage = withRole("Service")(() => {
         dispatch(addDish(values))
         onClose()
     }
-    const typeSelect = <TypeSelect filter={filter} setFilter={setFilter} type={type} setType={setType}/>
+    const typeSelect = <TypeSelect filter={filter} setFilter={setFilter}/>
     const searchComponent = <SearchComponent filter={filter} setFilter={setFilter}/>
     useEffect(() => {
         setLoading(true)
@@ -37,6 +37,16 @@ export const MenuPage = withRole("Service")(() => {
         updated && dispatch(setUpdated(false))
     }, [filter, updated])
     useEffect(() => setLoading(false), [items])
+
+    const style = {
+        margin: 0,
+        top: 'auto',
+        right: 20,
+        bottom: 20,
+        left: 'auto',
+        position: 'fixed',
+    };
+
     return <>
         <ListContainer filter={filter}
                           filters={[searchComponent, typeSelect]}
@@ -48,7 +58,7 @@ export const MenuPage = withRole("Service")(() => {
                           emptyLabel={t("No dishes found")}/>
 
         <DishEditDialog dish={{cateringId}} open={open} onClose={onClose} onSubmit={onSubmit}/>
-        <Fab color="primary" sx={{position: "absolute", bottom: 16, right: 16}} onClick={onClick}>
+        <Fab color="primary" style={style} onClick={onClick}>
             <AddIcon/>
         </Fab>
     </>

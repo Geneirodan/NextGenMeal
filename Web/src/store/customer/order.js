@@ -9,30 +9,36 @@ const {actions, name, reducer} = createSlice({
         ...commonInitialState,
         caterings: new PagedArray(),
         services: new PagedArray(),
-        optimalDishes: []
+        selectedDishes: []
     },
     reducers: {
         ...commonReducers,
-        cateringsSuccess: (state, action) => {
-            state.caterings = new PagedArray(action.payload)
+        cateringsSuccess: (state, {payload}) => {
+            state.caterings = new PagedArray(payload)
         },
-        servicesSuccess: (state, action) => {
-            state.services = new PagedArray(action.payload)
+        servicesSuccess: (state, {payload}) => {
+            state.services = new PagedArray(payload)
         },
-        optimalDishesSuccess: (state, action) => {
-            state.optimalDishes = action.payload
+        selectedDishesSuccess: (state, {payload}) => {
+            state.selectedDishes = payload
+        },
+        addDish: (state, {payload}) => {
+            state.selectedDishes[payload.dishId.toString()] = payload
+        },
+        removeDish: (state, action) => {
+            state.selectedDishes = state.selectedDishes.filter(item => item.dishId !== action.payload.dishId)
         }
     },
 });
 export default {name, reducer}
 export const selector = getSelector(name)
-export const {resetErrors, setUpdated, cateringsSuccess, servicesSuccess, setErrors, optimalDishesSuccess} = actions
+export const {resetErrors, setUpdated, cateringsSuccess, servicesSuccess, setErrors, selectedDishesSuccess, addDish, removeDish} = actions
 export const getCaterings = (filter = null) => commonGet(`Catering/${filter.serviceId}`, filter, cateringsSuccess)
 export const getServices = (filter = null) => commonGet('Order/Services', filter, servicesSuccess)
 export const getOptimalDishes = (filter = null) => async dispatch => {
     const response = await get('Order/Optimal', filter)
     const data = await response.json()
-    const action = response.ok ? optimalDishesSuccess : setErrors
+    const action = response.ok ? selectedDishesSuccess : setErrors
     dispatch(action(data))
     return response.ok
 }

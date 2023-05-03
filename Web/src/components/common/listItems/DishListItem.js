@@ -53,5 +53,5 @@ export const DishListItem = ({dish}) => {
                 dispatch(deleteDish(id))
             },
         [dispatch])
-    return <DishListComponent dish={dish} open={open} onClose={onClose} onClick={onEdit} onSubmit={onSubmit} onDelete={onDelete}/>
+    return <DishListComponent dish={dish} open={open} onClose={onClose} onEdit={onEdit} onSubmit={onSubmit} onDelete={onDelete}/>
 }
