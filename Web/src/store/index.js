@@ -7,6 +7,7 @@ import app from './app'
 import caterings from './service/caterings'
 import menu from './service/menu'
 import boxes from "./service/boxes";
+import order from "./customer/order";
 
 export default configureStore({
     reducer: combineReducers({
@@ -15,7 +16,8 @@ export default configureStore({
         register,
         [caterings.name]: caterings.reducer,
         [menu.name]: menu.reducer,
-        [boxes.name]: boxes.reducer
+        [boxes.name]: boxes.reducer,
+        [order.name]: order.reducer
     }),
     middleware: [thunkMiddleware]
 });

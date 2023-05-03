@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Services.Interfaces;
 using Services.Interfaces.CRUD;
 using Services.Models;
+using Services.Models.Users;
+using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Security.Claims;
@@ -51,7 +53,14 @@ namespace Services.CRUD
             model.Status = "Undone";
             var entity = model.Adapt<Order>();
             await context.AddAsync(entity);
-            entity.Price = entity.OrderDishes.Sum(od => od.Quantity * od.Dish.Price);
+            try
+            {
+                entity.Price = entity.OrderDishes.Sum(od => od.Quantity * od.Dish.Price);
+            }
+            catch
+            {
+                return Result.Fail("Invalid dishes");
+            }
             //context.Update(entity);
             await context.SaveChangesAsync();
             var response = entity.Adapt<OrderModel>();
@@ -76,7 +85,7 @@ namespace Services.CRUD
             return Result.Ok();
         }
 
-        public Result<List<OrderDishModel>> GetOptimal(int maxPrice, Dictionary<string, int> types)
+        public Result<List<OrderDishModel>> GetOptimal(int cateringId, decimal maxPrice, Dictionary<string, int> types)
         {
             try
             {
@@ -87,7 +96,9 @@ namespace Services.CRUD
                 {
                     var tagDish = new TagDish(type)
                     {
-                        Dishes = context.Dishes.Where(d => d.Type == type.Key).OrderByDescending(d => d.Price)
+                        Dishes = context.Dishes.Where(d => d.CateringId == cateringId)
+                                               .Where(d => d.Type == type.Key)
+                                               .OrderByDescending(d => d.Price)
                     };
                     tagDishes.Add(tagDish);
                 }
@@ -98,13 +109,14 @@ namespace Services.CRUD
                     if (first.Dishes.Count() == 1)
                     {
                         invariant.Add(first);
+                        maxPrice -= GoalFunc(first);
                         tagDishes.RemoveAt(0);
                     }
                     else
                         first.Dishes.Skip(1);
                 }
                 invariant.AddRange(tagDishes);
-                if (invariant.Sum(GoalFunc) > maxPrice)
+                if (maxPrice < 0)
                     return Result.Fail(Errors.NotFound);
                 return invariant.Select(i =>
                 {
@@ -121,5 +133,15 @@ namespace Services.CRUD
         {
             public IOrderedQueryable<Dish> Dishes { get; set; } = null!;
         }
-    }
+
+        public async Task<PagedArrayModel<ServiceModel>> GetServicesAsync(int page, string query, string? country)
+        {
+            var enumerable = context.Set<Service>().Where(x => x.Name.Contains(query));
+            if(country is not null)
+                enumerable = enumerable.Where(x => x.Country == country);
+            var entities = await enumerable.OrderByDescending(x => x.Name).Skip((page-1) * Utils.ItemsPerPage).Take(Utils.ItemsPerPage).ToListAsync();
+            var models = entities.Adapt<List<ServiceModel>>();
+            return new PagedArrayModel<ServiceModel>(models, enumerable.Count());
+        }
+    } 
 }

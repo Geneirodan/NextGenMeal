@@ -7,8 +7,9 @@ import {CateringListItem} from "../../common/listItems/CateringListItem";
 import {ListContainer} from "../../common/ListContainer";
 import {addDish, setUpdated} from "../../../store/service/caterings";
 import {CateringEditDialog} from "../../common/dialogs/CateringEditDialog";
-import {Link} from "@mui/material";
+import {Fab, Link} from "@mui/material";
 import {useTranslation} from "react-i18next";
+import AddIcon from "@mui/icons-material/Add";
 
 export const CateringsPage = withRole("Service")(() => {
     const {t} = useTranslation()
@@ -25,7 +26,6 @@ export const CateringsPage = withRole("Service")(() => {
         dispatch(addCatering(values))
         onClose()
     }
-    const editDialog = <CateringEditDialog catering={{}} open={open} onClose={onClose} onSubmit={onSubmit}/>
     const searchComponent = <SearchComponent filter={filter} setFilter={setFilter}/>
     useEffect(() => {
         setLoading(true)
@@ -33,13 +33,17 @@ export const CateringsPage = withRole("Service")(() => {
         updated && dispatch(setUpdated(false))
     }, [filter, updated])
     useEffect(() => setLoading(false), [items])
-    return <ListContainer filter={filter}
+    return <>
+        <ListContainer filter={filter}
                           setFilter={setFilter}
                           filters={[searchComponent]}
-                          onClick={onClick}
                           items={items}
                           loading={loading}
-                          editDialog={editDialog}
                           itemCallback={itemCallback}
                           totalCount={totalCount}/>
+        <CateringEditDialog catering={{}} open={open} onClose={onClose} onSubmit={onSubmit}/>
+        <Fab color="primary" sx={{position: "absolute", bottom: 16, right: 16}} onClick={onClick}>
+            <AddIcon/>
+        </Fab>
+    </>
 })

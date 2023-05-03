@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
 using Services.Models;
+using Services.Models.Users;
 using System.ComponentModel.DataAnnotations;
 using Utils.Constants;
 
@@ -26,10 +27,11 @@ namespace API.Controllers
         [HttpGet("Optimal")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<List<OrderDishModel>> GetOptimal(int maxPrice, [FromQuery] Dictionary<string, int> types)
+        public ActionResult<List<OrderDishModel>> GetOptimal(int cateringId, int maxPrice, [FromQuery] Dictionary<string, int> types)
         {
             types.Remove("maxPrice");
-            var result = orderService.GetOptimal(maxPrice, types);
+            types.Remove("cateringId");
+            var result = orderService.GetOptimal(cateringId, maxPrice, types);
             return HandleResult(result);
         }
 
@@ -55,5 +57,11 @@ namespace API.Controllers
             var result = await orderService.DeleteAsync(User, id);
             return HandleResult(result);
         }
+
+        [HttpGet("Services")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<PagedArrayModel<ServiceModel>>> GetServices(int page = 1, string query = "", string? country = null) =>
+            await orderService.GetServicesAsync(page, query, country);
     }
 }

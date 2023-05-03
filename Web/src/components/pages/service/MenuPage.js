@@ -9,6 +9,8 @@ import {DishListItem} from "../../common/listItems/DishListItem";
 import {DishEditDialog} from "../../common/dialogs/DishEditDialog";
 import {ListContainer} from "../../common/ListContainer";
 import {useTranslation} from "react-i18next";
+import {Fab} from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
 
 export const MenuPage = withRole("Service")(() => {
     const {t} = useTranslation();
@@ -27,8 +29,7 @@ export const MenuPage = withRole("Service")(() => {
         dispatch(addDish(values))
         onClose()
     }
-    const editDialog = <DishEditDialog dish={{cateringId}} open={open} onClose={onClose} onSubmit={onSubmit}/>
-    const typeSelect = <TypeSelect filter={filter} setFilter={setFilter}/>
+    const typeSelect = <TypeSelect filter={filter} setFilter={setFilter} type={type} setType={setType}/>
     const searchComponent = <SearchComponent filter={filter} setFilter={setFilter}/>
     useEffect(() => {
         setLoading(true)
@@ -36,14 +37,19 @@ export const MenuPage = withRole("Service")(() => {
         updated && dispatch(setUpdated(false))
     }, [filter, updated])
     useEffect(() => setLoading(false), [items])
-    return <ListContainer filter={filter}
+    return <>
+        <ListContainer filter={filter}
                           filters={[searchComponent, typeSelect]}
                           setFilter={setFilter}
                           items={items}
                           loading={loading}
                           itemCallback={itemCallback}
                           totalCount={totalCount}
-                          onClick={onClick}
-                          editDialog={editDialog}
                           emptyLabel={t("No dishes found")}/>
+
+        <DishEditDialog dish={{cateringId}} open={open} onClose={onClose} onSubmit={onSubmit}/>
+        <Fab color="primary" sx={{position: "absolute", bottom: 16, right: 16}} onClick={onClick}>
+            <AddIcon/>
+        </Fab>
+    </>
 })

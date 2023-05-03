@@ -1,5 +1,5 @@
 import {useTranslation} from "react-i18next";
-import React, {useCallback, useState} from "react";
+import React, {useCallback, useState, memo} from "react";
 import {useNavigate} from "react-router-dom";
 import {Box, Card, IconButton, Stack, Typography} from "@mui/material";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
@@ -9,8 +9,8 @@ import {TerminalEditDialog} from "../dialogs/TerminalEditDialog";
 import {useDispatch} from "react-redux";
 import {deleteTerminal, editTerminal} from "../../../store/service/caterings";
 
-function TerminalListComponent({title, terminal, open, onEdit, onDelete, onClose, onBoxesButtonClick, onSubmit}) {
-    return <Card sx={{padding: 1}}>
+const TerminalListComponent = memo(({title, terminal, open, onEdit, onDelete, onClose, onBoxesButtonClick, onSubmit}) =>
+    <Card sx={{padding: 1}}>
         <Stack direction="row" alignItems="center">
             <Box sx={{flexGrow: 1}}>
                 <Typography>
@@ -32,8 +32,7 @@ function TerminalListComponent({title, terminal, open, onEdit, onDelete, onClose
                 <DeleteIcon/>
             </IconButton>
         </Stack>
-    </Card>;
-}
+    </Card>)
 
 export const TerminalListItem = ({terminal}) => {
     const {t} = useTranslation()

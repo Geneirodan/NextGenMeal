@@ -9,7 +9,7 @@ export const Paginator = ({filter, setFilter, totalCount}) => {
             setFilter({...filter, page})
     }, [page])
     const onChange = (e, page) => setPage(page);
-    return <Stack alignItems="center">
+    return totalCount > 10 && <Stack alignItems="center">
         <Pagination count={Math.ceil(totalCount / 10)} onChange={onChange} page={page} showFirstButton showLastButton/>
     </Stack>
 };

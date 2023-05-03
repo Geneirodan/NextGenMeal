@@ -7,8 +7,10 @@ import {SearchComponent} from "../../common/SearchComponent";
 import {BoxListItem} from "../../common/listItems/BoxListItem";
 import {BoxEditDialog} from "../../common/dialogs/BoxEditDialog";
 import {ListContainer} from "../../common/ListContainer";
-import {Link} from "@mui/material";
+import {Fab, Link} from "@mui/material";
 import {useTranslation} from "react-i18next";
+import {CateringEditDialog} from "../../common/dialogs/CateringEditDialog";
+import AddIcon from "@mui/icons-material/Add";
 
 export const BoxesPage = withRole("Service")(() => {
     const {t} = useTranslation()
@@ -26,7 +28,6 @@ export const BoxesPage = withRole("Service")(() => {
         dispatch(addBox(values))
         onClose()
     }
-    const editDialog = <BoxEditDialog box={{terminalId}} open={open} onClose={onClose} onSubmit={onSubmit}/>
     const searchComponent = <SearchComponent filter={filter} setFilter={setFilter}/>
     useEffect(() => {
         setLoading(true)
@@ -34,7 +35,8 @@ export const BoxesPage = withRole("Service")(() => {
         updated && dispatch(setUpdated(false))
     }, [filter, updated])
     useEffect(() => setLoading(false), [items])
-    return <ListContainer filter={filter}
+    return <>
+        <ListContainer filter={filter}
                           filters={[searchComponent]}
                           setFilter={setFilter}
                           items={items}
@@ -44,4 +46,9 @@ export const BoxesPage = withRole("Service")(() => {
                           onClick={onClick}
                           editDialog={editDialog}
                           emptyLabel={t("No boxes found")}/>
+        <BoxEditDialog box={{terminalId}} open={open} onClose={onClose} onSubmit={onSubmit}/>
+        <Fab color="primary" sx={{position: "absolute", bottom: 16, right: 16}} onClick={onClick}>
+            <AddIcon/>
+        </Fab>
+    </>
 })

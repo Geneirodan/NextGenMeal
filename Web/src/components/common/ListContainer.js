@@ -5,11 +5,9 @@ import AddIcon from "@mui/icons-material/Add";
 import React from "react";
 
 export const ListContainer = ({
-                                  editDialog,
                                   filter,
                                   items,
                                   loading,
-                                  onClick,
                                   itemCallback,
                                   setFilter,
                                   totalCount,
@@ -31,8 +29,4 @@ export const ListContainer = ({
                 </Box>
             }
         </Stack>
-        {editDialog}
-        <Fab color="primary" sx={{position: "absolute", bottom: 16, right: 16}} onClick={onClick}>
-            <AddIcon/>
-        </Fab>
     </Container>;

@@ -11,7 +11,7 @@ i18n.use(LanguageDetector)
     .use(i18nextPlugin)
     .init({
         initImmediate: false,
-        debug: true,
+        //debug: true,
         fallbackLng: 'en',
         interpolation: {
             escapeValue: false,
