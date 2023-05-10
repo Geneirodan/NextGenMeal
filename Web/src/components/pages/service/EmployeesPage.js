@@ -1,6 +1,6 @@
 import {withRole} from "../../../utils/hoc/withAuth";
 import {useDispatch, useSelector} from "react-redux";
-import React, {useCallback,useState, useEffect, memo} from "react";
+import React, {memo, useCallback, useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import {getEmployees, register, selector, setUpdated} from "../../../store/service/employee";
 import {SearchComponent} from "../../common/inputs/SearchComponent";

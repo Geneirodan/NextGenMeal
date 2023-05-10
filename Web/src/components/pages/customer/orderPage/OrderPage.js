@@ -20,6 +20,7 @@ import {stringRequired} from "../../../../utils/validation";
 import {useErrors, useOpen, useStepping, useUpdate} from "../../../../utils/hook/hooks";
 import {ErrorsSnackbar} from "../../../common/ErrorsSnackbar";
 import {useNavigate} from "react-router-dom";
+import {BoxesDialog} from "../../../common/dialogs/BoxesDialog";
 
 const StepperComponent = memo(
     ({activeStep}) => {
@@ -42,7 +43,7 @@ const StepperComponent = memo(
 )
 
 const BottomButtons = memo(
-    ({activeStep, disabled, handleBack, onOptimalClick, handleNext}) => {
+    ({activeStep, disabled, handleBack, onOptimalClick, handleNext, formik}) => {
         const {t} = useTranslation()
         return <AppBar position="sticky" color="primary" sx={{
             top: "auto",
@@ -55,6 +56,7 @@ const BottomButtons = memo(
                 {
                     activeStep === 2 &&
                     <>
+                        <BoxesDialog formik={formik}/>
                         <Button color="inherit" onClick={onOptimalClick}>
                             <StarIcon/> {t("Try optimal")}
                         </Button>
@@ -169,7 +171,8 @@ export const OrderPage = memo(
                                        activeStep={step}
                                        onOptimalClick={onClick}
                                        handleNext={handleNext}
-                                       disabled={disableNext}/>
+                                       disabled={disableNext}
+                                       formik={formik}/>
                         <OptimalDialog cateringId={formik.values.cateringId}
                                        open={open}
                                        onClose={onClose}

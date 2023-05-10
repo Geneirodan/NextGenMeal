@@ -15,6 +15,7 @@ namespace API.Controllers
         public BoxController(IBoxService service) : base(service) { }
 
         [HttpGet]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<PagedArrayModel<BoxModel>>> GetAsync(int terminalId, int page = 1, string query = "")
         {

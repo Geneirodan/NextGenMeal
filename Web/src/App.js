@@ -18,6 +18,7 @@ import {OrdersPage} from "./components/pages/customer/OrdersPage";
 import {EmployeesPage} from "./components/pages/service/EmployeesPage";
 import {useUpdate} from "./utils/hook/hooks";
 import {selector} from "./store/account/login";
+import {Footer} from "./components/Footer";
 
 const TempMain = () => <div>Dima is chort</div>;
 const Temp404 = () => <div>404 NOT FOUND</div>

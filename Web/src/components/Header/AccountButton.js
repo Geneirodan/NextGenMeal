@@ -9,6 +9,7 @@ import LoginIcon from "@mui/icons-material/Login";
 import {ChangeNameDialog} from "../common/dialogs/ChangeNameDialog";
 import {EditDialogButton} from "../common/dialogs/EditDialogButton";
 import {RenameIconButton} from "../common/buttons/IconButtons";
+import {SettingsDialogMenuItem} from "../common/dialogs/SettingsDialog";
 
 const menuItem = class {
     constructor(title, route) {
@@ -71,9 +72,7 @@ const AccountButtonComponent = memo(
                     {
                         menuItems.map(getMenuItem)
                     }
-                    <MenuItem>
-                        Settings
-                    </MenuItem>
+                    <SettingsDialogMenuItem/>
                     <MenuItem onClick={logoutCallback}>
                         {t("Logout")}
                     </MenuItem>

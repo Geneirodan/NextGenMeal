@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit'
-import {getRole, getInfo} from "./account/login";
+import {getInfo, getRole} from "./account/login";
 
 // Slice
 const {actions, reducer} = createSlice({

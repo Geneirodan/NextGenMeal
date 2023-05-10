@@ -32,7 +32,16 @@ const {actions, name, reducer} = createSlice({
 });
 export default {name, reducer}
 export const selector = getSelector(name)
-export const {resetErrors, setUpdated, cateringsSuccess, servicesSuccess, setErrors, selectedDishesSuccess, addDish, removeDish} = actions
+export const {
+    resetErrors,
+    setUpdated,
+    cateringsSuccess,
+    servicesSuccess,
+    setErrors,
+    selectedDishesSuccess,
+    addDish,
+    removeDish
+} = actions
 export const getCaterings = (filter = null) => commonGet(`Catering/${filter.serviceId}`, filter, cateringsSuccess)
 export const getServices = (filter = null) => commonGet('Order/Services', filter, servicesSuccess)
 export const getOptimalDishes = (filter = null) => async dispatch => {
