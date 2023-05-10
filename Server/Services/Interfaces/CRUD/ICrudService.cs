@@ -4,7 +4,7 @@ using System.Security.Claims;
 
 namespace Services.Interfaces.CRUD
 {
-    public interface ICrudService<TModel> where TModel : EntityModel
+    public interface ICrudService<TModel> where TModel : class
     {
         public Task<TModel?> GetByIdAsync(int id);
         public Task<Result<TModel>> AddAsync(ClaimsPrincipal user, TModel model);

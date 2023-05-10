@@ -1,6 +1,6 @@
 ﻿namespace DataAccess.Entities
 {
-    public abstract class Entity
+    public abstract class Entity : IOwnedEntity
     {
         public int Id { get; set; }
 

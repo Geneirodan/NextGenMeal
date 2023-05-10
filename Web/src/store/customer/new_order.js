@@ -4,12 +4,12 @@ import {commonGet, commonInitialState, commonPost, commonReducers, getSelector} 
 import {get} from "../../api/api";
 
 const {actions, name, reducer} = createSlice({
-    name: 'customer.order',
+    name: 'customer.new_order',
     initialState: {
         ...commonInitialState,
         caterings: new PagedArray(),
         services: new PagedArray(),
-        selectedDishes: []
+        selectedDishes: {}
     },
     reducers: {
         ...commonReducers,
@@ -25,8 +25,8 @@ const {actions, name, reducer} = createSlice({
         addDish: (state, {payload}) => {
             state.selectedDishes[payload.dishId.toString()] = payload
         },
-        removeDish: (state, action) => {
-            state.selectedDishes = state.selectedDishes.filter(item => item.dishId !== action.payload.dishId)
+        removeDish: (state, {payload}) => {
+            state.selectedDishes = state.selectedDishes.filter(item => item.dishId !== payload.dishId)
         }
     },
 });

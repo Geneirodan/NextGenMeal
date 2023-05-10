@@ -21,9 +21,9 @@ namespace Services.CRUD
                                     .Where(x => x.CateringId == cateringId && x.Name.Contains(query))
                                     .OrderBy(x => x.Price)
                                     .AsEnumerable();
-            if(types.Count() > 0)
+            if (types.Any())
                 enumerable = enumerable.Where(x => types.Contains(x.Type));
-            var entities = enumerable.Skip((page-1) * Utils.ItemsPerPage)
+            var entities = enumerable.Skip((page - 1) * Utils.ItemsPerPage)
                                      .Take(Utils.ItemsPerPage)
                                      .ToList();
             var models = entities.Adapt<List<DishModel>>();

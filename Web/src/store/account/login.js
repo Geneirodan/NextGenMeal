@@ -1,43 +1,35 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {authAPI} from "../../api/auth-api";
+import {commonInitialState, commonReducers, getSelector, handleResponse} from "../common";
 
-const slice = createSlice({
+const {actions, name, reducer} = createSlice({
     name: 'login',
     initialState: {
+        ...commonInitialState,
         confirmed: null,
-        errors: null,
         info: null,
         role: null
     },
     reducers: {
-        confirmEmailSuccess: (state, action) => {
-            state.confirmed = action.payload;
+        ...commonReducers,
+        confirmEmailSuccess: (state, {payload}) => {
+            state.confirmed = payload;
         },
-        fail: (state, action) => {
-            state.errors = action.payload.errors;
-        },
-        infoSuccess: (state, action) => {
-            state.info = action.payload;
+        infoSuccess: (state, {payload}) => {
+            state.info = payload;
         },
         logoutSuccess: (state, action) => {
             state.role = null;
+            state.info = null;
         },
-        roleSuccess: (state, action) => {
-            state.role = action.payload;
+        roleSuccess: (state, {payload}) => {
+            state.role = payload;
         }
     },
 });
-export default slice.reducer
-const {infoSuccess, roleSuccess, fail, logoutSuccess, confirmEmailSuccess} = slice.actions
-export const resetErrors = () => async dispatch => {
-    dispatch(fail(null))
-}
-export const selectors = {
-    confirmed: state => state.login.confirmed,
-    errors: state => state.login.errors,
-    info: state => state.login.info,
-    role: state => state.login.role,
-}
+export default {name, reducer}
+export const selector = getSelector(name)
+export const {resetErrors, setUpdated, infoSuccess, roleSuccess, setErrors, logoutSuccess, confirmEmailSuccess} = actions
 
 export const getInfo = () => async dispatch => {
     const response = await authAPI.info()
@@ -57,12 +49,7 @@ export const getRole = () => async dispatch => {
 
 export const signIn = ({email, password}) => async dispatch => {
     const response = await authAPI.login(email, password)
-    if (response.ok)
-        dispatch(getRole())
-    else {
-        const data = await response.json();
-        dispatch(fail(data))
-    }
+    await handleResponse(response, dispatch, setUpdated, setErrors);
 }
 
 export const signOut = () => async dispatch => {
@@ -74,4 +61,13 @@ export const signOut = () => async dispatch => {
 export const confirmEmail = ({id, code}) => async dispatch => {
     const response = await authAPI.confirmEmail(id, code)
     dispatch(confirmEmailSuccess(response.ok))
+}
+export const register = ({name, email, password, confirmPassword}) => async dispatch => {
+    const response = await authAPI.register(name, email, password, confirmPassword)
+    await handleResponse(response, dispatch, setUpdated, setErrors)
+}
+
+export const rename = ({name}) => async dispatch => {
+    const response = await authAPI.changeName(name)
+    await handleResponse(response, dispatch, setUpdated, setErrors)
 }

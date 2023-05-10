@@ -5,16 +5,16 @@ import React from "react";
 import {useSelector} from "react-redux";
 import {resetErrors, selector} from "../../../store/service/menu";
 import {useFormik} from "formik";
-import {EditDialog} from "../EditDialog";
-import {useErrors} from "../../../utils/hook/UseErrors";
+import {EditDialog} from "./EditDialog";
 import {useMeasurements} from "../../../utils/hook/UseMeasurements";
 import {numberValidation, stringRequired} from "../../../utils/validation";
 import * as yup from "yup";
+import {useErrors, useReset} from "../../../utils/hook/hooks";
 
 export const DishEditDialog = ({dish, open, onClose, onSubmit}) => {
-    const {getUnit, toUnit} = useMeasurements()
+    const {getUnitSymbol, toUnit} = useMeasurements()
     const types = useSelector(selector("types"))
-    const errors = useSelector(selector("errors"))
+    const errors = useErrors(selector, resetErrors)
     const {t} = useTranslation()
     const title = dish.id ? t("Edit dish") : t("Add dish")
     let initialValues = {
@@ -39,12 +39,12 @@ export const DishEditDialog = ({dish, open, onClose, onSubmit}) => {
         <CustomTextField name="name" formik={formik} label={t("Name")}/>,
         <CustomTextField name="price" formik={formik} label={t("Price")}/>,
         <CustomTextField name="portion" formik={formik} label={t("Portion")} InputProps={{
-            endAdornment: getUnit()
+            endAdornment: getUnitSymbol()
         }}/>,
         <CustomTextField name="description" type="multiline" formik={formik} label={t("Description")}/>,
         <CustomSelect name="type" label={t("Type")} formik={formik} items={types}/>
     ]
-    useErrors(open, formik.resetForm, resetErrors);
+    useReset(open, formik.resetForm);
     return <EditDialog title={title}
                        open={open}
                        onClose={onClose}

@@ -1,4 +1,4 @@
-import {del, get, post, put} from "../api/api";
+import {del, get, patch, post, put} from "../api/api";
 
 export const commonInitialState = {
     errors: null,
@@ -35,6 +35,10 @@ export const commonGet = (url, filter, action) => async dispatch => {
 }
 export const commonPut = (url, data, setUpdated, setErrors) => async dispatch => {
     const response = await put(url, data, {id: data.id})
+    await handleResponse(response, dispatch, setUpdated, setErrors);
+}
+export const commonPatch = (url, data, setUpdated, setErrors) => async dispatch => {
+    const response = await patch(url, data, {id: data.id})
     await handleResponse(response, dispatch, setUpdated, setErrors);
 }
 export const commonDelete = (url, id, setUpdated, setErrors) => async dispatch => {

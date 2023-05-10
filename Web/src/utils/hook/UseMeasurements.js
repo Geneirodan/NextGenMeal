@@ -8,21 +8,22 @@ const ratios = {
     'gram': 1
 }
 
+const measurement = 'measurement';
 export const useMeasurements = () => {
     const {i18n} = useTranslation()
-    const [cookies, setCookie] = useCookies(['measurement'])
-    const m = (value, unit = cookies['measurement']) => {
+    const [cookies, setCookie] = useCookies([measurement])
+    if(!cookies[measurement])
+        setCookie(measurement, units[0], {path: '/'})
+    const m = (value, unit = cookies[measurement]) => {
         const numberFormat = Intl.NumberFormat(i18n.resolvedLanguage, {style: 'unit', unit});
         return numberFormat.format(value / ratios[unit]);
     }
     return {
         m,
-        measurements: {
-            get: () => cookies['measurement'],
-            set: (value) => setCookie('measurement', value, {path: '/'})
-        },
-        toCI: (value, unit = cookies['measurement']) => value * ratios[unit],
-        toUnit: (value, unit = cookies['measurement']) => value / ratios[unit],
-        getUnit: (unit = cookies['measurement']) => m(0, unit).substring(2)
+        unit: cookies[measurement],
+        setUnit: value => setCookie(measurement, value, {path: '/'}),
+        toCI: (value, unit = cookies[measurement]) => value * ratios[unit],
+        toUnit: (value, unit = cookies[measurement]) => value / ratios[unit],
+        getUnitSymbol: (unit = cookies[measurement]) => m(0, unit).substring(2)
     }
 }

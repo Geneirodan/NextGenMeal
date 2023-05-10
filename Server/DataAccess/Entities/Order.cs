@@ -1,6 +1,6 @@
 ﻿using DataAccess.Entities.Users;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics.Contracts;
+using Utils.Constants;
 
 namespace DataAccess.Entities
 {
@@ -8,9 +8,9 @@ namespace DataAccess.Entities
     {
         [Precision(18, 2)]
         public decimal Price { get; set; }
-        public string Status { get; set; } = null!;
+        public string Status { get; set; } = OrderStatuses.Undone;
         public DateTime Time { get; set; }
-        public bool IsBox { get; set; }
+        public bool IsBox { get; set; } = false;
 
         public string CustomerId { get; set; } = null!;
         public virtual Customer Customer { get; set; } = null!;

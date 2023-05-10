@@ -1,4 +1,4 @@
-const baseUrl = 'https://localhost:7168/api/'
+export const baseUrl = 'https://localhost:7168/api/'
 
 export const sendRequest = async (url, method, {data = null, params = null}) => {
 

@@ -14,8 +14,8 @@ using Utils.Constants;
 namespace Services.CRUD
 {
     public abstract class CrudService<TModel, TEntity> : ICrudService<TModel>
-        where TModel : EntityModel
-        where TEntity : Entity
+        where TModel : class
+        where TEntity : class, IOwnedEntity
     {
         protected readonly ApplicationContext context;
         protected readonly UserManager<User> userManager;
@@ -39,9 +39,9 @@ namespace Services.CRUD
             var models = entities.Adapt<List<TModel>>();
             return new PagedArrayModel<TModel>(models, query.Count());
         }
-        public virtual async Task<Result<TModel>> AddAsync(ClaimsPrincipal user, TModel model)
+        public virtual async Task<Result<TModel>> AddAsync(ClaimsPrincipal principal, TModel model)
         {
-            var userId = userManager.GetUserId(user);
+            var userId = userManager.GetUserId(principal);
             var entity = model.Adapt<TEntity>();
             var proxy = context.Set<TEntity>().CreateProxy();
             context.Entry(proxy).CurrentValues.SetValues(entity);
@@ -53,9 +53,9 @@ namespace Services.CRUD
             return Result.Ok(response);
         }
 
-        public virtual async Task<Result> DeleteAsync(ClaimsPrincipal user, int id)
+        public virtual async Task<Result> DeleteAsync(ClaimsPrincipal principal, int id)
         {
-            var userId = userManager.GetUserId(user);
+            var userId = userManager.GetUserId(principal);
             var entity = await context.FindAsync<TEntity>(id);
             if (entity is null)
                 return Result.Fail(Errors.NotFound);
@@ -66,9 +66,9 @@ namespace Services.CRUD
             return Result.Ok();
         }
 
-        public virtual async Task<Result> EditAsync(ClaimsPrincipal user, TModel model)
+        public virtual async Task<Result> EditAsync(ClaimsPrincipal principal, TModel model)
         {
-            var userId = userManager.GetUserId(user);
+            var userId = userManager.GetUserId(principal);
             var entity = model.Adapt<TEntity>();
             var proxy = context.Set<TEntity>().CreateProxy();
             context.Entry(proxy).CurrentValues.SetValues(entity);

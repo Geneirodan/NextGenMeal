@@ -3,13 +3,13 @@ import {useFormik} from 'formik';
 import {useTranslation} from "react-i18next";
 import {Navigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {confirmPasswordValidation, emailValidation, stringRequired, passwordValidation} from "../../utils/validation";
+import {confirmPasswordValidation, emailValidation, passwordValidation, stringRequired} from "../../utils/validation";
 import * as yup from "yup";
-import {register, selectors} from "../../store/account/register";
-import {selectors as authSelectors} from "../../store/account/login"
+import {register, resetErrors, selector} from "../../store/account/login"
 import {Button, Container, Stack, Typography} from "@mui/material";
 import {Errors} from "../common/Errors";
 import {CustomTextField} from "../common/inputs/CustomTextField";
+import {useErrors, useReset, useUpdate} from "../../utils/hook/hooks";
 
 
 export const RegisterPageComponent = ({errors, formik, t}) => <form onSubmit={formik.handleSubmit}>
@@ -32,9 +32,9 @@ export const RegisterPageComponent = ({errors, formik, t}) => <form onSubmit={fo
     </Container>
 </form>;
 export const RegisterPage = () => {
-    const errors = useSelector(selectors.errors)
-    const role = useSelector(authSelectors.role)
-    const isRegistered = useSelector(selectors.registered)
+    const errors = useErrors(selector, resetErrors)
+    const role = useSelector(selector("role"))
+    const isRegistered = useUpdate(selector)
     const {t} = useTranslation();
     const dispatch = useDispatch()
 
@@ -54,7 +54,7 @@ export const RegisterPage = () => {
         dispatch(register(values));
     };
     const formik = useFormik({initialValues, validationSchema, onSubmit});
-    useEffect(() => () => formik.resetForm(), [])
+    useReset(open, formik.resetForm);
     return isRegistered
         ? <Navigate to={"/register/confirm"}/>
         : role

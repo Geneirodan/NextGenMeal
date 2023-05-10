@@ -1,6 +1,5 @@
-import {IconButton, TextField} from "@mui/material";
+import {TextField} from "@mui/material";
 import React from "react";
-import SearchIcon from '@mui/icons-material/Search';
 import {getIn} from "formik";
 
 export const CustomTextField = ({formik: {errors, handleChange, touched, values}, name, ...restProps}) => {

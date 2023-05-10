@@ -1,30 +1,29 @@
 import {createSlice} from '@reduxjs/toolkit'
-
-import {getRole} from "./account/login";
+import {getRole, getInfo} from "./account/login";
 
 // Slice
-const slice = createSlice({
+const {actions, reducer} = createSlice({
     name: 'app',
-    initialState: { initialized: false },
+    initialState: {
+        initialized: false
+    },
     reducers: {
-        initializeSuccess: (state, action) => {
-            state.initialized = true;
+        setInitialized: (state, {payload}) => {
+            state.initialized = payload;
         },
     },
 });
-export default slice.reducer
-
-// Actions
-const { initializeSuccess } = slice.actions
-
+export default reducer
+export const {setInitialized} = actions
 export const initialize = () => async dispatch => {
     try {
         await dispatch(getRole())
+        await dispatch(getInfo())
     } catch (e) {
-        console.error(e.message);
+        console.error(e.message)
     }
-    dispatch(initializeSuccess());
+    dispatch(setInitialized(true))
 }
 
 // Selectors
-export const initializedSelector = (state) => state.app.initialized
+export const initializedSelector = state => state.app.initialized

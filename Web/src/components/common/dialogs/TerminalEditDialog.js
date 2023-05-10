@@ -3,12 +3,11 @@ import {useFormik} from "formik";
 import React from "react";
 import {CustomTextField} from "../inputs/CustomTextField";
 import {resetErrors, selector} from "../../../store/service/caterings";
-import {useSelector} from "react-redux";
-import {useErrors} from "../../../utils/hook/UseErrors";
-import {EditDialog} from "../EditDialog";
+import {EditDialog} from "./EditDialog";
+import {useErrors, useReset} from "../../../utils/hook/hooks";
 
 export const TerminalEditDialog = ({terminal, open, onClose, onSubmit}) => {
-    const errors = useSelector(selector("errors"))
+    const errors = useErrors(selector, resetErrors)
     const {t} = useTranslation()
     const title = terminal ? t("Add terminal") : t("Edit terminal")
     const initialValues = {
@@ -19,7 +18,7 @@ export const TerminalEditDialog = ({terminal, open, onClose, onSubmit}) => {
     const fields = [
         <CustomTextField name="serialNumber" formik={formik} label={t("SerialNumber")}/>
     ]
-    useErrors(open, formik.resetForm, resetErrors);
+    useReset(open, formik.resetForm);
     return <EditDialog title={title}
                        open={open}
                        onClose={onClose}

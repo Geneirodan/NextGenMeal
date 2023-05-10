@@ -1,10 +1,14 @@
-﻿using DataAccess.Entities.Users;
+﻿using DataAccess;
+using DataAccess.Entities;
+using DataAccess.Entities.Users;
 using FluentResults;
 using Mapster;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Services.Interfaces;
+using Services.Models;
 using Services.Models.Register;
 using Services.Models.Users;
 using System.Security.Claims;
@@ -19,16 +23,19 @@ namespace Services
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
         private readonly IEmailSender emailSender;
+        private readonly ApplicationContext context;
 
         public UserService(UserManager<User> userManager,
                            SignInManager<User> signInManager,
                            IEmailSender emailSender,
                            RoleManager<IdentityRole> roleManager,
-                           IConfiguration configuration) : base()
+                           IConfiguration configuration,
+                           ApplicationContext context) : base()
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.emailSender = emailSender;
+            this.context = context;
             InitializeAsync(userManager, roleManager, configuration).Wait();
         }
 
@@ -62,11 +69,35 @@ namespace Services
             var result = await userManager.DeleteAsync(user!);
             return HandleResult(result);
         }
+        public async Task<Result> DeleteAsync(ClaimsPrincipal principal, string id)
+        {
+            var userId = userManager.GetUserId(principal);
+            var user = await context.Employees.FindAsync(id);
+            if(user is null)
+                return Result.Fail(Errors.NotFound);
+            if (user.GetOwnerId() != userId)
+                return Result.Fail(Errors.Forbidden);
+            var result = await userManager.DeleteAsync(user!);
+            return HandleResult(result);
+        }
 
         public async Task<Result> ChangeNameAsync(string name, ClaimsPrincipal principal)
         {
             var user = await userManager.GetUserAsync(principal);
             user!.Name = name;
+            var result = await userManager.UpdateAsync(user);
+            return HandleResult(result);
+        }
+
+        public async Task<Result> ChangeNameAsync(string name, ClaimsPrincipal principal, string id)
+        {
+            var userId = userManager.GetUserId(principal);
+            var user = await context.Employees.FindAsync(id);
+            if (user is null)
+                return Result.Fail(Errors.NotFound);
+            if (user.GetOwnerId() != userId)
+                return Result.Fail(Errors.Forbidden);
+            user.Name = name;
             var result = await userManager.UpdateAsync(user);
             return HandleResult(result);
         }
@@ -125,11 +156,16 @@ namespace Services
             return HandleResult(result);
         }
 
-        public async Task<TModel?> GetUser<TModel>(ClaimsPrincipal principal)
-            where TModel : UserModel
+        public async Task<UserModel?> GetUser(ClaimsPrincipal principal)
         {
             var user = await userManager.GetUserAsync(principal);
-            return user?.Adapt<TModel>();
+            var role = await userManager.GetRolesAsync(user!);
+            return role.FirstOrDefault() switch
+            {
+                Roles.Service => user!.Adapt<ServiceModel>(),
+                Roles.Employee => user!.Adapt<EmployeeModel>(),
+                _ => user!.Adapt<UserModel>(),
+            };
         }
         public async Task<string?> GetRole(ClaimsPrincipal principal)
         {
@@ -140,12 +176,12 @@ namespace Services
 
         public AuthenticationProperties ConfigureExternalAuthenticationProperties(string provider, string redirectUrl)
         {
-            return signInManager.ConfigureExternalAuthenticationProperties("Google", redirectUrl);
+            return signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
         }
 
         public async Task<Result> GoogleAuth()
         {
-            ExternalLoginInfo info = await signInManager.GetExternalLoginInfoAsync();
+            var info = await signInManager.GetExternalLoginInfoAsync();
             if (info is not null)
             {
                 var signInResult = await signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, true);
@@ -218,5 +254,17 @@ namespace Services
         }
 
         public string? GetUserId(ClaimsPrincipal principal) => userManager.GetUserId(principal);
+
+        public async Task<PagedArrayModel<EmployeeModel>> GetEmployeesAsync(int cateringId, int page, string query)
+        {
+            var employees = context.Set<Employee>()
+                                   .Where(x => x.CateringId == cateringId && x.Name.Contains(query));
+            var entities = await employees.OrderByDescending(x => x.Name)
+                                           .Skip((page - 1) * Utils.ItemsPerPage)
+                                           .Take(Utils.ItemsPerPage)
+                                           .ToListAsync();
+            var models = entities.Adapt<List<EmployeeModel>>();
+            return new PagedArrayModel<EmployeeModel>(models, employees.Count());
+        }
     }
 }

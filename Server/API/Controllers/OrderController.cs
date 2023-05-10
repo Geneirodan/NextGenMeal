@@ -35,22 +35,60 @@ namespace API.Controllers
             return HandleResult(result);
         }
 
-        [HttpPost]
+        [HttpPost(Routes.Action)]
         [Authorize(Roles = Roles.CustomerEmployee)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async virtual Task<ActionResult<OrderModel>> AddAsync([FromBody] OrderRequest request)
         {
             var model = request.Adapt<OrderModel>();
-            var result = await orderService.AddAsync(model);
+            var result = await orderService.AddAsync(User, model);
             return HandleCreatedResult(result);
+        }
+
+        [HttpPatch(Routes.Action)]
+        [Authorize(Roles = Roles.CustomerEmployee)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async virtual Task<IActionResult> PayAsync([FromBody] int id)
+        {
+            var result = await orderService.PayAsync(User, id);
+            return HandleResult(result);
+        }
+
+        [HttpPatch(Routes.Action)]
+        [Authorize(Roles = Roles.CustomerEmployee)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async virtual Task<IActionResult> DoAsync([FromBody] int id)
+        {
+            var result = await orderService.DoAsync(User, id);
+            return HandleResult(result);
+        }
+
+        [HttpPatch(Routes.Action)]
+        [Authorize(Roles = Roles.CustomerEmployee)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async virtual Task<IActionResult> ReceiveAsync([FromBody] int id)
+        {
+            var result = await orderService.ReceiveAsync(User, id);
+            return HandleResult(result);
         }
 
         [HttpDelete]
         [Authorize(Roles = Roles.CustomerEmployee)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async virtual Task<IActionResult> DeleteAsync([Required] int id)
         {

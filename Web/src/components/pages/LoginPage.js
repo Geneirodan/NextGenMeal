@@ -4,12 +4,14 @@ import {Navigate, NavLink} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {emailValidation, passwordValidation} from "../../utils/validation";
 import * as yup from "yup";
-import {selectors, signIn} from "../../store/account/login";
+import {resetErrors, selector, signIn} from "../../store/account/login";
 import {useTranslation} from "react-i18next";
 import {Button, Container, Stack, SvgIcon, Typography} from "@mui/material";
 import {Errors} from "../common/Errors";
 import {CustomTextField} from "../common/inputs/CustomTextField";
 import {ReactComponent as GoogleIcon} from "../../img/google.svg"
+import {baseUrl} from "../../api/api"
+import {useErrors} from "../../utils/hook/hooks";
 
 export const LoginPageComponent = React.memo(
     ({errors, formik, t}) => (
@@ -19,7 +21,7 @@ export const LoginPageComponent = React.memo(
                     <Typography variant="h3" align="center">
                         {t("Login")}
                     </Typography>
-                    <Errors errors={errors} t={t}/>
+                    <Errors errors={errors}/>
                     <CustomTextField name="email" formik={formik} label={t("Email")}/>
                     <CustomTextField name="password" type="password" formik={formik} label={t("Password")}/>
                     <Typography variant="body1" align="center">
@@ -32,7 +34,7 @@ export const LoginPageComponent = React.memo(
                             {t("Log in")}
                         </Button>
                         <Button variant="outlined"
-                                href={`https://localhost:7168/api/Account/GoogleAuth?returnUrl=${window.location.href}`}
+                                href={`${baseUrl}Account/GoogleAuth?returnUrl=${window.location.href}`}
                                 startIcon={<SvgIcon component={GoogleIcon} inheritViewBox/>}>
                             {t("Continue with Google")}
                         </Button>
@@ -49,8 +51,8 @@ export const LoginPageComponent = React.memo(
     )
 );
 export const LoginPage = () => {
-    const errors = useSelector(selectors.errors)
-    const role = useSelector(selectors.role)
+    const errors = useErrors(selector, resetErrors)
+    const role = useSelector(selector("role"))
     const dispatch = useDispatch()
     const {t} = useTranslation()
     const initialValues = {email: '', password: ''};

@@ -16,6 +16,5 @@ i18n.use(LanguageDetector)
         interpolation: {
             escapeValue: false,
         }
-    });
-
-export default i18n;
+    })
+    .then();

@@ -59,10 +59,8 @@ services.ConfigureApplicationCookie(options =>
         context.Response.StatusCode = StatusCodes.Status403Forbidden;
         return Task.CompletedTask;
     };
-});
-services.Configure<CookiePolicyOptions>(options =>
-{
-    options.MinimumSameSitePolicy = SameSiteMode.Lax;
+    options.Cookie.SameSite = SameSiteMode.None;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 });
 services.AddEndpointsApiExplorer()
         .AddSwaggerGen()
@@ -85,7 +83,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 app.UseExceptionHandler()
    .UseHttpsRedirection()
    .UseCors(builder => builder.WithOrigins("https://localhost:3000")

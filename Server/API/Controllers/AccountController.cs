@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
+using Services.Models;
 using Services.Models.Users;
 using Utils.Constants;
 
@@ -29,27 +30,22 @@ namespace API.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<UserModel>> RegisterAsync([FromBody] CustomerRegisterRequest request, string callbackUrl)
-        {
-            return await RegisterAsync<UserModel>(request, callbackUrl);
-        }
+        public async Task<ActionResult<UserModel>> RegisterAsync([FromBody] CustomerRegisterRequest request, string callbackUrl) => 
+            await RegisterAsync<UserModel>(request, callbackUrl);
 
         [HttpPost(Roles.Service)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<ServiceModel>> RegisterAsync([FromBody] ServiceRegisterRequest request, string callbackUrl)
-        {
-            return await RegisterAsync<ServiceModel>(request, callbackUrl);
-        }
+        public async Task<ActionResult<ServiceModel>> RegisterAsync([FromBody] ServiceRegisterRequest request, string callbackUrl) => 
+            await RegisterAsync<ServiceModel>(request, callbackUrl);
 
         [HttpPost(Roles.Employee)]
         [Authorize(Roles = Roles.Service)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<EmployeeModel>> RegisterAsync([FromBody] EmployeeRegisterRequest request, string callbackUrl)
-        {
-            return await RegisterAsync<EmployeeModel>(request, callbackUrl);
-        }
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<ActionResult<EmployeeModel>> RegisterAsync([FromBody] EmployeeRegisterRequest request, string callbackUrl) => 
+            await RegisterAsync<EmployeeModel>(request, callbackUrl);
 
         private async Task<ActionResult<TModel>> RegisterAsync<TModel>(RegisterRequest request, string callbackUrl)
             where TModel : UserModel
@@ -63,18 +59,14 @@ namespace API.Controllers
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> LogoutAsync()
-        {
-            await userService.LogoutAsync();
-            return Ok();
-        }
+        public async Task LogoutAsync() => await userService.LogoutAsync();
 
         [HttpGet]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<UserModel?>> Info() => await userService.GetUser<UserModel>(User);
+        public async Task<ActionResult<UserModel?>> Info() => await userService.GetUser(User);
 
         [HttpGet]
         [Authorize]
@@ -98,10 +90,24 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteAsync()
         {
             var result = await userService.DeleteAsync(User);
+            return HandleResult(result);
+        }
+        
+        [HttpDelete("{id}")]
+        [Authorize(Roles = Roles.Service)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> DeleteAsync(string id)
+        {
+            var result = await userService.DeleteAsync(User, id);
             return HandleResult(result);
         }
 
@@ -114,6 +120,19 @@ namespace API.Controllers
         public async Task<IActionResult> ChangeName([FromBody] ChangeNameRequest model)
         {
             var result = await userService.ChangeNameAsync(model.Name, User);
+            return HandleResult(result);
+        }
+
+        [HttpPatch("{id}")]
+        [Authorize(Roles = Roles.Service)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> ChangeName([FromBody] ChangeNameRequest model, string id)
+        {
+            var result = await userService.ChangeNameAsync(model.Name, User, id);
             return HandleResult(result);
         }
 
@@ -153,7 +172,7 @@ namespace API.Controllers
         public IActionResult GoogleAuth(string? returnUrl = null)
         {
             returnUrl ??= Request.Headers["Origin"].FirstOrDefault() ?? Url.Content("/");
-            string? redirectUrl = Url.Action("GoogleResponse", "Account", new { returnUrl });
+            string? redirectUrl =  Url.Action("GoogleResponse", "Account", new { returnUrl });
             AuthenticationProperties properties = userService.ConfigureExternalAuthenticationProperties("Google", redirectUrl!);
             return new ChallengeResult("Google", properties);
         }
@@ -165,6 +184,15 @@ namespace API.Controllers
             await userService.GoogleAuth();
             return Redirect(returnUrl);
         }
+
+
+        [HttpGet]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult<PagedArrayModel<EmployeeModel>>> GetEmployees(int cateringId, int page = 1, string query = "") =>
+            await userService.GetEmployeesAsync(cateringId, page, query);
 
     }
 }

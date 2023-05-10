@@ -10,5 +10,6 @@
         public const string InvalidCredentials = "Invalid email and/or password";
         public const string IsLockedOut = "Account is locked out";
         public const string IsNotAllowed = "Login is not allowed";
+        public const string InvalidDishes = "Invalid dishes";
     }
 }

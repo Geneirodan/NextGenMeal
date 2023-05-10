@@ -1,6 +1,6 @@
 import React, {memo} from "react";
 import {Dialog, DialogActions, DialogContent, DialogTitle, Stack} from "@mui/material";
-import {Errors} from "./Errors";
+import {Errors} from "../Errors";
 import Button from "@mui/material/Button";
 
 export const EditDialog = memo(
