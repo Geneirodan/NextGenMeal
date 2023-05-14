@@ -16,7 +16,6 @@ namespace DataAccess
         public DbSet<Customer> Customers { get; set; } = null!;
         public DbSet<Employee> Employees { get; set; } = null!;
         public DbSet<Service> Services { get; set; } = null!;
-        public DbSet<Box> Boxes { get; set; } = null!;
         public DbSet<Catering> Caterings { get; set; } = null!;
         public DbSet<Dish> Dishes { get; set; } = null!;
         public DbSet<Order> Orders { get; set; } = null!;
@@ -80,12 +79,6 @@ namespace DataAccess
                    .HasOne(c => c.Terminal)
                    .WithOne(t => t.Catering)
                    .HasForeignKey<Terminal>(t => t.Id)
-                   .OnDelete(DeleteBehavior.Cascade);
-
-            builder.Entity<Terminal>()
-                   .HasMany(t => t.Boxes)
-                   .WithOne(b => b.Terminal)
-                   .HasForeignKey(b => b.TerminalId)
                    .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Terminal>()

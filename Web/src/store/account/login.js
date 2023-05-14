@@ -29,7 +29,15 @@ const {actions, name, reducer} = createSlice({
 });
 export default {name, reducer}
 export const selector = getSelector(name)
-export const {resetErrors, setUpdated, infoSuccess, roleSuccess, setErrors, logoutSuccess, confirmEmailSuccess} = actions
+export const {
+    resetErrors,
+    setUpdated,
+    infoSuccess,
+    roleSuccess,
+    setErrors,
+    logoutSuccess,
+    confirmEmailSuccess
+} = actions
 
 export const getInfo = () => async dispatch => {
     const response = await authAPI.info()
@@ -62,10 +70,11 @@ export const confirmEmail = ({id, code}) => async dispatch => {
     const response = await authAPI.confirmEmail(id, code)
     dispatch(confirmEmailSuccess(response.ok))
 }
-export const register = ({name, email, password, confirmPassword}) => async dispatch => {
-    const response = await authAPI.register(name, email, password, confirmPassword)
-    await handleResponse(response, dispatch, setUpdated, setErrors)
-}
+export const register = ({name, email, password, confirmPassword}) =>
+    async dispatch => {
+        const response = await authAPI.register(name, email, password, confirmPassword)
+        await handleResponse(response, dispatch, setUpdated, setErrors)
+    }
 
 export const rename = ({name}) => async dispatch => {
     const response = await authAPI.changeName(name)

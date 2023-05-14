@@ -9,11 +9,11 @@ import {CateringEditDialog} from "../../common/dialogs/CateringEditDialog";
 import {useUpdate} from "../../../utils/hook/hooks";
 import {AddFab} from "../../common/buttons/AddFab";
 import {EditDialogButton} from "../../common/dialogs/EditDialogButton";
+import {roles} from "../../../utils/constants";
 
 export const CateringsPage = memo(
-    withRole("Service")(
+    withRole(roles.Service)(
         () => {
-
             const {items, totalCount} = useSelector(selector("caterings"))
             const updated = useUpdate(selector)
             const dispatch = useDispatch()

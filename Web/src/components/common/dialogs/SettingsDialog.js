@@ -14,7 +14,7 @@ export const SettingsDialogMenuItem = memo(
             (event, measure) => setUnit(measure.props.value),
             []
         )
-        const callbackfn = useCallback(
+        const itemCallback = useCallback(
             name =>
                 <MenuItem key={name} value={name}>
                     {getUnitSymbol(name)}
@@ -33,7 +33,7 @@ export const SettingsDialogMenuItem = memo(
                             {t("Measure units")}:
                         </Typography>
                         <Select color="inherit" variant="standard" value={unit} onChange={onChange} disableUnderline>
-                            {units.map(callbackfn)}
+                            {units.map(itemCallback)}
                         </Select>
                     </Stack>
                 </DialogContent>

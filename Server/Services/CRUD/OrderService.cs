@@ -6,7 +6,6 @@ using Mapster;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Services.Interfaces;
 using Services.Models;
 using Services.Models.Users;
@@ -28,7 +27,11 @@ namespace Services.CRUD
             this.configuration = configuration;
         }
 
-        public async Task<PagedArrayModel<OrderModel>> GetAsync(ClaimsPrincipal principal, int page)
+        public async Task<PagedArrayModel<OrderModel>> GetAsync(ClaimsPrincipal principal,
+                                                                int page,
+                                                                bool? isBox,
+                                                                DateTime startTime,
+                                                                DateTime endTime)
         {
             var user = await userManager.GetUserAsync(principal);
             Expression<Func<Order, bool>> predicate = user switch
@@ -37,8 +40,16 @@ namespace Services.CRUD
                 null => throw new NullReferenceException(),
                 _ => x => x.CustomerId == user.Id,
             };
-            var query = context.Set<Order>().Where(predicate).OrderByDescending(x => x.Time);
-            var entities = await query.Skip((page - 1) * Utils.ItemsPerPage).Take(Utils.ItemsPerPage).ToListAsync();
+            var query = context.Set<Order>()
+                               .Where(o => o.Time <= endTime
+                                           && o.Time >= startTime)
+                               .Where(predicate);
+            if (isBox is not null)
+                query = query.Where(x => x.IsBox == isBox);
+            var entities = await query.OrderByDescending(x => x.Time)
+                                      .Skip((page - 1) * Utils.ItemsPerPage)
+                                      .Take(Utils.ItemsPerPage)
+                                      .ToListAsync();
             var models = entities.Adapt<List<OrderModel>>();
             return new PagedArrayModel<OrderModel>(models, query.Count());
         }
@@ -46,11 +57,24 @@ namespace Services.CRUD
         public async Task<Result<OrderModel>> AddAsync(ClaimsPrincipal principal, OrderModel model)
         {
             using var transaction = context.Database.BeginTransaction();
+            model.Status = OrderStatuses.Undone;
             var b = model.OrderDishes.All(od => context.Set<Dish>().Any(d => d.Id == od.DishId));
             if (!b)
                 return Result.Fail(Errors.InvalidDishes);
             var entity = model.Adapt<Order>();
-            entity.CustomerId = userManager.GetUserId(principal)!;
+            var user = await userManager.GetUserAsync(principal);
+            switch (user)
+            {
+                case Customer customer:
+                    entity.CustomerId = user.Id;
+                    break;
+                case Employee employee:
+                    entity.CateringId = employee.CateringId;
+                    break;
+                default:
+                    throw new ArgumentException(string.Empty, nameof(principal));
+
+            }
             var proxy = context.Set<Order>().CreateProxy();
             context.Entry(proxy).CurrentValues.SetValues(entity);
             await context.AddAsync(proxy);
@@ -84,8 +108,8 @@ namespace Services.CRUD
                 var timeoutMins = double.Parse(configuration["Order:DeleteTimeout"]!);
                 var timeout = TimeSpan.FromMinutes(timeoutMins);
                 if (order.Time - timeout < DateTime.UtcNow)
-                        return Result.Fail(Errors.Forbidden);
-                }
+                    return Result.Fail(Errors.Forbidden);
+            }
             context.Remove(order);
             await context.SaveChangesAsync();
             return Result.Ok();
@@ -145,18 +169,18 @@ namespace Services.CRUD
             var enumerable = context.Set<Service>().Where(x => x.Name.Contains(query));
             if (country is not null)
                 enumerable = enumerable.Where(x => x.Country == country);
-            var entities = await enumerable.OrderByDescending(x => x.Name).Skip((page - 1) * Utils.ItemsPerPage).Take(Utils.ItemsPerPage).ToListAsync();
+            var entities = await enumerable.OrderByDescending(x => x.Name)
+                                           .Skip((page - 1) * Utils.ItemsPerPage)
+                                           .Take(Utils.ItemsPerPage)
+                                           .ToListAsync();
             var models = entities.Adapt<List<ServiceModel>>();
             return new PagedArrayModel<ServiceModel>(models, enumerable.Count());
         }
 
-        public async Task<Result> PayAsync(ClaimsPrincipal principal, int id) => 
-            await SetStatus(principal, id, OrderStatuses.Undone, OrderStatuses.Paid);
+        public async Task<Result> DoAsync(ClaimsPrincipal principal, int id) =>
+            await SetStatus(principal, id, OrderStatuses.Undone, OrderStatuses.Done);
 
-        public async Task<Result> DoAsync(ClaimsPrincipal principal, int id) => 
-            await SetStatus(principal, id, OrderStatuses.Paid, OrderStatuses.Done);
-
-        public async Task<Result> ReceiveAsync(ClaimsPrincipal principal, int id) => 
+        public async Task<Result> ReceiveAsync(ClaimsPrincipal principal, int id) =>
             await SetStatus(principal, id, OrderStatuses.Done, OrderStatuses.Received);
 
         private async Task<Result> SetStatus(ClaimsPrincipal principal, int id, string oldStatus, string newStatus)

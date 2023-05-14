@@ -21,8 +21,11 @@ namespace API.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<PagedArrayModel<OrderModel>>> GetAsync(int page = 1) =>
-            await orderService.GetAsync(User, page);
+        public async Task<ActionResult<PagedArrayModel<OrderModel>>> GetAsync(DateTime? startTime,
+                                                                              DateTime? endTime,
+                                                                              int page = 1,
+                                                                              bool? isBox = null) =>
+            await orderService.GetAsync(User, page, isBox, startTime ?? DateTime.MinValue, endTime ?? DateTime.MaxValue);
 
         [HttpGet("Optimal")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -35,7 +38,7 @@ namespace API.Controllers
             return HandleResult(result);
         }
 
-        [HttpPost(Routes.Action)]
+        [HttpPost]
         [Authorize(Roles = Roles.CustomerEmployee)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -54,19 +57,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async virtual Task<IActionResult> PayAsync([FromBody] int id)
-        {
-            var result = await orderService.PayAsync(User, id);
-            return HandleResult(result);
-        }
-
-        [HttpPatch(Routes.Action)]
-        [Authorize(Roles = Roles.CustomerEmployee)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async virtual Task<IActionResult> DoAsync([FromBody] int id)
+        public async virtual Task<IActionResult> DoAsync([Required] int id)
         {
             var result = await orderService.DoAsync(User, id);
             return HandleResult(result);
@@ -78,7 +69,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async virtual Task<IActionResult> ReceiveAsync([FromBody] int id)
+        public async virtual Task<IActionResult> ReceiveAsync([Required] int id)
         {
             var result = await orderService.ReceiveAsync(User, id);
             return HandleResult(result);

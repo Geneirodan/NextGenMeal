@@ -10,9 +10,14 @@ export const ConfirmPage = memo(
         const [id] = useQueryParam("id")
         const [code] = useQueryParam("code")
         const confirmed = useSelector(selector("confirmed"))
-        if (id && code) {
+        if (id && code)
             dispatch(confirmEmail({id, code}))
-        } else return <div>Invalid</div>
-        return confirmed === null ? <Preloader/> : confirmed ? <div>Confirmed</div> : <div>Not confirmed</div>;
+        else
+            return <div>Invalid</div>
+        return confirmed === null
+            ? <Preloader/>
+            : confirmed
+                ? <div>Confirmed</div>
+                : <div>Not confirmed</div>;
     }
 )

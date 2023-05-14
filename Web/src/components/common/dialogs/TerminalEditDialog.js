@@ -9,7 +9,7 @@ import {useErrors, useReset} from "../../../utils/hook/hooks";
 export const TerminalEditDialog = ({terminal, open, onClose, onSubmit}) => {
     const errors = useErrors(selector, resetErrors)
     const {t} = useTranslation()
-    const title = terminal ? t("Add terminal") : t("Edit terminal")
+    const title = terminal.serialNumber ? t("Edit terminal") : t("Add terminal")
     const initialValues = {
         serialNumber: null,
         ...terminal

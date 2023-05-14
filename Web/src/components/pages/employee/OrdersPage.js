@@ -1,34 +1,34 @@
 import {withRole} from "../../../utils/hoc/withAuth";
+import {getOrders, selector, setUpdated} from "../../../store/customer/orders";
 import {useDispatch, useSelector} from "react-redux";
 import React, {memo, useCallback, useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
-import {addBox, getBoxes, selector, setUpdated} from "../../../store/service/boxes";
-import {SearchComponent} from "../../common/inputs/SearchComponent";
-import {BoxListItem} from "../../common/listItems/BoxListItem";
-import {BoxEditDialog} from "../../common/dialogs/BoxEditDialog";
 import {ListContainer} from "../../common/ListContainer";
 import {useTranslation} from "react-i18next";
+import {useUpdate} from "../../../utils/hook/hooks";
+import {OrderListItem} from "../../common/listItems/OrderListItem";
+import {roles} from "../../../utils/constants";
 import {AddFab} from "../../common/buttons/AddFab";
-import {EditDialogButton} from "../../common/dialogs/EditDialogButton";
+import {useNavigate} from "react-router-dom";
+import {PeriodPicker} from "../../common/inputs/PeriodPicker";
 
-export const BoxesPage = memo(
-    withRole("Service")(
+export const OrdersPage = memo(
+    withRole(roles.Employee)(
         () => {
             const {t} = useTranslation()
-            const {terminalId} = useParams()
-            const {items, totalCount} = useSelector(selector("boxes"))
-            const updated = useSelector(selector("updated"))
+            const {items, totalCount} = useSelector(selector("orders"))
             const dispatch = useDispatch()
-            const [filter, setFilter] = useState({terminalId})
+            const navigate = useNavigate()
+            const [filter, setFilter] = useState({})
+            const updated = useUpdate(selector)
             const [loading, setLoading] = useState(false)
             const itemCallback = useCallback(
-                box => <BoxListItem key={box.id} box={box}/>,
+                order => <OrderListItem key={order.id} order={order}/>,
                 []
             )
             useEffect(
                 () => {
                     setLoading(true)
-                    dispatch(getBoxes(filter))
+                    dispatch(getOrders(filter))
                     updated && dispatch(setUpdated(false))
                 },
                 [filter, updated]
@@ -37,17 +37,19 @@ export const BoxesPage = memo(
                 () => setLoading(false),
                 [items]
             )
+            const onClick = useCallback(
+                () => navigate("/orders/new"),
+                [navigate]
+            )
             return <>
                 <ListContainer filter={filter}
-                               filters={<SearchComponent filter={filter} setFilter={setFilter}/>}
                                setFilter={setFilter}
+                               filters={<PeriodPicker filter={filter} setFilter={setFilter}/>}
                                items={items}
                                loading={loading}
                                itemCallback={itemCallback}
-                               totalCount={totalCount}
-                               emptyLabel={t("No boxes found")}/>
-                <EditDialogButton EditDialog={BoxEditDialog} EditButton={AddFab} editAction={addBox}
-                                  box={{terminalId}}/>
+                               totalCount={totalCount}/>
+                <AddFab onClick={onClick}/>
             </>
         }
     )

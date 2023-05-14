@@ -14,13 +14,13 @@ import {Step4} from "./Step4";
 import StarIcon from '@mui/icons-material/Star';
 import {OptimalDialog} from "../../../common/dialogs/OptimalDialog";
 import {useDispatch, useSelector} from "react-redux";
-import {addOrder, getOptimalDishes, resetErrors, selector} from "../../../../store/customer/new_order";
+import {addOrder, getOptimalDishes, resetErrors, selector, setUpdated} from "../../../../store/customer/new_order";
 import * as yup from "yup";
 import {stringRequired} from "../../../../utils/validation";
 import {useErrors, useOpen, useStepping, useUpdate} from "../../../../utils/hook/hooks";
 import {ErrorsSnackbar} from "../../../common/ErrorsSnackbar";
 import {useNavigate} from "react-router-dom";
-import {BoxesDialog} from "../../../common/dialogs/BoxesDialog";
+import {roles} from "../../../../utils/constants";
 
 const StepperComponent = memo(
     ({activeStep}) => {
@@ -43,51 +43,61 @@ const StepperComponent = memo(
 )
 
 const BottomButtons = memo(
-    ({activeStep, disabled, handleBack, onOptimalClick, handleNext, formik}) => {
+    ({activeStep, disabled, handleBack, onOptimalClick, handleNext}) => {
         const {t} = useTranslation()
-        return <AppBar position="sticky" color="primary" sx={{
-            top: "auto",
-            bottom: 0
-        }}>
-            <Stack direction="row" justifyContent="space-between" padding={2}>
-                <Button color="inherit" onClick={handleBack} disabled={activeStep === 0}>
-                    <KeyboardArrowLeft/> {t("Back")}
-                </Button>
-                {
-                    activeStep === 2 &&
-                    <>
-                        <BoxesDialog formik={formik}/>
-                        <Button color="inherit" onClick={onOptimalClick}>
-                            <StarIcon/> {t("Try optimal")}
-                        </Button>
-                        <Button color="inherit" onClick={handleNext} disabled={disabled}>
-                            {t("Next")} <KeyboardArrowRight/>
-                        </Button>
-                    </>
-                }
-                {
-                    activeStep === 3 &&
-                    <Button color="inherit" type="submit">
-                        {t("Finish")}
+        return (
+            <AppBar position="sticky" color="primary" sx={{top: "auto", bottom: 0}}>
+                <Stack direction="row" justifyContent="space-between" padding={2}>
+                    <Button color="inherit" onClick={handleBack} disabled={activeStep === 0}>
+                        <KeyboardArrowLeft/> {t("Back")}
                     </Button>
-                }
-            </Stack>
-        </AppBar>;
+                    {
+                        activeStep === 2 &&
+                        <>
+                            <Button color="inherit" onClick={onOptimalClick}>
+                                <StarIcon/> {t("Try optimal")}
+                            </Button>
+                            <Button color="inherit" onClick={handleNext} disabled={disabled}>
+                                {t("Next")} <KeyboardArrowRight/>
+                            </Button>
+                        </>
+                    }
+                    {
+                        activeStep === 3 &&
+                        <Button color="inherit" type="submit">
+                            {t("Finish")}
+                        </Button>
+                    }
+                </Stack>
+            </AppBar>
+        )
     }
 )
 
-const SuccessSnackbar = ({open}) => {
-    const navigate = useNavigate()
-    const onClose = useCallback(() => navigate("/myorders"), [])
-    return <Snackbar open={open} autoHideDuration={6000} onClose={onClose}>
-        <Alert onClose={onClose} severity="success">
-            This is a success message!
-        </Alert>
-    </Snackbar>
-}
+const SuccessSnackbar = memo(
+    ({open}) => {
+        const {t} = useTranslation()
+        const navigate = useNavigate()
+        const dispatch = useDispatch()
+        const onClose = useCallback(
+            () => navigate("/my_orders"),
+            []
+        )
+        return (
+            <Snackbar open={open}
+                      autoHideDuration={6000}
+                      onClose={onClose}
+                      anchorOrigin={{vertical: "bottom", horizontal: "right"}}>
+                <Alert onClose={onClose} severity="success">
+                    {t("Successfully created")}
+                </Alert>
+            </Snackbar>
+        )
+    }
+)
 
-export const OrderPage = memo(
-    withRole("Customer")(
+export const NewOrderPage = memo(
+    withRole(roles.Customer)(
         () => {
             const {t} = useTranslation()
             const dispatch = useDispatch()
@@ -108,6 +118,7 @@ export const OrderPage = memo(
             const initialValues = {
                 time: null,
                 cateringId: null,
+                isBox: false,
                 orderDishes: []
             }
             const validationSchema = yup.object({
@@ -158,21 +169,25 @@ export const OrderPage = memo(
                 },
                 [formik, handleNext, onClose, dispatch]
             )
+            useEffect(
+                () =>
+                    () => {
+                        dispatch(setUpdated(false))
+                    },
+                []
+            )
             return (
                 <form onSubmit={formik.handleSubmit} style={{height: "100%"}}>
                     <Stack sx={{width: '100%', height: '100%'}} spacing={2}>
                         <StepperComponent activeStep={step}/>
                         <Box flexGrow="1">
-                            {
-                                stepsComponents[step]
-                            }
+                            {stepsComponents[step]}
                         </Box>
                         <BottomButtons handleBack={handleBack}
                                        activeStep={step}
                                        onOptimalClick={onClick}
                                        handleNext={handleNext}
-                                       disabled={disableNext}
-                                       formik={formik}/>
+                                       disabled={disableNext}/>
                         <OptimalDialog cateringId={formik.values.cateringId}
                                        open={open}
                                        onClose={onClose}

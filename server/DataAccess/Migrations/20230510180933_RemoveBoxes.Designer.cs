@@ -4,6 +4,7 @@ using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20230510180933_RemoveBoxes")]
+    partial class RemoveBoxes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -106,13 +109,11 @@ namespace DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<byte>("BoxNumber")
-                        .HasColumnType("tinyint");
-
                     b.Property<int>("CateringId")
                         .HasColumnType("int");
 
                     b.Property<string>("CustomerId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsBox")
@@ -159,9 +160,6 @@ namespace DataAccess.Migrations
             modelBuilder.Entity("DataAccess.Entities.Terminal", b =>
                 {
                     b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Cells")
                         .HasColumnType("int");
 
                     b.Property<string>("SerialNumber")
@@ -248,12 +246,12 @@ namespace DataAccess.Migrations
                         {
                             Id = "0",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "e5948c0d-a69b-451e-94cd-70df799056de",
+                            ConcurrencyStamp = "e4bf0776-47da-4d90-95d4-88e1e6a2b08b",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             Name = "Deleted user",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "5a8c1fec-ba66-4e09-bd83-b427daddffba",
+                            SecurityStamp = "e43b250f-dda8-4b29-98ba-f612d84cb618",
                             TwoFactorEnabled = false
                         });
                 });
@@ -454,7 +452,8 @@ namespace DataAccess.Migrations
                     b.HasOne("DataAccess.Entities.Users.Customer", "Customer")
                         .WithMany("Orders")
                         .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.Navigation("Catering");
 

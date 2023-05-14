@@ -4,6 +4,7 @@ using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20230511221211_OrderCustomerId")]
+    partial class OrderCustomerId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -106,9 +109,6 @@ namespace DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<byte>("BoxNumber")
-                        .HasColumnType("tinyint");
-
                     b.Property<int>("CateringId")
                         .HasColumnType("int");
 
@@ -159,9 +159,6 @@ namespace DataAccess.Migrations
             modelBuilder.Entity("DataAccess.Entities.Terminal", b =>
                 {
                     b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Cells")
                         .HasColumnType("int");
 
                     b.Property<string>("SerialNumber")
@@ -248,12 +245,12 @@ namespace DataAccess.Migrations
                         {
                             Id = "0",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "e5948c0d-a69b-451e-94cd-70df799056de",
+                            ConcurrencyStamp = "556755ba-4a2a-471f-839d-03e73e5cb861",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             Name = "Deleted user",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "5a8c1fec-ba66-4e09-bd83-b427daddffba",
+                            SecurityStamp = "0ad39a2f-32ee-4c95-a81a-e16d48974f4f",
                             TwoFactorEnabled = false
                         });
                 });

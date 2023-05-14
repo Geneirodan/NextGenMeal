@@ -26,7 +26,7 @@ const {actions, name, reducer} = createSlice({
             state.selectedDishes[payload.dishId.toString()] = payload
         },
         removeDish: (state, {payload}) => {
-            state.selectedDishes = state.selectedDishes.filter(item => item.dishId !== payload.dishId)
+            state.selectedDishes = Object.values(state.selectedDishes).filter(item => item.dishId !== payload.dishId)
         }
     },
 });
