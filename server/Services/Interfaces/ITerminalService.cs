@@ -1,7 +1,7 @@
 ﻿using Services.Models;
 using System.Security.Claims;
 
-namespace Services.Interfaces.CRUD
+namespace Services.Interfaces
 {
     public interface ITerminalService : ICrudService<TerminalModel>
     {

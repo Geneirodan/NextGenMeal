@@ -11,6 +11,7 @@ using Services.Interfaces;
 using Services.Models;
 using Services.Models.Register;
 using Services.Models.Users;
+using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
 using Utils.Constants;
@@ -255,16 +256,43 @@ namespace Services
 
         public string? GetUserId(ClaimsPrincipal principal) => userManager.GetUserId(principal);
 
-        public async Task<PagedArrayModel<EmployeeModel>> GetEmployeesAsync(int cateringId, int page, string query)
+        public async Task<PagedArrayModel<EmployeeModel>> GetEmployeesAsync(int cateringId, int page, string query) =>
+            await GetUsers<EmployeeModel, Employee>(page, query, x => x.CateringId == cateringId);
+
+        public async Task<PagedArrayModel<ServiceModel>> GetServicesAsync(int page, string query, string? country)
         {
-            var employees = context.Set<Employee>()
-                                   .Where(x => x.CateringId == cateringId && x.Name.Contains(query));
-            var entities = await employees.OrderByDescending(x => x.Name)
-                                           .Skip((page - 1) * Utils.ItemsPerPage)
-                                           .Take(Utils.ItemsPerPage)
-                                           .ToListAsync();
-            var models = entities.Adapt<List<EmployeeModel>>();
-            return new PagedArrayModel<EmployeeModel>(models, employees.Count());
+            Expression<Func<Service, bool>>? predicate = country is null ? null : x => x.Country == country;
+            return await GetUsers<ServiceModel, Service>(page, query, predicate);
+        }
+
+        public async Task<PagedArrayModel<UserModel>> GetCustomersAsync(int page, string query) =>
+            await GetUsers<UserModel, Customer>(page, query);
+
+        private async Task<PagedArrayModel<TModel>> GetUsers<TModel, TEntity>(int page, string query, Expression<Func<TEntity, bool>>? predicate = null)
+            where TEntity : User
+        {
+            var users = context.Set<TEntity>().Where(x => x.Name.Contains(query));
+            if (predicate is not null)
+                users = users.Where(predicate);
+            var entities = await users.OrderByDescending(x => x.Name)
+                                      .Skip((page - 1) * ItemsPerPage)
+                                      .Take(ItemsPerPage)
+                                      .ToListAsync();
+            var models = entities.Adapt<List<TModel>>();
+            return new PagedArrayModel<TModel>(models, users.Count());
+        }
+
+        public async Task<Result> BlockUserAsync(string id) => await SetLockoutDate(id, DateTimeOffset.MaxValue);
+
+        public async Task<Result> UnblockUserAsync(string id) => await SetLockoutDate(id, null);
+
+        private async Task<Result> SetLockoutDate(string id, DateTimeOffset? lockoutEnd)
+        {
+            var user = await userManager.FindByIdAsync(id);
+            if (user is null)
+                return Result.Fail(Errors.NotFound);
+            var result = await userManager.SetLockoutEndDateAsync(user, lockoutEnd);
+            return HandleResult(result);
         }
     }
 }

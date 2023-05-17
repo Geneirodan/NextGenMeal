@@ -2,7 +2,7 @@
 using Services.Models;
 using System.Security.Claims;
 
-namespace Services.Interfaces.CRUD
+namespace Services.Interfaces
 {
     public interface ICateringService : ICrudService<CateringModel>
     {

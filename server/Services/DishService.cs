@@ -4,10 +4,10 @@ using DataAccess.Entities.Users;
 using Mapster;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Services.Interfaces.CRUD;
+using Services.Interfaces;
 using Services.Models;
 
-namespace Services.CRUD
+namespace Services
 {
     public class DishService : CrudService<DishModel, Dish>, IDishService
     {

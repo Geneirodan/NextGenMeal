@@ -1,6 +1,6 @@
 ﻿using Services.Models;
 
-namespace Services.Interfaces.CRUD
+namespace Services.Interfaces
 {
     public interface IDishService : ICrudService<DishModel>
     {

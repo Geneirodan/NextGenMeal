@@ -64,14 +64,12 @@ namespace API.Controllers
         [HttpGet]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<UserModel?>> Info() => await userService.GetUser(User);
 
         [HttpGet]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<string?>> RoleAsync() => await userService.GetRole(User);
 
@@ -185,14 +183,53 @@ namespace API.Controllers
             return Redirect(returnUrl);
         }
 
-
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = Roles.Service)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult<PagedArrayModel<EmployeeModel>>> GetEmployees(int cateringId, int page = 1, string query = "") =>
             await userService.GetEmployeesAsync(cateringId, page, query);
+
+        [HttpGet]
+        [Authorize(Roles = Roles.Admin)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<ActionResult<PagedArrayModel<ServiceModel>>> GetServices(string? country, int page = 1, string query = "") =>
+            await userService.GetServicesAsync(page, query, country);
+
+        [HttpGet]
+        [Authorize(Roles = Roles.Admin)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<ActionResult<PagedArrayModel<UserModel>>> GetCustomers(int page = 1, string query = "") =>
+            await userService.GetCustomersAsync(page, query);
+
+        [HttpPatch]
+        [Authorize(Roles = Roles.Admin)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> BlockAsync(string id)
+        {
+            var result = await userService.BlockUserAsync(id);
+            return HandleResult(result);
+        }
+
+        [HttpPatch]
+        [Authorize(Roles = Roles.Admin)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> UnblockAsync(string id)
+        {
+            var result = await userService.UnblockUserAsync(id);
+            return HandleResult(result);
+        }
 
     }
 }

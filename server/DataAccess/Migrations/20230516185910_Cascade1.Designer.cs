@@ -4,6 +4,7 @@ using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20230516185910_Cascade1")]
+    partial class Cascade1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -106,7 +109,7 @@ namespace DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CateringId")
+                    b.Property<int>("CateringId")
                         .HasColumnType("int");
 
                     b.Property<string>("CustomerId")
@@ -246,12 +249,12 @@ namespace DataAccess.Migrations
                         {
                             Id = "0",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "dd227089-dac9-4abf-a36b-5aa94097cd66",
+                            ConcurrencyStamp = "d27b5a8b-2477-4214-87b1-238992d68022",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             Name = "Deleted user",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "26a8cbf7-3702-4699-92af-20f1b4a40a31",
+                            SecurityStamp = "a03d4cd1-dd87-4606-97e6-34e476866622",
                             TwoFactorEnabled = false
                         });
                 });
@@ -446,12 +449,13 @@ namespace DataAccess.Migrations
                     b.HasOne("DataAccess.Entities.Catering", "Catering")
                         .WithMany("Orders")
                         .HasForeignKey("CateringId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.HasOne("DataAccess.Entities.Users.Customer", "Customer")
                         .WithMany("Orders")
                         .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Catering");
 

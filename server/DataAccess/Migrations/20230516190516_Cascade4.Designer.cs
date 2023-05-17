@@ -4,6 +4,7 @@ using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20230516190516_Cascade4")]
+    partial class Cascade4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -106,7 +109,7 @@ namespace DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CateringId")
+                    b.Property<int>("CateringId")
                         .HasColumnType("int");
 
                     b.Property<string>("CustomerId")
@@ -240,20 +243,6 @@ namespace DataAccess.Migrations
                     b.ToTable("AspNetUsers", (string)null);
 
                     b.UseTptMappingStrategy();
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "0",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "dd227089-dac9-4abf-a36b-5aa94097cd66",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            Name = "Deleted user",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "26a8cbf7-3702-4699-92af-20f1b4a40a31",
-                            TwoFactorEnabled = false
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -446,7 +435,8 @@ namespace DataAccess.Migrations
                     b.HasOne("DataAccess.Entities.Catering", "Catering")
                         .WithMany("Orders")
                         .HasForeignKey("CateringId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.HasOne("DataAccess.Entities.Users.Customer", "Customer")
                         .WithMany("Orders")

@@ -12,7 +12,7 @@ namespace API.Controllers
 {
     [ApiController]
     [Route(Routes.CrudRoute)]
-    [Authorize]
+    [Authorize(Roles = Roles.CustomerEmployee)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public class OrderController : BaseController
     {
@@ -27,10 +27,12 @@ namespace API.Controllers
                                                                               bool? isBox = null) =>
             await orderService.GetAsync(User, page, isBox, startTime ?? DateTime.MinValue, endTime ?? DateTime.MaxValue);
 
-        [HttpGet("Optimal")]
+        [HttpGet(Routes.Action)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<List<OrderDishModel>> GetOptimal(int cateringId, int maxPrice, [FromQuery] Dictionary<string, int> types)
+        public ActionResult<List<OrderDishModel>> Optimal(int cateringId,
+                                                          int maxPrice,
+                                                          [FromQuery] Dictionary<string, int> types)
         {
             types.Remove("maxPrice");
             types.Remove("cateringId");
@@ -39,7 +41,6 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = Roles.CustomerEmployee)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -52,7 +53,6 @@ namespace API.Controllers
         }
 
         [HttpPatch(Routes.Action)]
-        [Authorize(Roles = Roles.CustomerEmployee)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -64,7 +64,6 @@ namespace API.Controllers
         }
 
         [HttpPatch(Routes.Action)]
-        [Authorize(Roles = Roles.CustomerEmployee)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -76,7 +75,6 @@ namespace API.Controllers
         }
 
         [HttpDelete]
-        [Authorize(Roles = Roles.CustomerEmployee)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -87,10 +85,11 @@ namespace API.Controllers
             return HandleResult(result);
         }
 
-        [HttpGet("Services")]
+        [HttpGet(Routes.Action)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<PagedArrayModel<ServiceModel>>> GetServices(int page = 1, string query = "", string? country = null) =>
+        public async Task<ActionResult<PagedArrayModel<ServiceModel>>> ServicesAsync(int page = 1,
+                                                                                     string query = "",
+                                                                                     string? country = null) =>
             await orderService.GetServicesAsync(page, query, country);
     }
 }

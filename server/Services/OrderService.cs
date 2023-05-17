@@ -6,6 +6,8 @@ using Mapster;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using MQTTnet;
+using MQTTnet.Client;
 using Services.Interfaces;
 using Services.Models;
 using Services.Models.Users;
@@ -13,18 +15,20 @@ using System.Linq.Expressions;
 using System.Security.Claims;
 using Utils.Constants;
 
-namespace Services.CRUD
+namespace Services
 {
     public class OrderService : IOrderService
     {
         private readonly ApplicationContext context;
         private readonly UserManager<User> userManager;
         private readonly IConfiguration configuration;
-        public OrderService(ApplicationContext context, UserManager<User> userManager, IConfiguration configuration)
+        private readonly IMqttClient client;
+        public OrderService(ApplicationContext context, UserManager<User> userManager, IConfiguration configuration, IMqttClient client)
         {
             this.context = context;
             this.userManager = userManager;
             this.configuration = configuration;
+            this.client = client;
         }
 
         public async Task<PagedArrayModel<OrderModel>> GetAsync(ClaimsPrincipal principal,
@@ -87,6 +91,15 @@ namespace Services.CRUD
                 od.Dish = dish!;
             });
             await context.AddRangeAsync(orderDishes);
+            if (proxy.IsBox)
+            {
+                var terminal = proxy.Catering.Terminal;
+                var index = Array.IndexOf(terminal.Cells, string.Empty);
+                if (index == -1)
+                    return Result.Fail("No cells available");
+                terminal.Cells[index] = proxy.Id.ToString();
+                context.Update(terminal);
+            }
             proxy.Price = orderDishes.Sum(od => od.Quantity * od.Dish.Price);
             context.Update(proxy);
             await context.SaveChangesAsync();
@@ -110,6 +123,8 @@ namespace Services.CRUD
                 if (order.Time - timeout < DateTime.UtcNow)
                     return Result.Fail(Errors.Forbidden);
             }
+            if (order.IsBox)
+                RemoveFromCell(order);
             context.Remove(order);
             await context.SaveChangesAsync();
             return Result.Ok();
@@ -188,13 +203,33 @@ namespace Services.CRUD
             var order = await context.FindAsync<Order>(id);
             if (order is null)
                 return Result.Fail(Errors.NotFound);
-            var userId = userManager.GetUserId(principal);
-            if (order.GetOwnerId() != userId || order.Status != oldStatus)
+            var user = await userManager.GetUserAsync(principal) as Employee;
+            if (order.CateringId != user!.CateringId || order.Status != oldStatus)
                 return Result.Fail(Errors.Forbidden);
+            if (order.IsBox && newStatus == OrderStatuses.Received)
+            {
+                var terminal = order.Catering.Terminal;
+                var cellId = Array.IndexOf(terminal.Cells, order.Id.ToString());
+                var prefix = configuration["Mqtt:Prefix"];
+                var message = new MqttApplicationMessageBuilder()
+                .WithTopic($"{prefix}/{terminal.SerialNumber}")
+                .WithPayload(cellId.ToString())
+                .Build();
+                await client.PublishAsync(message);
+                RemoveFromCell(order);
+            }
             order.Status = newStatus;
             context.Update(order);
             await context.SaveChangesAsync();
             return Result.Ok();
+        }
+
+        private void RemoveFromCell(Order order)
+        {
+            var terminal = order.Catering.Terminal;
+            var index = Array.IndexOf(terminal.Cells, order.Id.ToString());
+            terminal.Cells[index] = string.Empty;
+            context.Update(terminal);
         }
     }
 }

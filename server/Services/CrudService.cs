@@ -5,13 +5,13 @@ using FluentResults;
 using Mapster;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Services.Interfaces.CRUD;
+using Services.Interfaces;
 using Services.Models;
 using System.Linq.Expressions;
 using System.Security.Claims;
 using Utils.Constants;
 
-namespace Services.CRUD
+namespace Services
 {
     public abstract class CrudService<TModel, TEntity> : ICrudService<TModel>
         where TModel : class

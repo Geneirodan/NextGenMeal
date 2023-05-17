@@ -5,7 +5,7 @@ namespace API.Requests.Account
 {
     public class LoginRequest
     {
-        [Required]
+        [Required, EmailAddress]
         public string Email { get; set; } = null!;
 
         [Required, DataType(DataType.Password)]

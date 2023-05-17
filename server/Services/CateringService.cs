@@ -3,11 +3,11 @@ using DataAccess;
 using DataAccess.Entities;
 using DataAccess.Entities.Users;
 using Microsoft.AspNetCore.Identity;
-using Services.Interfaces.CRUD;
+using Services.Interfaces;
 using Services.Models;
 using System.Security.Claims;
 
-namespace Services.CRUD
+namespace Services
 {
     public class CateringService : CrudService<CateringModel, Catering>, ICateringService
     {
