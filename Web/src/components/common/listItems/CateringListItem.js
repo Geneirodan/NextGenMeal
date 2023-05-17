@@ -1,7 +1,6 @@
 import React, {memo, useCallback} from "react";
 import {useNavigate} from "react-router-dom";
 import {Box, Button, Card, IconButton, Stack, Typography} from "@mui/material";
-import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu";
 import {CateringEditDialog} from "../dialogs/CateringEditDialog";
 import {TerminalListItem} from "./TerminalListItem";
 import {addTerminal, deleteCatering, editCatering} from "../../../store/service/caterings";
@@ -10,6 +9,7 @@ import {EditDialogButton} from "../dialogs/EditDialogButton";
 import {DeleteButton} from "../buttons/DeleteButton";
 import {TerminalEditDialog} from "../dialogs/TerminalEditDialog";
 import PersonIcon from '@mui/icons-material/Person';
+import {DishesIconButton} from "../buttons/IconButtons";
 
 
 export const CateringListItem = memo(
@@ -44,9 +44,7 @@ export const CateringListItem = memo(
                         </Typography>
                     </Box>
                     <EditDialogButton EditDialog={CateringEditDialog} editAction={editCatering} catering={catering}/>
-                    <IconButton onClick={onMenuButtonClick}>
-                        <RestaurantMenuIcon/>
-                    </IconButton>
+                    <DishesIconButton onClick={onMenuButtonClick}/>
                     <IconButton onClick={onPersonnelButtonClick}>
                         <PersonIcon/>
                     </IconButton>

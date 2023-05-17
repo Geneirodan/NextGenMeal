@@ -1,5 +1,4 @@
-﻿using Services.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace API.Requests
 {
@@ -7,9 +6,11 @@ namespace API.Requests
     {
         [Required, DataType(DataType.DateTime)]
         public DateTime Time { get; set; }
-        public bool IsBox { get; set; } = false;
+        [Required]
+        public bool? IsBox { get; set; } = null!;
         [Required]
         public int CateringId { get; set; }
+        [Required]
         public List<OrderDishRequest> OrderDishes { get; set; } = null!;
     }
 }

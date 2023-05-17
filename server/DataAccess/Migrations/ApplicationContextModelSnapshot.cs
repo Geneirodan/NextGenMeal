@@ -25,36 +25,6 @@ namespace DataAccess.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("DataAccess.Entities.Box", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Price")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("TerminalId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TerminalId");
-
-                    b.ToTable("Boxes");
-                });
-
             modelBuilder.Entity("DataAccess.Entities.Catering", b =>
                 {
                     b.Property<int>("Id")
@@ -136,11 +106,10 @@ namespace DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CateringId")
+                    b.Property<int?>("CateringId")
                         .HasColumnType("int");
 
                     b.Property<string>("CustomerId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsBox")
@@ -188,6 +157,10 @@ namespace DataAccess.Migrations
                 {
                     b.Property<int>("Id")
                         .HasColumnType("int");
+
+                    b.Property<string>("Cells")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SerialNumber")
                         .IsRequired()
@@ -273,12 +246,12 @@ namespace DataAccess.Migrations
                         {
                             Id = "0",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "93eb3989-e0a4-46c6-a8fd-4d7be2edb844",
+                            ConcurrencyStamp = "dd227089-dac9-4abf-a36b-5aa94097cd66",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             Name = "Deleted user",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "fb37fa12-3efa-426c-8bf2-3ecb72466d16",
+                            SecurityStamp = "26a8cbf7-3702-4699-92af-20f1b4a40a31",
                             TwoFactorEnabled = false
                         });
                 });
@@ -446,17 +419,6 @@ namespace DataAccess.Migrations
                     b.ToTable("Services");
                 });
 
-            modelBuilder.Entity("DataAccess.Entities.Box", b =>
-                {
-                    b.HasOne("DataAccess.Entities.Terminal", "Terminal")
-                        .WithMany("Boxes")
-                        .HasForeignKey("TerminalId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Terminal");
-                });
-
             modelBuilder.Entity("DataAccess.Entities.Catering", b =>
                 {
                     b.HasOne("DataAccess.Entities.Users.Service", "Service")
@@ -484,14 +446,12 @@ namespace DataAccess.Migrations
                     b.HasOne("DataAccess.Entities.Catering", "Catering")
                         .WithMany("Orders")
                         .HasForeignKey("CateringId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("DataAccess.Entities.Users.Customer", "Customer")
                         .WithMany("Orders")
                         .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Catering");
 
@@ -634,11 +594,6 @@ namespace DataAccess.Migrations
             modelBuilder.Entity("DataAccess.Entities.Order", b =>
                 {
                     b.Navigation("OrderDishes");
-                });
-
-            modelBuilder.Entity("DataAccess.Entities.Terminal", b =>
-                {
-                    b.Navigation("Boxes");
                 });
 
             modelBuilder.Entity("DataAccess.Entities.Users.Customer", b =>

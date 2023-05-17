@@ -1,13 +1,13 @@
 import {useTranslation} from "react-i18next";
-import {Container, Stack, Typography} from "@mui/material";
+import {Container, FormControlLabel, Stack, Switch, Typography} from "@mui/material";
 import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
-import {DateTimePicker} from "@mui/x-date-pickers/DateTimePicker";
 import React, {memo, useCallback} from "react";
 import {DishListComponent} from "../../../common/buttons/DishListButton";
 import {resetErrors, selector} from "../../../../store/customer/new_order";
 import {Errors} from "../../../common/Errors";
 import {useErrors} from "../../../../utils/hook/hooks";
+import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 
 export const Step4 = memo(
     ({formik}) => {
@@ -34,23 +34,24 @@ export const Step4 = memo(
                         {t("Your price")}: ${price}
                     </Typography>
                     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={i18n.resolvedLanguage}>
-                        <DateTimePicker disablePast
-                                        label={t("Choose date and time")}
-                                        value={formik.values.time}
-                                        onChange={onChange}
-                                        slotProps={{
-                                            textField: {
-                                                error: formik.touched.time && Boolean(formik.errors.time),
-                                                helperText: formik.touched.time && formik.errors.time
-                                            }
-                                        }}/>
+                        <MobileDateTimePicker disablePast
+                                              label={t("Choose date and time")}
+                                              value={formik.values.time}
+                                              onChange={onChange}
+                                              slotProps={{
+                                                  textField: {
+                                                      error: formik.touched.time && Boolean(formik.errors.time),
+                                                      helperText: formik.touched.time && formik.errors.time
+                                                  }
+                                              }}/>
                     </LocalizationProvider>
                     <Typography>
                         {t("Your dishes")}:
                     </Typography>
-                    {
-                        formik.values.orderDishes.map(handleDish)
-                    }
+                    {formik.values.orderDishes.map(handleDish)}
+                    <FormControlLabel
+                        control={<Switch name="isBox" checked={formik.values.isBox} onChange={formik.handleChange}/>}
+                        label={t("Pack in box")}/>
                 </Stack>
             </Container>
         )

@@ -1,3 +1,4 @@
+using API.Extensions;
 using DataAccess;
 using DataAccess.Entities.Users;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -5,10 +6,9 @@ using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Services;
-using Services.CRUD;
 using Services.Interfaces;
-using Services.Interfaces.CRUD;
 using Services.Logging;
+using Utils.Constants;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
@@ -23,6 +23,10 @@ var provider = new FileLoggerProvider(path);
 logging.AddProvider(provider);
 
 // Add various services
+
+// Add MQTT client
+var prefix = configuration["Mqtt:Prefix"];
+services.AddMqttClient($"{prefix}/Server", "broker.emqx.io");
 
 var connectionString = configuration.GetConnectionString("DefaultConnection");
 services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connectionString));
@@ -68,7 +72,6 @@ services.AddEndpointsApiExplorer()
         .AddScoped<IUserService, UserService>()
         .AddScoped<IDishService, DishService>()
         .AddScoped<ICateringService, CateringService>()
-        .AddScoped<IBoxService, BoxService>()
         .AddScoped<IOrderService, OrderService>()
         .AddScoped<ITerminalService, TerminalService>()
         .AddProblemDetails()
@@ -95,4 +98,3 @@ app.UseExceptionHandler()
 app.MapControllers();
 
 app.Run();
-

@@ -2,21 +2,15 @@
 using DataAccess.Entities.Users;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace DataAccess
 {
     public class ApplicationContext : IdentityDbContext<User>
     {
-        public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
-        {
-            //Database.EnsureDeleted();
-            //Database.EnsureCreated();
-        }
+        public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options) {}
         public DbSet<Customer> Customers { get; set; } = null!;
         public DbSet<Employee> Employees { get; set; } = null!;
         public DbSet<Service> Services { get; set; } = null!;
-        public DbSet<Box> Boxes { get; set; } = null!;
         public DbSet<Catering> Caterings { get; set; } = null!;
         public DbSet<Dish> Dishes { get; set; } = null!;
         public DbSet<Order> Orders { get; set; } = null!;
@@ -30,20 +24,11 @@ namespace DataAccess
             builder.Entity<User>()
                    .UseTptMappingStrategy();
 
-            builder.Entity<User>()
-                   .HasData(new User { Id = "0", Name = "Deleted user" });
-
-            //builder.Entity<Customer>()
-            //       .HasMany(c => c.Orders)
-            //       .WithOne(o => o.Customer)
-            //       .HasForeignKey(o => o.CustomerId)
-            //       .OnDelete(DeleteBehavior.Cascade);
-
             builder.Entity<Order>()
                    .HasOne(o => o.Customer)
                    .WithMany(c => c.Orders)
                    .HasForeignKey(o => o.CustomerId)
-                   .OnDelete(DeleteBehavior.NoAction);
+                   .OnDelete(DeleteBehavior.SetNull);
 
             builder.Entity<Service>()
                    .HasMany(s => s.Caterings)
@@ -83,12 +68,6 @@ namespace DataAccess
                    .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Terminal>()
-                   .HasMany(t => t.Boxes)
-                   .WithOne(b => b.Terminal)
-                   .HasForeignKey(b => b.TerminalId)
-                   .OnDelete(DeleteBehavior.Cascade);
-
-            builder.Entity<Terminal>()
                    .HasKey(t => t.Id);
 
             builder.Entity<Terminal>()
@@ -110,10 +89,10 @@ namespace DataAccess
                    .HasForeignKey(od => od.DishId)
                    .OnDelete(DeleteBehavior.NoAction);
 
-            //builder.Entity<Dish>()
-            //       .Property(e => e.Tags)
-            //       .HasConversion(v => string.Join('|', v),
-            //                      v => v.Split('|', StringSplitOptions.RemoveEmptyEntries).ToList());
+            builder.Entity<Terminal>()
+                   .Property(t => t.Cells)
+                   .HasConversion(c => string.Join('|', c),
+                                  c => c.Split('|', StringSplitOptions.None));
 
             base.OnModelCreating(builder);
         }

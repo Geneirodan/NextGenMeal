@@ -3,7 +3,6 @@ using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
-using Services.Interfaces.CRUD;
 using Services.Models;
 using Utils.Constants;
 

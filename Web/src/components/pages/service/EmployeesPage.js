@@ -11,9 +11,10 @@ import {EditDialogButton} from "../../common/dialogs/EditDialogButton";
 import {useUpdate} from "../../../utils/hook/hooks";
 import {EmployeeListItem} from "../../common/listItems/EmployeeListItem";
 import {EmployeeRegisterDialog} from "../../common/dialogs/EmployeeRegisterDialog";
+import {roles} from "../../../utils/constants";
 
 export const EmployeesPage = memo(
-    withRole("Service")(
+    withRole(roles.Service)(
         () => {
             const {t} = useTranslation()
             const {cateringId} = useParams()

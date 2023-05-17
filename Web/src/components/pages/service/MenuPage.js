@@ -12,9 +12,10 @@ import {useTranslation} from "react-i18next";
 import {AddFab} from "../../common/buttons/AddFab";
 import {EditDialogButton} from "../../common/dialogs/EditDialogButton";
 import {useUpdate} from "../../../utils/hook/hooks";
+import {roles} from "../../../utils/constants";
 
 export const MenuPage = memo(
-    withRole("Service")(
+    withRole(roles.Service)(
         () => {
             const {t} = useTranslation();
             const {cateringId} = useParams()

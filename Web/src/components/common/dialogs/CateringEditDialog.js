@@ -11,7 +11,7 @@ export const CateringEditDialog = memo(
     ({catering, open, onClose, onSubmit}) => {
         const errors = useErrors(selector, resetErrors)
         const {t} = useTranslation()
-        const title = catering ? t("Add catering") : t("Edit catering")
+        const title = catering.id ? t("Edit catering") : t("Add catering")
         let initialValues = {
             name: null,
             street: null,

@@ -8,5 +8,7 @@ namespace API.Requests
         public string SerialNumber { get; set; } = null!;
         [Required]
         public int Id { get; set; }
+        [Required]
+        public int CellCount { get; set; }
     }
 }

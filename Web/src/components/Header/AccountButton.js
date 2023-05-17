@@ -10,6 +10,7 @@ import {ChangeNameDialog} from "../common/dialogs/ChangeNameDialog";
 import {EditDialogButton} from "../common/dialogs/EditDialogButton";
 import {RenameIconButton} from "../common/buttons/IconButtons";
 import {SettingsDialogMenuItem} from "../common/dialogs/SettingsDialog";
+import {roles} from "../../utils/constants";
 
 const menuItem = class {
     constructor(title, route) {
@@ -97,16 +98,16 @@ export const AccountButton = memo(
         const role = useSelector(selector("role"))
         const {t} = useTranslation()
         const menuItems = {
-            "Customer": [
-                new menuItem(t("My Orders"), "/myorders")
+            [roles.Customer]: [
+                new menuItem(t("My Orders"), "/my_orders")
             ],
-            "Service": [
+            [roles.Service]: [
                 new menuItem(t("Caterings"), "/service/caterings")
             ],
-            "Employee": [
-                new menuItem(t("Orders"), "/service/orders")
+            [roles.Employee]: [
+                new menuItem(t("Orders"), "/orders")
             ],
-            "Admin": [
+            [roles.Admin]: [
                 new menuItem(t("Customers"), "/admin/customers"),
                 new menuItem(t("Services"), "/admin/services")
             ]

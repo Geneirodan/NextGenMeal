@@ -1,7 +1,7 @@
 ﻿using API.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Services.Interfaces.CRUD;
+using Services.Interfaces;
 using Services.Models;
 using Utils.Constants;
 
