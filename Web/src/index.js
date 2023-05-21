@@ -18,11 +18,11 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
         <BrowserRouter>
-          <QueryParamProvider adapter={ReactRouter6Adapter}>
-            <Provider store={store}>
-                <App/>
-            </Provider>
-          </QueryParamProvider>
+            <QueryParamProvider adapter={ReactRouter6Adapter}>
+                <Provider store={store}>
+                    <App/>
+                </Provider>
+            </QueryParamProvider>
         </BrowserRouter>
     </React.StrictMode>
 );

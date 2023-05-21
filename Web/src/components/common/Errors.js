@@ -8,7 +8,7 @@ export const Errors = memo(
         if (errors && errors["Common"])
             return <Stack spacing={2}>
                 {errors["Common"].map(error =>
-                    <Typography variant="body1" align="center">
+                    <Typography variant="body1" align="center" key={error}>
                         {t(error)}
                     </Typography>)}
             </Stack>;

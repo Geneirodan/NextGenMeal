@@ -1,6 +1,6 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {authAPI} from "../../api/auth-api";
-import {commonInitialState, commonReducers, getSelector, handleResponse} from "../common";
+import {authAPI} from "../api/auth-api";
+import {commonInitialState, commonReducers, getSelector, handleResponse} from "./common";
 
 const {actions, name, reducer} = createSlice({
     name: 'login',

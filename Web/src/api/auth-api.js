@@ -1,5 +1,5 @@
 import {del, get, patch, post} from "./api";
-
+import {baseUrl} from "./api";
 export const authAPI = {
 
     info: async () =>
@@ -15,7 +15,7 @@ export const authAPI = {
         await del(`Account/Logout`),
 
     register: async (name, email, password, confirmPassword) =>
-        await post(`Account/Register`, {name, email, password, confirmPassword}, {callbackUrl: "/register/confirm"}),
+        await post(`Account/Register`, {name, email, password, confirmPassword}, {callbackUrl: `${window.location.origin}/register/confirm`}),
 
     confirmEmail: async (id, code) =>
         await get(`Account/ConfirmEmail`, {id, code}),

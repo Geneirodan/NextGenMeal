@@ -4,7 +4,7 @@ import {Navigate, NavLink} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {emailValidation, passwordValidation} from "../../utils/validation";
 import * as yup from "yup";
-import {register, resetErrors, selector, signIn} from "../../store/account/login";
+import {register, resetErrors, selector, signIn} from "../../store/auth";
 import {useTranslation} from "react-i18next";
 import {Button, Container, Stack, SvgIcon, Typography} from "@mui/material";
 import {Errors} from "../common/Errors";
