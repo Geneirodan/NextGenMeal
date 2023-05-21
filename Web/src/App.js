@@ -16,7 +16,7 @@ import {NewOrderPage} from "./components/pages/customer/orderPage/NewOrderPage";
 import {MyOrdersPage} from "./components/pages/customer/MyOrdersPage";
 import {EmployeesPage} from "./components/pages/service/EmployeesPage";
 import {useUpdate} from "./utils/hook/hooks";
-import {selector} from "./store/account/login";
+import {selector} from "./store/auth";
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {OrderPage} from "./components/pages/employee/OrderPage";
 import {OrdersPage} from "./components/pages/employee/OrdersPage";

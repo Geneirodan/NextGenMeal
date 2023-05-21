@@ -1,4 +1,4 @@
-import React, {memo, useCallback} from "react";
+import React, {memo, useCallback, useMemo} from "react";
 import {useNavigate} from "react-router-dom";
 import {Box, Button, Card, IconButton, Stack, Typography} from "@mui/material";
 import {CateringEditDialog} from "../dialogs/CateringEditDialog";
@@ -32,8 +32,12 @@ export const CateringListItem = memo(
                 </Button>,
             [t]
         )
+        const terminal = useMemo(
+            () => catering.terminal || {id: catering.id},
+            [catering.terminal]
+        )
         return (
-            <Card sx={{padding: 1}}>
+            <Card p="1">
                 <Stack direction="row" alignItems="center">
                     <Box sx={{flexGrow: 1}}>
                         <Typography>
@@ -51,12 +55,12 @@ export const CateringListItem = memo(
                     <DeleteButton deleteAction={deleteCatering} id={catering.id}/>
                 </Stack>
                 {
-                    catering.terminal
-                        ? <TerminalListItem terminal={catering.terminal}/>
+                    terminal
+                        ? <TerminalListItem terminal={terminal}/>
                         : <EditDialogButton EditDialog={TerminalEditDialog}
                                             EditButton={AddTerminalButton}
                                             editAction={addTerminal}
-                                            terminal={{id: catering.id}}/>
+                                            terminal={terminal}/>
                 }
             </Card>
         )

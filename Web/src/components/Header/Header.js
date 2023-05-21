@@ -6,7 +6,7 @@ import {useNavigate} from "react-router-dom";
 import {LanguageSelect} from "./LanguageSelect";
 import {AccountButton} from "./AccountButton";
 import {useSelector} from "react-redux";
-import {selector} from "../../store/account/login";
+import {selector} from "../../store/auth";
 import {roles} from "../../utils/constants";
 
 export const Header = memo(

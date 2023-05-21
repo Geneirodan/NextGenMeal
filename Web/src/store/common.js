@@ -17,12 +17,12 @@ export const commonReducers = {
         state.errors = null
     },
 
-    setErrors: (state, action) => {
-        state.errors = action.payload.errors
+    setErrors: (state, {payload}) => {
+        state.errors = payload.errors
     },
 
-    setUpdated: (state, action) => {
-        state.updated = action.payload
+    setUpdated: (state, {payload}) => {
+        state.updated = payload
     }
 }
 export const getSelector = name => field => state => state[name][field];

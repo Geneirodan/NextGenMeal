@@ -1,5 +1,5 @@
 import {useDispatch, useSelector} from "react-redux";
-import {rename, selector, signOut} from "../../store/account/login";
+import {rename, selector, signOut} from "../../store/auth";
 import {useTranslation} from "react-i18next";
 import React, {memo, useCallback, useState} from "react";
 import {IconButton, MenuItem, Popover, Stack} from "@mui/material";

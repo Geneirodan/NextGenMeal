@@ -17,7 +17,7 @@ import {DishListButton} from "../../common/buttons/DishListButton";
 import {ListContainer} from "../../common/ListContainer";
 import {SearchComponent} from "../../common/inputs/SearchComponent";
 import {TypeSelect} from "../../common/inputs/TypeSelect";
-import {selector as authSelector} from "../../../store/account/login"
+import {selector as authSelector} from "../../../store/auth"
 import dayjs from "dayjs/esm";
 
 const SuccessSnackbar = memo(
