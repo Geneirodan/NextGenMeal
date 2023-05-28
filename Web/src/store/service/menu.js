@@ -11,7 +11,7 @@ import {
 } from "../common";
 
 const {actions, name, reducer} = createSlice({
-    name: 'service.menu',
+    name: 'menu',
     initialState: {
         ...commonInitialState,
         dishes: new PagedArray(),
@@ -27,7 +27,7 @@ const {actions, name, reducer} = createSlice({
         }
     }
 });
-export default {name, reducer}
+export default reducer
 export const selector = getSelector(name)
 export const {dishesSuccess, resetErrors, setErrors, setUpdated, typesSuccess} = actions
 export const getDishes = (filter = null) => commonGet('Dish', filter, dishesSuccess)

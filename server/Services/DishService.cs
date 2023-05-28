@@ -15,13 +15,13 @@ namespace Services
         {
         }
 
-        public PagedArrayModel<DishModel> Get(int cateringId, IEnumerable<string> types, int page, string query)
+        public PagedArrayModel<DishModel> Get(int cateringId, IEnumerable<string>? types, int page, string query)
         {
             var enumerable = context.Set<Dish>()
                                     .Where(x => x.CateringId == cateringId && x.Name.Contains(query))
                                     .OrderBy(x => x.Price)
                                     .AsEnumerable();
-            if (types.Any())
+            if (types is not null && types.Any())
                 enumerable = enumerable.Where(x => types.Contains(x.Type));
             var entities = enumerable.Skip((page - 1) * Utils.ItemsPerPage)
                                      .Take(Utils.ItemsPerPage)

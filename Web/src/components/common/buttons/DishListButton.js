@@ -27,7 +27,7 @@ export const DishListComponent = memo(
                     </IconButton>
                 }
                 {
-                    quantity &&
+                    !!quantity &&
                     <>
                         <Chip label={quantity}/>
                         {

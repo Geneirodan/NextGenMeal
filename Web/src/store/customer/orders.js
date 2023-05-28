@@ -1,9 +1,9 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {PagedArray} from "../../utils/pagedArray";
-import {commonGet, commonInitialState, commonPatch, commonReducers, getSelector} from "../common";
+import {commonGet, commonInitialState, commonReducers, getSelector} from "../common";
 
 const {actions, name, reducer} = createSlice({
-    name: 'customer.orders',
+    name: 'orders',
     initialState: {
         ...commonInitialState,
         orders: new PagedArray()
@@ -15,8 +15,7 @@ const {actions, name, reducer} = createSlice({
         },
     },
 });
-export default {name, reducer}
+export default reducer
 export const selector = getSelector(name)
-export const {resetErrors, setUpdated, setErrors, ordersSuccess} = actions
+export const {resetErrors, setUpdated, ordersSuccess} = actions
 export const getOrders = (filter = null) => commonGet(`Order`, filter, ordersSuccess)
-export const pay = order => commonPatch(`Order/Pay`, order, setUpdated, setErrors)

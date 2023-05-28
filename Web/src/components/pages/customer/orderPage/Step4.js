@@ -6,7 +6,7 @@ import React, {memo, useCallback} from "react";
 import {DishListComponent} from "../../../common/buttons/DishListButton";
 import {resetErrors, selector} from "../../../../store/customer/new_order";
 import {useErrors} from "../../../../utils/hook/hooks";
-import {MobileDateTimePicker} from '@mui/x-date-pickers/MobileDateTimePicker';
+import {DateTimePicker} from '@mui/x-date-pickers/DateTimePicker';
 import {bottomFabStyle, leftFabStyle, rightFabStyle} from "../../../common/buttons/AddFab";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 
@@ -34,7 +34,7 @@ export const Step4 = memo(
                         {t("Your price")}: ${price}
                     </Typography>
                     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={i18n.resolvedLanguage}>
-                        <MobileDateTimePicker disablePast
+                        <DateTimePicker disablePast
                                               label={t("Choose date and time")}
                                               value={formik.values.time}
                                               onChange={onChange}

@@ -4,7 +4,7 @@ import {commonGet, commonInitialState, commonPost, commonReducers, getSelector} 
 import {get} from "../../api/api";
 
 const {actions, name, reducer} = createSlice({
-    name: 'customer.new_order',
+    name: 'new_order',
     initialState: {
         ...commonInitialState,
         caterings: new PagedArray(),
@@ -30,7 +30,7 @@ const {actions, name, reducer} = createSlice({
         }
     },
 });
-export default {name, reducer}
+export default reducer
 export const selector = getSelector(name)
 export const {
     resetErrors,

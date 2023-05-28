@@ -3,7 +3,7 @@ import {Accordion, AccordionDetails, AccordionSummary, Chip, Stack, Typography} 
 import {useTranslation} from "react-i18next";
 import dayjs from "dayjs/esm";
 import utc from "dayjs/plugin/utc";
-import Inventory2Icon from "@mui/icons-material/Inventory2";
+import Inventory2Icon from "@mui/icons-material/Inventory2Outlined";
 import {DishListComponent} from "../buttons/DishListButton";
 import {useOpen} from "../../../utils/hook/hooks";
 import {useDispatch} from "react-redux";
@@ -23,7 +23,6 @@ const options = {
 export const OrderListItem = memo(
     ({order}) => {
         const {t, i18n} = useTranslation()
-        const [open, onClick, onClose] = useOpen()
         const dispatch = useDispatch()
         const date = dayjs.utc(order.time).toDate();
         const formattedTime = Intl.DateTimeFormat(i18n.resolvedLanguage, options).format(date)
@@ -36,11 +35,15 @@ export const OrderListItem = memo(
                 <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
                     <Stack direction="row" alignItems="center" flexGrow={1}>
                         <Typography flexGrow={1}>
-                            {t("Order")} №{order.id}<br/>
+                            <Stack direction="row" alignItems="center" spacing={1}>
+                                <Typography>
+                                    {t("Order")} №{order.id}
+                                </Typography>
+                                {order.isBox && <Inventory2Icon fontSize="small" color="primary"/>}<br/>
+                            </Stack>
                             {t("Time")}: {formattedTime}<br/>
                             {t("Price")}: {`$${(order.price)}`}
                         </Typography>
-                        {order.isBox && <Inventory2Icon/>}
                         <Chip label={order.status}/>
                     </Stack>
                 </AccordionSummary>

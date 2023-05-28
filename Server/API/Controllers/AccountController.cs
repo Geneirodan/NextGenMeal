@@ -196,7 +196,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult<PagedArrayModel<ServiceModel>>> GetServices(string? country, int page = 1, string query = "") =>
+        public async Task<ActionResult<PagedArrayModel<LockableUserModel<ServiceModel>>>> GetServices(string? country, int page = 1, string query = "") =>
             await userService.GetServicesAsync(page, query, country);
 
         [HttpGet]
@@ -204,7 +204,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult<PagedArrayModel<UserModel>>> GetCustomers(int page = 1, string query = "") =>
+        public async Task<ActionResult<PagedArrayModel<LockableUserModel<UserModel>>>> GetCustomers(int page = 1, string query = "") =>
             await userService.GetCustomersAsync(page, query);
 
         [HttpPatch]

@@ -37,14 +37,14 @@ export const CateringListItem = memo(
             [catering.terminal]
         )
         return (
-            <Card p="1">
+            <Card  sx={{padding: 1}}>
                 <Stack direction="row" alignItems="center">
-                    <Box sx={{flexGrow: 1}}>
-                        <Typography>
-                            {catering.name}
-                        </Typography>
-                        <Typography>
-                            {`${(catering.city)}, ${(catering.state)}, ${(catering.street)}`}
+                    <Box flexGrow={1}>
+                        <Typography ml={2}>
+                            {t("Name")}: {catering.name}<br/>
+                            {t("City")}: {(catering.city)}<br/>
+                            {t("State")}: {(catering.state)}<br/>
+                            {t("Street")}: {(catering.street)}<br/>
                         </Typography>
                     </Box>
                     <EditDialogButton EditDialog={CateringEditDialog} editAction={editCatering} catering={catering}/>
@@ -55,7 +55,7 @@ export const CateringListItem = memo(
                     <DeleteButton deleteAction={deleteCatering} id={catering.id}/>
                 </Stack>
                 {
-                    terminal
+                    terminal.serialNumber
                         ? <TerminalListItem terminal={terminal}/>
                         : <EditDialogButton EditDialog={TerminalEditDialog}
                                             EditButton={AddTerminalButton}

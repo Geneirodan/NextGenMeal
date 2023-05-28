@@ -13,6 +13,7 @@ import {AddFab} from "../../common/buttons/AddFab";
 import {EditDialogButton} from "../../common/dialogs/EditDialogButton";
 import {useUpdate} from "../../../utils/hook/hooks";
 import {roles} from "../../../utils/constants";
+import {Stack} from "@mui/material";
 
 export const MenuPage = memo(
     withRole(roles.Service)(
@@ -40,7 +41,7 @@ export const MenuPage = memo(
                 () => setLoading(false),
                 [items]
             )
-            return <>
+            return <Stack>
                 <ListContainer filter={filter}
                                filters={[
                                    <SearchComponent filter={filter} setFilter={setFilter}/>,
@@ -54,7 +55,7 @@ export const MenuPage = memo(
                                emptyLabel={t("No dishes found")}/>
                 <EditDialogButton EditDialog={DishEditDialog} EditButton={AddFab} editAction={addDish}
                                   dish={{cateringId}}/>
-            </>
+            </Stack>;
         }
     )
 )

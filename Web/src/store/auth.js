@@ -3,7 +3,7 @@ import {authAPI} from "../api/auth-api";
 import {commonInitialState, commonReducers, getSelector, handleResponse} from "./common";
 
 const {actions, name, reducer} = createSlice({
-    name: 'login',
+    name: 'auth',
     initialState: {
         ...commonInitialState,
         confirmed: null,
@@ -27,7 +27,7 @@ const {actions, name, reducer} = createSlice({
         }
     },
 });
-export default {name, reducer}
+export default reducer
 export const selector = getSelector(name)
 export const {
     resetErrors,

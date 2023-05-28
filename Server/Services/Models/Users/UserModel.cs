@@ -1,6 +1,4 @@
-﻿using DataAccess.Entities.Users;
-
-namespace Services.Models.Users
+﻿namespace Services.Models.Users
 {
     public class UserModel
     {

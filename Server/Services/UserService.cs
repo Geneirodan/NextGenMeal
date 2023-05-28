@@ -5,6 +5,7 @@ using FluentResults;
 using Mapster;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Services.Interfaces;
@@ -256,19 +257,23 @@ namespace Services
 
         public string? GetUserId(ClaimsPrincipal principal) => userManager.GetUserId(principal);
 
-        public async Task<PagedArrayModel<EmployeeModel>> GetEmployeesAsync(int cateringId, int page, string query) =>
-            await GetUsers<EmployeeModel, Employee>(page, query, x => x.CateringId == cateringId);
+        public async Task<PagedArrayModel<EmployeeModel>> GetEmployeesAsync(int cateringId, int page, string query)
+        {
+            var users = await GetUsers<EmployeeModel, Employee>(page, query, x => x.CateringId == cateringId);
+            return new PagedArrayModel<EmployeeModel>(users.Items.Select(x => x.User.Adapt<EmployeeModel>()).ToList(), users.TotalCount);
+        }
 
-        public async Task<PagedArrayModel<ServiceModel>> GetServicesAsync(int page, string query, string? country)
+        public async Task<PagedArrayModel<LockableUserModel<ServiceModel>>> GetServicesAsync(int page, string query, string? country)
         {
             Expression<Func<Service, bool>>? predicate = country is null ? null : x => x.Country == country;
             return await GetUsers<ServiceModel, Service>(page, query, predicate);
         }
 
-        public async Task<PagedArrayModel<UserModel>> GetCustomersAsync(int page, string query) =>
+        public async Task<PagedArrayModel<LockableUserModel<UserModel>>> GetCustomersAsync(int page, string query) =>
             await GetUsers<UserModel, Customer>(page, query);
 
-        private async Task<PagedArrayModel<TModel>> GetUsers<TModel, TEntity>(int page, string query, Expression<Func<TEntity, bool>>? predicate = null)
+        private async Task<PagedArrayModel<LockableUserModel<TModel>>> GetUsers<TModel, TEntity>(int page, string query, Expression<Func<TEntity, bool>>? predicate = null)
+            where TModel : UserModel
             where TEntity : User
         {
             var users = context.Set<TEntity>().Where(x => x.Name.Contains(query));
@@ -277,9 +282,11 @@ namespace Services
             var entities = await users.OrderByDescending(x => x.Name)
                                       .Skip((page - 1) * ItemsPerPage)
                                       .Take(ItemsPerPage)
+                                      .Select(x => new {User = x, IsLocked = x.LockoutEnd != null})
                                       .ToListAsync();
-            var models = entities.Adapt<List<TModel>>();
-            return new PagedArrayModel<TModel>(models, users.Count());
+            var models = entities.Adapt<List<LockableUserModel<TModel>>>();
+
+            return new PagedArrayModel<LockableUserModel<TModel>>(models, users.Count());
         }
 
         public async Task<Result> BlockUserAsync(string id) => await SetLockoutDate(id, DateTimeOffset.MaxValue);

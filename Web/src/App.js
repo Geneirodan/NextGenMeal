@@ -21,6 +21,8 @@ import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {OrderPage} from "./components/pages/employee/OrderPage";
 import {OrdersPage} from "./components/pages/employee/OrdersPage";
 import {Footer} from "./components/Footer";
+import {getCustomers, getServices} from "./store/admin";
+import mainImage from "./img/NextGenMealMain.png"
 
 const theme = createTheme({
     components: {
@@ -31,7 +33,10 @@ const theme = createTheme({
         },
     },
 });
-const TempMain = () => <div>Dima is chort</div>;
+const TempMain = () => <Stack justifyContent="center" alignItems="center" sx={{height:"100%",width:"100%"}}>
+    <img src={mainImage} alt="NextGenMeal"/>
+    <h1>Your ad could be here!</h1>
+</Stack>;
 const Temp404 = () => <div>404 NOT FOUND</div>
 export const App = () => {
     const initialized = useSelector(initializedSelector)
@@ -56,7 +61,6 @@ export const App = () => {
                         <Route path='/confirm' element={<ConfirmPage/>}/>
                         <Route path='/login' element={<LoginPage/>}/>
                         <Route path='/register' element={<RegisterPage/>}/>
-                        <Route path='/test' element={<CustomersPage/>}/>
                         <Route path='/my_orders/new' element={<NewOrderPage/>}/>
                         <Route path='/my_orders' element={<MyOrdersPage/>}/>
                         <Route path='/orders/new' element={<OrderPage/>}/>
@@ -64,6 +68,8 @@ export const App = () => {
                         <Route path='/service/caterings/:cateringId/menu' element={<MenuPage/>}/>
                         <Route path='/service/caterings/:cateringId/personnel' element={<EmployeesPage/>}/>
                         <Route path='/service/caterings' element={<CateringsPage/>}/>
+                        <Route path='/admin/customers' element={<CustomersPage getter={getCustomers}/>}/>
+                        <Route path='/admin/services' element={<CustomersPage getter={getServices}/>}/>
                         <Route path='*' element={<Temp404/>}/>
                     </Routes>
                 </Box>

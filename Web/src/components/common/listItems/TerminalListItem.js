@@ -19,7 +19,7 @@ export const TerminalListItem = memo(
                 <AccordionDetails>
                     <Stack direction="row" alignItems="center">
                         <Box flexGrow={1}>
-                            {terminal.serialNumber}
+                            {t("Serial number")}: {terminal.serialNumber}
                         </Box>
                         <EditDialogButton EditDialog={TerminalEditDialog}
                                           EditButton={RenameIconButton}

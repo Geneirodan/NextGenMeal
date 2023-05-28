@@ -1,5 +1,6 @@
 ﻿using FluentResults;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Mvc;
 using Services.Models;
 using Services.Models.Register;
 using Services.Models.Users;
@@ -28,8 +29,8 @@ namespace Services.Interfaces
         Task<Result> DeleteAsync(ClaimsPrincipal principal, string id);
         Task<Result> ChangeNameAsync(string name, ClaimsPrincipal principal, string id);
         Task<PagedArrayModel<EmployeeModel>> GetEmployeesAsync(int cateringId, int page, string query);
-        Task<PagedArrayModel<ServiceModel>> GetServicesAsync(int page, string query, string? country);
-        Task<PagedArrayModel<UserModel>> GetCustomersAsync(int page, string query);
+        Task<PagedArrayModel<LockableUserModel<ServiceModel>>> GetServicesAsync(int page, string query, string? country);
+        Task<PagedArrayModel<LockableUserModel<UserModel>>> GetCustomersAsync(int page, string query);
         Task<Result> BlockUserAsync(string id);
         Task<Result> UnblockUserAsync(string id);
     }

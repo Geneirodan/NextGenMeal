@@ -8,6 +8,7 @@ import {AccountButton} from "./AccountButton";
 import {useSelector} from "react-redux";
 import {selector} from "../../store/auth";
 import {roles} from "../../utils/constants";
+import logo from "../../img/NextGenMealLogo.png"
 
 export const Header = memo(
     () => {
@@ -33,9 +34,7 @@ export const Header = memo(
         return (
             <AppBar component="header" position="sticky" sx={{display: "flex"}}>
                 <Toolbar>
-                    <Typography variant="h5" component="p" onClick={onLogoClick}>
-                        NextGenMeal
-                    </Typography>
+                    <img src={logo} alt="NextGenMeal" style={{width:"10%"}} onClick={onLogoClick}/>
                     <Stack direction="row"
                            ml={3}
                            spacing={3}

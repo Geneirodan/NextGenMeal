@@ -18,12 +18,12 @@ namespace API.Controllers
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<PagedArrayModel<DishModel>> Get(int cateringId,
-                                                            [FromQuery] List<string> types,
+                                                            string? types = null,
                                                             int page = 1,
                                                             string query = "")
         {
             var dishService = service as IDishService;
-            return dishService!.Get(cateringId, types, page, query);
+            return dishService!.Get(cateringId, types?.Split(','), page, query);
         }
 
         [HttpGet("Types")]
