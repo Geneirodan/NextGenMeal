@@ -1,15 +1,15 @@
-import React, {memo, useCallback} from 'react';
-import {useFormik} from 'formik';
-import {useTranslation} from "react-i18next";
-import {Navigate} from "react-router-dom";
-import {useDispatch, useSelector} from "react-redux";
-import {confirmPasswordValidation, emailValidation, passwordValidation, stringRequired} from "../../utils/validation";
-import * as yup from "yup";
+import React, {memo, useCallback} from 'react'
+import {useFormik} from 'formik'
+import {useTranslation} from "react-i18next"
+import {Navigate} from "react-router-dom"
+import {useDispatch, useSelector} from "react-redux"
+import {confirmPasswordValidation, emailValidation, passwordValidation, stringRequired} from "../../utils/validation"
+import * as yup from "yup"
 import {register, resetErrors, selector} from "../../store/auth"
-import {Button, Container, Stack, Typography} from "@mui/material";
-import {Errors} from "../common/Errors";
-import {CustomTextField} from "../common/inputs/CustomTextField";
-import {useErrors, useReset, useUpdate} from "../../utils/hook/hooks";
+import {Button, Container, Stack, Typography} from "@mui/material"
+import {Errors} from "../common/Errors"
+import {CustomTextField} from "../common/inputs/CustomTextField"
+import {useErrors, useReset, useUpdate} from "../../utils/hook/hooks"
 
 
 export const RegisterPage = memo(
@@ -63,7 +63,7 @@ export const RegisterPage = memo(
                             </Stack>
                         </Stack>
                     </Container>
-                </form>;
+                </form>
 
     }
 )

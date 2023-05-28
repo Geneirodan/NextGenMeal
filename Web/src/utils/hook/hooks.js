@@ -3,11 +3,17 @@ import {useCallback, useEffect, useState} from "react";
 
 export const useStepping = () => {
     const [activeStep, setActiveStep] = useState(0)
-    const handleNext = useCallback(() => setActiveStep(prevState => prevState + 1),[])
-    const handleBack = useCallback(() => setActiveStep(prevState => prevState - 1),[])
+    const handleNext = useCallback(
+        () => setActiveStep(prevState => prevState + 1),
+        [setActiveStep]
+    )
+    const handleBack = useCallback(
+        () => setActiveStep(prevState => prevState - 1),
+        [setActiveStep]
+    )
     return [activeStep, handleNext, handleBack]
 };
-export const useUpdate = selector => useSelector(selector("updated"));
+export const useUpdate = (selector, setUpdated) => useSelector(selector("updated"));
 export const useErrors = (selector, resetErrors) => {
     const dispatch = useDispatch()
     useEffect(() => () => {

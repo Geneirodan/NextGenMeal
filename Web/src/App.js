@@ -16,10 +16,11 @@ import {NewOrderPage} from "./components/pages/customer/orderPage/NewOrderPage";
 import {MyOrdersPage} from "./components/pages/customer/MyOrdersPage";
 import {EmployeesPage} from "./components/pages/service/EmployeesPage";
 import {useUpdate} from "./utils/hook/hooks";
-import {selector} from "./store/auth";
+import {selector, setUpdated} from "./store/auth";
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {OrderPage} from "./components/pages/employee/OrderPage";
 import {OrdersPage} from "./components/pages/employee/OrdersPage";
+import {Footer} from "./components/Footer";
 
 const theme = createTheme({
     components: {
@@ -34,7 +35,7 @@ const TempMain = () => <div>Dima is chort</div>;
 const Temp404 = () => <div>404 NOT FOUND</div>
 export const App = () => {
     const initialized = useSelector(initializedSelector)
-    const updated = useUpdate(selector)
+    const updated = useUpdate(selector, setUpdated)
     const dispatch = useDispatch()
     useEffect(
         () => {
@@ -46,10 +47,10 @@ export const App = () => {
     return !initialized
         ? <Preloader/>
         : <ThemeProvider theme={theme}>
-            <Stack spacing={5} sx={{height: "100%"}}>
+            <Stack spacing={5} sx={{minHeight: "100vh"}}>
                 <CssBaseline/>
                 <Header/>
-                <Box component="main" sx={{height: "100%"}}>
+                <Box component="main" sx={{height: "100%"}} flexGrow={1}>
                     <Routes>
                         <Route path='/' element={<TempMain/>} exact/>
                         <Route path='/confirm' element={<ConfirmPage/>}/>
@@ -66,6 +67,7 @@ export const App = () => {
                         <Route path='*' element={<Temp404/>}/>
                     </Routes>
                 </Box>
+                <Footer/>
             </Stack>
         </ThemeProvider>
 }

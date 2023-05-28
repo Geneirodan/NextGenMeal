@@ -5,9 +5,12 @@ import React, {memo, useCallback, useEffect, useState} from "react";
 import {CateringListButton} from "../../../common/buttons/CateringListButton";
 import {SearchComponent} from "../../../common/inputs/SearchComponent";
 import {ListContainer} from "../../../common/ListContainer";
+import {leftFabStyle} from "../../../common/buttons/AddFab";
+import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
+import Button from "@mui/material/Button";
 
 export const Step2 = memo(
-    ({nextStep, formik}) => {
+    ({nextStep, backStep, formik}) => {
         const {t} = useTranslation();
         const {items, totalCount} = useSelector(selector("caterings"))
         const [filter, setFilter] = useState({serviceId: formik.values.serviceId})
@@ -39,15 +42,18 @@ export const Step2 = memo(
                 },
             []
         )
-        return <ListContainer filter={filter}
-                              filters={[
-                                  <SearchComponent filter={filter} setFilter={setFilter}/>
-                              ]}
-                              setFilter={setFilter}
-                              items={items}
-                              loading={loading}
-                              itemCallback={itemCallback}
-                              totalCount={totalCount}
-                              emptyLabel={t("No caterings found")}/>
+        return <>
+            <ListContainer filter={filter}
+                           filters={<SearchComponent filter={filter} setFilter={setFilter}/>}
+                           setFilter={setFilter}
+                           items={items}
+                           loading={loading}
+                           itemCallback={itemCallback}
+                           totalCount={totalCount}
+                           emptyLabel={t("No caterings found")}/>
+            <Button variant="contained" onClick={backStep} sx={leftFabStyle}>
+                <KeyboardArrowLeft/> {t("Back")}
+            </Button>
+        </>
     }
 )

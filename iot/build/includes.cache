@@ -1,0 +1,17 @@
+[
+  {
+    "Sourcefile": null,
+    "Include": "",
+    "Includepath": "C:\\Users\\Genei\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\2.0.8\\cores\\esp32"
+  },
+  {
+    "Sourcefile": null,
+    "Include": "",
+    "Includepath": "C:\\Users\\Genei\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\2.0.8\\variants\\doitESP32devkitV1"
+  },
+  {
+    "Sourcefile": "D:\\Source\\NextGenMeal\\iot\\build\\sketch\\iot.ino.cpp",
+    "Include": "",
+    "Includepath": null
+  }
+]

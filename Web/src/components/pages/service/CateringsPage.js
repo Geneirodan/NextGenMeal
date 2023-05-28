@@ -15,7 +15,7 @@ export const CateringsPage = memo(
     withRole(roles.Service)(
         () => {
             const {items, totalCount} = useSelector(selector("caterings"))
-            const updated = useUpdate(selector)
+            const updated = useUpdate(selector, setUpdated)
             const dispatch = useDispatch()
             const [filter, setFilter] = useState({})
             const [loading, setLoading] = useState(false)

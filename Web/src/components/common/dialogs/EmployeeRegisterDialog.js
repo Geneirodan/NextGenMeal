@@ -33,7 +33,7 @@ export const EmployeeRegisterDialog = ({cateringId, open, onClose, onSubmit}) =>
     });
     const formik = useFormik({initialValues, validationSchema, onSubmit});
     const fields = [
-        <CustomTextField key="name" name="name" formik={formik} label={t("Name")}/>,
+        <CustomTextField key="name" name="name" formik={formik} label={t("Full name")}/>,
         <CustomTextField key="email" name="email" formik={formik} label={t("Email")}/>,
         <CustomTextField key="password" name="password" type="password" formik={formik} label={t("Password")}/>,
         <CustomTextField key="confirmPassword" name="confirmPassword" type="password" formik={formik}

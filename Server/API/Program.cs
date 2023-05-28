@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using Services;
 using Services.Interfaces;
 using Services.Logging;
-using Utils.Constants;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;

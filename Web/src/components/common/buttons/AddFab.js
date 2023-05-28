@@ -2,16 +2,32 @@ import {Fab} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import React from "react";
 
+export const rightFabStyle = {
+    margin: 0,
+    top: 'auto',
+    right: 20,
+    bottom: 20,
+    left: 'auto',
+    position: 'sticky',
+};
+export const leftFabStyle = {
+    margin: 0,
+    top: 'auto',
+    right: 'auto',
+    bottom: 20,
+    left: 20,
+    position: 'sticky',
+};
+export const bottomFabStyle = {
+    margin: 0,
+    top: 'auto',
+    right: 20,
+    bottom: 20,
+    left: 20,
+    position: 'sticky',
+};
 export const AddFab = props => {
-    const style = {
-        margin: 0,
-        top: 'auto',
-        right: 20,
-        bottom: 20,
-        left: 'auto',
-        position: 'fixed',
-    };
-    return <Fab color="primary" style={style} {...props}>
+    return <Fab color="primary" style={rightFabStyle} {...props}>
         <AddIcon/>
     </Fab>;
 };

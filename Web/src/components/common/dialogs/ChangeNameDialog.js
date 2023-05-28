@@ -18,7 +18,7 @@ export const ChangeNameDialog = ({user, open, onClose, onSubmit}) => {
         name: stringRequired(t)
     });
     const formik = useFormik({initialValues, validationSchema, onSubmit});
-    const fields = <CustomTextField key="name" name="name" formik={formik} label={t("Name")}/>
+    const fields = <CustomTextField key="name" name="name" formik={formik} label={t("Full name")}/>
     return <EditDialog title={t("Change name")}
                        open={open}
                        onClose={onClose}

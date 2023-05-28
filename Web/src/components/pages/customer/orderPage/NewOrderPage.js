@@ -12,12 +12,11 @@ import {Step2} from "./Step2";
 import {Step3} from "./Step3";
 import {Step4} from "./Step4";
 import StarIcon from '@mui/icons-material/Star';
-import {OptimalDialog} from "../../../common/dialogs/OptimalDialog";
 import {useDispatch, useSelector} from "react-redux";
-import {addOrder, getOptimalDishes, resetErrors, selector, setUpdated} from "../../../../store/customer/new_order";
+import {addOrder, resetErrors, selector, setUpdated} from "../../../../store/customer/new_order";
 import * as yup from "yup";
 import {stringRequired} from "../../../../utils/validation";
-import {useErrors, useOpen, useStepping, useUpdate} from "../../../../utils/hook/hooks";
+import {useErrors, useStepping, useUpdate} from "../../../../utils/hook/hooks";
 import {ErrorsSnackbar} from "../../../common/ErrorsSnackbar";
 import {useNavigate} from "react-router-dom";
 import {roles} from "../../../../utils/constants";
@@ -78,7 +77,6 @@ const SuccessSnackbar = memo(
     ({open}) => {
         const {t} = useTranslation()
         const navigate = useNavigate()
-        const dispatch = useDispatch()
         const onClose = useCallback(
             () => navigate("/my_orders"),
             []
@@ -103,10 +101,9 @@ export const NewOrderPage = memo(
             const dispatch = useDispatch()
 
             const orderDishes = useSelector(selector("selectedDishes"))
-            const updated = useUpdate(selector);
+            const updated = useUpdate(selector, setUpdated)
             const errors = useErrors(selector, resetErrors);
 
-            const [open, onClick, onClose] = useOpen();
             const [step, handleNext, handleBack] = useStepping();
 
             const [alert, setAlert] = useState(false)
@@ -142,33 +139,19 @@ export const NewOrderPage = memo(
                 },
                 [orderDishes]
             )
-            const [disableNext, setDisableNext] = useState(true)
-            useEffect(
-                () => setDisableNext(!formik.values.orderDishes.length),
-                [formik]
-            )
 
             const stepsComponents = [
-                <Step1 nextStep={handleNext} formik={formik}/>,
-                <Step2 nextStep={handleNext} formik={formik}/>,
-                <Step3 formik={formik}/>,
-                <Step4 formik={formik}/>
+                <Step1 formik={formik} nextStep={handleNext}/>,
+                <Step2 formik={formik} nextStep={handleNext} backStep={handleBack}/>,
+                <Step3 formik={formik} nextStep={handleNext} backStep={handleBack}/>,
+                <Step4 formik={formik} backStep={handleBack}/>
             ]
             useEffect(
                 () => setAlert(Boolean(errors?.length)),
                 [errors]
             )
 
-            const onSubmitOptimal = useCallback(
-                async values => {
-                    const ok = await dispatch(getOptimalDishes(values))
-                    if (ok) {
-                        handleNext()
-                        onClose()
-                    }
-                },
-                [formik, handleNext, onClose, dispatch]
-            )
+
             useEffect(
                 () =>
                     () => {
@@ -177,26 +160,16 @@ export const NewOrderPage = memo(
                 []
             )
             return (
-                <form onSubmit={formik.handleSubmit} style={{height: "100%"}}>
-                    <Stack sx={{width: '100%', height: '100%'}} spacing={2}>
-                        <StepperComponent activeStep={step}/>
-                        <Box flexGrow="1">
-                            {stepsComponents[step]}
-                        </Box>
-                        <BottomButtons handleBack={handleBack}
-                                       activeStep={step}
-                                       onOptimalClick={onClick}
-                                       handleNext={handleNext}
-                                       disabled={disableNext}/>
-                        <OptimalDialog cateringId={formik.values.cateringId}
-                                       open={open}
-                                       onClose={onClose}
-                                       onSubmit={onSubmitOptimal}
-                                       errors={errors}/>
-                        <ErrorsSnackbar errors={errors} open={alert} onClose={onAlertClose}/>
-                        <SuccessSnackbar open={updated}/>
-                    </Stack>
-                </form>
+                    <form onSubmit={formik.handleSubmit}>
+                        <Stack spacing={2}>
+                            <StepperComponent activeStep={step}/>
+                            <Box flexGrow="1">
+                                {stepsComponents[step]}
+                            </Box>
+                            <ErrorsSnackbar errors={errors} open={alert} onClose={onAlertClose}/>
+                            <SuccessSnackbar open={updated}/>
+                        </Stack>
+                    </form>
             )
         }
     )

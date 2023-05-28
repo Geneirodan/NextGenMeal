@@ -19,7 +19,7 @@ export const OrdersPage = memo(
             const dispatch = useDispatch()
             const navigate = useNavigate()
             const [filter, setFilter] = useState({})
-            const updated = useUpdate(selector)
+            const updated = useUpdate(selector, setUpdated)
             const [loading, setLoading] = useState(false)
             const itemCallback = useCallback(
                 order => <OrderListItem key={order.id} order={order}/>,

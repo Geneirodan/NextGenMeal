@@ -1,14 +1,13 @@
 import React, {memo, useCallback} from "react";
-import {Button, Card, Chip, Dialog, DialogActions, DialogContent, DialogTitle, Stack, Typography} from "@mui/material";
+import {Accordion, AccordionDetails, AccordionSummary, Chip, Stack, Typography} from "@mui/material";
 import {useTranslation} from "react-i18next";
 import dayjs from "dayjs/esm";
 import utc from "dayjs/plugin/utc";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
 import {DishListComponent} from "../buttons/DishListButton";
-import {DishesIconButton} from "../buttons/IconButtons";
 import {useOpen} from "../../../utils/hook/hooks";
 import {useDispatch} from "react-redux";
-import {pay} from "../../../store/customer/orders";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 dayjs.extend(utc)
 
@@ -32,29 +31,25 @@ export const OrderListItem = memo(
             value => <DishListComponent dish={value.dish} quantity={value.quantity} readonly/>,
             []
         )
-        return <Card sx={{padding: 1}}>
-            <Stack direction="row" alignItems="center">
-                <Typography flexGrow="1">
-                    {formattedTime}<br/>
-                    {`$${(order.price)}`}
-                </Typography>
-                {order.isBox && <Inventory2Icon/>}
-                <DishesIconButton onClick={onClick}/>
-                <Chip label={order.status} />
-            </Stack>
-            <Dialog open={open} keepMounted onClose={onClose}>
-                <DialogTitle>{t("Dishes")}</DialogTitle>
-                <DialogContent>
+        return (
+            <Accordion>
+                <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
+                    <Stack direction="row" alignItems="center" flexGrow={1}>
+                        <Typography flexGrow={1}>
+                            {t("Order")} №{order.id}<br/>
+                            {t("Time")}: {formattedTime}<br/>
+                            {t("Price")}: {`$${(order.price)}`}
+                        </Typography>
+                        {order.isBox && <Inventory2Icon/>}
+                        <Chip label={order.status}/>
+                    </Stack>
+                </AccordionSummary>
+                <AccordionDetails>
                     <Stack spacing={2}>
                         {order.orderDishes.map(itemCallback)}
                     </Stack>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={onClose}>
-                        {t("Close")}
-                    </Button>
-                </DialogActions>
-            </Dialog>
-        </Card>
+                </AccordionDetails>
+            </Accordion>
+        )
     }
 )

@@ -1,27 +1,25 @@
-import {Box, Card, IconButton, Stack, Typography} from "@mui/material";
+import {Box, Card, Chip, IconButton, Stack} from "@mui/material";
 import React, {memo, useCallback, useEffect, useState} from "react";
 import {useMeasurements} from "../../../utils/hook/UseMeasurements";
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import {addDish, removeDish, selector} from "../../../store/customer/new_order";
 import {useDispatch, useSelector} from "react-redux";
+import {useTranslation} from "react-i18next";
 
 export const DishListComponent = memo(
     ({dish, onAdd, onRemove, quantity, readonly = false}) => {
+        const {t} = useTranslation()
         const {m} = useMeasurements()
         return <Card sx={{padding: 1}}>
             <Stack direction="row" alignItems="center">
                 <Box sx={{flexGrow: 1}}>
-                    <Typography>
-                        {dish.name}
-                    </Typography>
-                    <Typography>
-                        {`$${(dish.price)}, ${m(dish.portion)}, ${(dish.type)}`}
-                    </Typography>
-                    <Typography>
-                        {dish.description}
-                    </Typography>
-                </Box>
+                    {t("Name")}: {dish.name}<br/>
+                    {t("Price")}: {`$${dish.price}`}<br/>
+                    {t("Portion")}: {m(dish.portion)}<br/>
+                    {t("Type")}: {dish.type}<br/>
+                    {dish.description}
+                < /Box>
                 {
                     readonly ||
                     <IconButton onClick={onAdd}>
@@ -31,9 +29,7 @@ export const DishListComponent = memo(
                 {
                     quantity &&
                     <>
-                        <Typography>
-                            {quantity}
-                        </Typography>
+                        <Chip label={quantity}/>
                         {
                             readonly ||
                             <IconButton onClick={onRemove}>
@@ -48,7 +44,9 @@ export const DishListComponent = memo(
 )
 
 export const DishListButton = memo(
-    ({dish}) => {
+    ({
+         dish
+     }) => {
         const dispatch = useDispatch()
         const selectedDishes = useSelector(selector("selectedDishes"))
         const [quantity, setQuantity] = useState(selectedDishes[dish.id.toString()]?.quantity ?? 0)

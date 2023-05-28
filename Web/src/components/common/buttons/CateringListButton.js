@@ -1,17 +1,20 @@
 import React, {memo} from "react";
-import {Card, CardActionArea, Typography} from "@mui/material";
+import {Typography, Card, CardActionArea} from "@mui/material";
+import {useTranslation} from "react-i18next";
 
 export const CateringListButton = memo(
-    ({catering, onClick}) =>
-        <Card>
+    ({catering, onClick}) => {
+        const {t} = useTranslation()
+        return <Card>
             <CardActionArea sx={{padding: 1}} onClick={onClick}>
                 <Typography>
-                    {catering.name}
+                    {t("Name")}: {catering.name}<br/>
+                    {t("City")}: {(catering.city)}<br/>
+                    {t("State")}: {(catering.state)}<br/>
+                    {t("Street")}: {(catering.street)}<br/>
+                    {catering.terminal && t("With terminal")}
                 </Typography>
-                <Typography>
-                    {`${(catering.city)}, ${(catering.state)}, ${(catering.street)}`}
-                </Typography>
-                {catering.terminal && <Typography>With terminal</Typography>}
             </CardActionArea>
         </Card>
+    }
 )

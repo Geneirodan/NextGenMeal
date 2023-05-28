@@ -6,10 +6,7 @@ export const ServiceListButton = memo(
         <Card>
             <CardActionArea sx={{padding: 1}} onClick={onClick}>
                 <Typography>
-                    {service.name}
-                </Typography>
-                <Typography>
-                    {service.country}
+                    {service.name} - {service.country}
                 </Typography>
             </CardActionArea>
         </Card>

@@ -1,16 +1,17 @@
 import {useTranslation} from "react-i18next";
-import {Container, FormControlLabel, Stack, Switch, Typography} from "@mui/material";
+import {Button, Container, FormControlLabel, Stack, Switch, Typography} from "@mui/material";
 import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import React, {memo, useCallback} from "react";
 import {DishListComponent} from "../../../common/buttons/DishListButton";
 import {resetErrors, selector} from "../../../../store/customer/new_order";
-import {Errors} from "../../../common/Errors";
 import {useErrors} from "../../../../utils/hook/hooks";
-import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
+import {MobileDateTimePicker} from '@mui/x-date-pickers/MobileDateTimePicker';
+import {bottomFabStyle, leftFabStyle, rightFabStyle} from "../../../common/buttons/AddFab";
+import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 
 export const Step4 = memo(
-    ({formik}) => {
+    ({formik, backStep}) => {
         const {t, i18n} = useTranslation()
         const errors = useErrors(selector, resetErrors);
         const reduceCallback = useCallback(
@@ -26,10 +27,9 @@ export const Step4 = memo(
             value => <DishListComponent dish={value.dish} quantity={value.quantity} readonly/>,
             []
         )
-        return (
+        return <>
             <Container>
                 <Stack spacing={2}>
-                    <Errors errors={errors}/>
                     <Typography>
                         {t("Your price")}: ${price}
                     </Typography>
@@ -54,6 +54,14 @@ export const Step4 = memo(
                         label={t("Pack in box")}/>
                 </Stack>
             </Container>
-        )
+            <Stack direction="row" justifyContent="space-between" spacing={2} sx={bottomFabStyle} alignItems="end">
+                <Button variant="contained" onClick={backStep} sx={leftFabStyle}>
+                    <KeyboardArrowLeft/> {t("Back")}
+                </Button>
+                <Button variant="contained" type="submit" sx={rightFabStyle}>
+                    {t("Finish")}
+                </Button>
+            </Stack>
+        </>
     }
 )

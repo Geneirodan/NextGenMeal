@@ -1,6 +1,6 @@
 import {withRole} from "../../../utils/hoc/withAuth";
 import React, {memo, useCallback, useEffect, useState} from "react";
-import {Alert, AppBar, Box, Button, Snackbar, Stack, Typography} from "@mui/material";
+import {Alert, Box, Card, Fab, Paper, Snackbar, Stack, Typography} from "@mui/material";
 import {useTranslation} from "react-i18next";
 import {useFormik} from "formik";
 import 'dayjs/locale/uk'
@@ -19,6 +19,7 @@ import {SearchComponent} from "../../common/inputs/SearchComponent";
 import {TypeSelect} from "../../common/inputs/TypeSelect";
 import {selector as authSelector} from "../../../store/auth"
 import dayjs from "dayjs/esm";
+import {rightFabStyle} from "../../common/buttons/AddFab";
 
 const SuccessSnackbar = memo(
     ({open}) => {
@@ -55,7 +56,7 @@ export const OrderPage = memo(
 
             const {items, totalCount} = useSelector(dishSelector("dishes"))
             const orderDishes = useSelector(selector("selectedDishes"))
-            const updated = useUpdate(selector);
+            const updated = useUpdate(selector, setUpdated)
             const errors = useErrors(selector, resetErrors);
 
 
@@ -139,16 +140,17 @@ export const OrderPage = memo(
                                            totalCount={totalCount}
                                            emptyLabel={t("No dishes found")}/>
                         </Box>
-                        <AppBar position="sticky" color="primary" sx={{top: "auto", bottom: 0}}>
-                            <Stack direction="row" justifyContent="space-between" padding={2}>
+                        <Stack justifyContent="space-between" spacing={2} sx={rightFabStyle} color="primary"
+                               alignItems="stretch">
+                            <Card sx={{padding: 1}}>
                                 <Typography>
                                     {t("Your price")}: ${formik.values.orderDishes.reduce(reduceCallback, 0)}
                                 </Typography>
-                                <Button color="inherit" type="submit">
-                                    {t("Finish")}
-                                </Button>
-                            </Stack>
-                        </AppBar>
+                            </Card>
+                            <Fab variant="extended" type="submit" color="primary">
+                                {t("Finish")}
+                            </Fab>
+                        </Stack>
                         <ErrorsSnackbar errors={errors} open={alert} onClose={onAlertClose}/>
                         <SuccessSnackbar open={updated}/>
                     </Stack>

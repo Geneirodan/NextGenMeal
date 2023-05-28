@@ -10,7 +10,7 @@ import {DeleteButton} from "../buttons/DeleteButton";
 import {TerminalEditDialog} from "../dialogs/TerminalEditDialog";
 import PersonIcon from '@mui/icons-material/Person';
 import {DishesIconButton} from "../buttons/IconButtons";
-
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 
 export const CateringListItem = memo(
     ({catering}) => {
@@ -27,7 +27,7 @@ export const CateringListItem = memo(
 
         const AddTerminalButton = useCallback(
             props =>
-                <Button {...props}>
+                <Button {...props} size="large" startIcon={<AddOutlinedIcon/>}>
                     {t("Add terminal")}
                 </Button>,
             [t]

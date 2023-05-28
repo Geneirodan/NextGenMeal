@@ -17,6 +17,7 @@ export const ListContainer = memo(
                                     ? <Preloader/>
                                     : items.map(itemCallback)
                             }
+                            <Paginator totalCount={totalCount} filter={filter} setFilter={setFilter}/>
                         </>
                         : <Box>
                             <Typography variant="h4" align="center">

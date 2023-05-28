@@ -208,7 +208,7 @@ namespace Services
                 return Result.Fail(Errors.Forbidden);
             if (order.IsBox && newStatus == OrderStatuses.Received)
             {
-                var terminal = order.Catering.Terminal;
+                var terminal = order.Catering!.Terminal;
                 var cellId = Array.IndexOf(terminal.Cells, order.Id.ToString());
                 var prefix = configuration["Mqtt:Prefix"];
                 var message = new MqttApplicationMessageBuilder()
