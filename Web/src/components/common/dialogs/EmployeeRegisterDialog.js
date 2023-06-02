@@ -2,9 +2,8 @@ import {useTranslation} from "react-i18next";
 import {useFormik} from "formik";
 import React from "react";
 import {CustomTextField} from "../inputs/CustomTextField";
-import {resetErrors, selector} from "../../../store/service/caterings";
 import {EditDialog} from "./EditDialog";
-import {useErrors, useReset} from "../../../utils/hook/hooks";
+import {useReset} from "../../../utils/hook/hooks";
 import {
     confirmPasswordValidation,
     emailValidation,
@@ -12,12 +11,9 @@ import {
     stringRequired
 } from "../../../utils/validation";
 import * as yup from "yup";
-import {useDispatch} from "react-redux";
 
 export const EmployeeRegisterDialog = ({cateringId, open, onClose, onSubmit}) => {
-    const errors = useErrors(selector, resetErrors)
     const {t} = useTranslation()
-    const dispatch = useDispatch()
     const initialValues = {
         name: "",
         email: "",
@@ -40,10 +36,5 @@ export const EmployeeRegisterDialog = ({cateringId, open, onClose, onSubmit}) =>
                          label={t("Confirm password")}/>
     ]
     useReset(open, formik.resetForm);
-    return <EditDialog title={t("Add employee")}
-                       open={open}
-                       onClose={onClose}
-                       formik={formik}
-                       errors={errors}
-                       fields={fields}/>;
+    return <EditDialog title={t("Add employee")} open={open} onClose={onClose} formik={formik} fields={fields}/>;
 };

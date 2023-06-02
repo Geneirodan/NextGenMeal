@@ -1,6 +1,6 @@
 import {useTranslation} from "react-i18next";
 import {useDispatch, useSelector} from "react-redux";
-import {getCaterings, selectedDishesSuccess, selector} from "../../../../store/customer/new_order";
+import {getCaterings, selectedDishesSuccess, selector} from "../../../../store/order";
 import React, {memo, useCallback, useEffect, useState} from "react";
 import {CateringListButton} from "../../../common/buttons/CateringListButton";
 import {SearchComponent} from "../../../common/inputs/SearchComponent";

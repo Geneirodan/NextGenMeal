@@ -3,7 +3,7 @@ import React, {memo, useCallback, useEffect, useState} from "react";
 import {useMeasurements} from "../../../utils/hook/UseMeasurements";
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
-import {addDish, removeDish, selector} from "../../../store/customer/new_order";
+import {addDish, removeDish, selector} from "../../../store/order";
 import {useDispatch, useSelector} from "react-redux";
 import {useTranslation} from "react-i18next";
 
@@ -44,9 +44,7 @@ export const DishListComponent = memo(
 )
 
 export const DishListButton = memo(
-    ({
-         dish
-     }) => {
+    ({dish}) => {
         const dispatch = useDispatch()
         const selectedDishes = useSelector(selector("selectedDishes"))
         const [quantity, setQuantity] = useState(selectedDishes[dish.id.toString()]?.quantity ?? 0)

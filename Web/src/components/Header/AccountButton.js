@@ -109,7 +109,8 @@ export const AccountButton = memo(
             ],
             [roles.Admin]: [
                 new menuItem(t("Customers"), "/admin/customers"),
-                new menuItem(t("Services"), "/admin/services")
+                new menuItem(t("Services"), "/admin/services"),
+                new menuItem(t("Register service"), "/admin/services/register")
             ]
         }
         return role

@@ -46,12 +46,13 @@ void setup()
     servos[i].write(0);
   }
   pinMode(LED_PIN, OUTPUT);
+  preferences.begin("MQTT", false);
 
   wm.setAPCallback(configModeCallback);
   wm.setSaveConfigCallback(saveConfigCallback);
   wm.setConfigPortalTimeout(TIMEOUT);
 
-  bool b = client.loadConfig();
+  bool isEmpty = client.loadConfig();
 
   ESP_WMParameter broker_text_box("broker", "Enter MQTT Broker", client.getBroker(), 50);
   char convertedValue[8];
@@ -62,7 +63,7 @@ void setup()
   wm.addParameter(&broker_text_box);
   wm.addParameter(&port_text_box);
   wm.addParameter(&topic_text_box);
-  if (!b || drd.detectDoubleReset())
+  if (!isEmpty || drd.detectDoubleReset())
     startAP(&ESP_WiFiManager::startConfigPortal);
   else
     startAP(&ESP_WiFiManager::autoConnect);
@@ -80,6 +81,7 @@ void setup()
     client.saveConfig();
   client.begin(MQTTCallback);
 }
+
 void loop()
 {
   analogWrite(LED_PIN, (WiFi.status() == WL_CONNECTED) ? 255 : 0);

@@ -25,7 +25,6 @@ namespace Services.Interfaces
         string? GetUserId(ClaimsPrincipal principal);
         Task<string?> GetRole(ClaimsPrincipal principal);
         AuthenticationProperties ConfigureExternalAuthenticationProperties(string provider, string redirectUrl);
-        Task<Result> GoogleAuth();
         Task<Result> DeleteAsync(ClaimsPrincipal principal, string id);
         Task<Result> ChangeNameAsync(string name, ClaimsPrincipal principal, string id);
         Task<PagedArrayModel<EmployeeModel>> GetEmployeesAsync(int cateringId, int page, string query);
@@ -33,5 +32,7 @@ namespace Services.Interfaces
         Task<PagedArrayModel<LockableUserModel<UserModel>>> GetCustomersAsync(int page, string query);
         Task<Result> BlockUserAsync(string id);
         Task<Result> UnblockUserAsync(string id);
+        Task<Result> GoogleAuthAsync();
+        Task<Result> GoogleAuthAsync(string providerKey, string token);
     }
 }

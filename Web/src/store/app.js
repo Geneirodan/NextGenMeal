@@ -1,8 +1,9 @@
 import {createSlice} from '@reduxjs/toolkit'
 import {getInfo, getRole} from "./auth";
+import {commonGet, getSelector} from "./common";
 
 // Slice
-const {actions, reducer} = createSlice({
+const {actions, name, reducer} = createSlice({
     name: 'app',
     initialState: {
         initialized: false
@@ -10,7 +11,7 @@ const {actions, reducer} = createSlice({
     reducers: {
         setInitialized: (state, {payload}) => {
             state.initialized = payload;
-        },
+        }
     },
 });
 export default reducer
@@ -24,6 +25,4 @@ export const initialize = () => async dispatch => {
     }
     dispatch(setInitialized(true))
 }
-
-// Selectors
-export const initializedSelector = state => state.app.initialized
+export const selector = getSelector(name)

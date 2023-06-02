@@ -7,7 +7,7 @@ import {units, useMeasurements} from "../../../utils/hook/UseMeasurements";
 
 export const SettingsDialogMenuItem = memo(
     () => {
-        const {t, i18n} = useTranslation();
+        const {t} = useTranslation();
         const [open, onClick, onClose] = useOpen()
         const {getUnitSymbol, unit, setUnit} = useMeasurements()
         const onChange = useCallback(

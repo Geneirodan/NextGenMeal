@@ -6,6 +6,7 @@ import Button from "@mui/material/Button";
 import {useTranslation} from "react-i18next";
 import {useDispatch} from "react-redux";
 import {block, unblock} from "../../../store/admin"
+// noinspection JSUnresolvedReference
 export const UserListItem = memo(
     ({user, isLocked}) => {
         const {t} = useTranslation()

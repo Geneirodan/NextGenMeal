@@ -1,6 +1,6 @@
 import {useTranslation} from "react-i18next";
 import {useDispatch, useSelector} from "react-redux";
-import {getTypes, selector} from "../../../store/service/menu";
+import {getTypes, selector} from "../../../store/menu";
 import React, {memo, useCallback, useEffect} from "react";
 import {Autocomplete, TextField} from "@mui/material";
 import {ArrayParam, useQueryParam} from "use-query-params";

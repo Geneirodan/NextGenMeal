@@ -1,25 +1,23 @@
-import {withRole} from "../../../../utils/hoc/withAuth";
-import React, {memo, useCallback, useEffect, useState} from "react";
-import {Alert, AppBar, Box, Button, Snackbar, Stack, Step, StepLabel, Stepper} from "@mui/material";
+import {withRole} from "../../../../utils/hoc/withRole";
+import React, {memo, useCallback, useEffect} from "react";
+import {Alert, Box, Snackbar, Stack, Step, StepLabel, Stepper} from "@mui/material";
 import {useTranslation} from "react-i18next";
 import {useFormik} from "formik";
-import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
-import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import 'dayjs/locale/uk'
 import 'dayjs/locale/en'
 import {Step1} from "./Step1";
 import {Step2} from "./Step2";
 import {Step3} from "./Step3";
 import {Step4} from "./Step4";
-import StarIcon from '@mui/icons-material/Star';
 import {useDispatch, useSelector} from "react-redux";
-import {addOrder, resetErrors, selector, setUpdated} from "../../../../store/customer/new_order";
+import {addOrder, selector} from "../../../../store/order";
 import * as yup from "yup";
 import {stringRequired} from "../../../../utils/validation";
-import {useErrors, useStepping, useUpdate} from "../../../../utils/hook/hooks";
+import {useStepping, useUpdate} from "../../../../utils/hook/hooks";
 import {ErrorsSnackbar} from "../../../common/ErrorsSnackbar";
 import {useNavigate} from "react-router-dom";
 import {roles} from "../../../../utils/constants";
+import {setUpdated} from "../../../../store/common";
 
 const StepperComponent = memo(
     ({activeStep}) => {
@@ -41,37 +39,6 @@ const StepperComponent = memo(
     }
 )
 
-const BottomButtons = memo(
-    ({activeStep, disabled, handleBack, onOptimalClick, handleNext}) => {
-        const {t} = useTranslation()
-        return (
-            <AppBar position="sticky" color="primary" sx={{top: "auto", bottom: 0}}>
-                <Stack direction="row" justifyContent="space-between" padding={2}>
-                    <Button color="inherit" onClick={handleBack} disabled={activeStep === 0}>
-                        <KeyboardArrowLeft/> {t("Back")}
-                    </Button>
-                    {
-                        activeStep === 2 &&
-                        <>
-                            <Button color="inherit" onClick={onOptimalClick}>
-                                <StarIcon/> {t("Try optimal")}
-                            </Button>
-                            <Button color="inherit" onClick={handleNext} disabled={disabled}>
-                                {t("Next")} <KeyboardArrowRight/>
-                            </Button>
-                        </>
-                    }
-                    {
-                        activeStep === 3 &&
-                        <Button color="inherit" type="submit">
-                            {t("Finish")}
-                        </Button>
-                    }
-                </Stack>
-            </AppBar>
-        )
-    }
-)
 
 const SuccessSnackbar = memo(
     ({open}) => {
@@ -101,16 +68,9 @@ export const NewOrderPage = memo(
             const dispatch = useDispatch()
 
             const orderDishes = useSelector(selector("selectedDishes"))
-            const updated = useUpdate(selector, setUpdated)
-            const errors = useErrors(selector, resetErrors);
+            const updated = useUpdate()
 
             const [step, handleNext, handleBack] = useStepping();
-
-            const [alert, setAlert] = useState(false)
-            const onAlertClose = useCallback(
-                () => setAlert(false),
-                []
-            )
 
             const initialValues = {
                 time: null,
@@ -147,12 +107,6 @@ export const NewOrderPage = memo(
                 <Step4 formik={formik} backStep={handleBack}/>
             ]
             useEffect(
-                () => setAlert(Boolean(errors?.length)),
-                [errors]
-            )
-
-
-            useEffect(
                 () =>
                     () => {
                         dispatch(setUpdated(false))
@@ -160,16 +114,16 @@ export const NewOrderPage = memo(
                 []
             )
             return (
-                    <form onSubmit={formik.handleSubmit}>
-                        <Stack spacing={2}>
-                            <StepperComponent activeStep={step}/>
-                            <Box flexGrow="1">
-                                {stepsComponents[step]}
-                            </Box>
-                            <ErrorsSnackbar errors={errors} open={alert} onClose={onAlertClose}/>
-                            <SuccessSnackbar open={updated}/>
-                        </Stack>
-                    </form>
+                <form onSubmit={formik.handleSubmit}>
+                    <Stack spacing={2}>
+                        <StepperComponent activeStep={step}/>
+                        <Box flexGrow="1">
+                            {stepsComponents[step]}
+                        </Box>
+                        <ErrorsSnackbar/>
+                        <SuccessSnackbar open={updated}/>
+                    </Stack>
+                </form>
             )
         }
     )

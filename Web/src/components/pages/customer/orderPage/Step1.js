@@ -1,6 +1,6 @@
 import {useTranslation} from "react-i18next";
 import {useDispatch, useSelector} from "react-redux";
-import {getServices, selector} from "../../../../store/customer/new_order";
+import {getServices, selector} from "../../../../store/order";
 import React, {memo, useCallback, useEffect, useState} from "react";
 import {ServiceListButton} from "../../../common/buttons/ServiceListButton";
 import {SearchComponent} from "../../../common/inputs/SearchComponent";

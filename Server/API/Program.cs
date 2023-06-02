@@ -5,9 +5,11 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Services;
 using Services.Interfaces;
 using Services.Logging;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
@@ -48,7 +50,8 @@ Action<GoogleOptions> googleConfig = options =>
 };
 services.AddAuthentication()
         .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
-        .AddGoogle(GoogleDefaults.AuthenticationScheme, googleConfig);
+        .AddGoogle(GoogleDefaults.AuthenticationScheme, googleConfig)
+;
 
 services.ConfigureApplicationCookie(options =>
 {
@@ -86,7 +89,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseExceptionHandler()
-   .UseHttpsRedirection()
+//   .UseHttpsRedirection()
    .UseCors(builder => builder.WithOrigins("https://localhost:3000")
                               .AllowAnyHeader()
                               .AllowAnyMethod()
@@ -95,5 +98,10 @@ app.UseExceptionHandler()
    .UseAuthorization();
 
 app.MapControllers();
-
+app.MapGet("/api/languages",
+    () => CultureInfo.GetCultures(CultureTypes.SpecificCultures)
+                     .Select(cult => new RegionInfo(cult.Name).EnglishName)
+                     .Distinct()
+                     .OrderBy(q => q)
+                     .ToList());
 app.Run();

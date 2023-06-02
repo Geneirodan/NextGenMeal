@@ -1,5 +1,4 @@
-import {withRole} from "../../../utils/hoc/withAuth";
-import {addCatering, getCaterings, selector, setUpdated} from "../../../store/service/caterings"
+import {withRole} from "../../../utils/hoc/withRole";
 import {useDispatch, useSelector} from "react-redux";
 import React, {memo, useCallback, useEffect, useState} from "react";
 import {SearchComponent} from "../../common/inputs/SearchComponent";
@@ -10,12 +9,14 @@ import {useUpdate} from "../../../utils/hook/hooks";
 import {AddFab} from "../../common/buttons/AddFab";
 import {EditDialogButton} from "../../common/dialogs/EditDialogButton";
 import {roles} from "../../../utils/constants";
+import {addCatering, getCaterings, selector} from "../../../store/caterings";
+import {setUpdated} from "../../../store/common";
 
 export const CateringsPage = memo(
     withRole(roles.Service)(
         () => {
             const {items, totalCount} = useSelector(selector("caterings"))
-            const updated = useUpdate(selector, setUpdated)
+            const updated = useUpdate()
             const dispatch = useDispatch()
             const [filter, setFilter] = useState({})
             const [loading, setLoading] = useState(false)

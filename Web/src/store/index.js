@@ -4,13 +4,14 @@ import {configureStore} from '@reduxjs/toolkit';
 import auth from './auth'
 import app from './app'
 import admin from './admin'
-import caterings from './service/caterings'
-import menu from './service/menu'
-import new_order from "./customer/new_order";
-import orders from "./customer/orders";
-import employee from "./service/employee"
+import common from './common'
+import caterings from './caterings'
+import menu from './menu'
+import order from "./order";
+import orders from "./orders";
+import employee from "./employee"
 
 export default configureStore({
-    reducer: combineReducers({ app, auth, employee, caterings, menu, new_order, orders, admin}),
+    reducer: combineReducers({admin, app, auth, caterings, employee, menu, order, orders, common}),
     middleware: [thunkMiddleware]
 });

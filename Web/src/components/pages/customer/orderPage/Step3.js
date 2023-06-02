@@ -1,6 +1,6 @@
 import {useTranslation} from "react-i18next";
 import {useDispatch, useSelector} from "react-redux";
-import {getDishes, selector as dishSelector} from "../../../../store/service/menu";
+import {getDishes, selector as dishSelector} from "../../../../store/menu";
 import React, {memo, useCallback, useEffect, useState} from "react";
 import {DishListButton} from "../../../common/buttons/DishListButton";
 import {SearchComponent} from "../../../common/inputs/SearchComponent";
@@ -9,7 +9,7 @@ import {ListContainer} from "../../../common/ListContainer";
 import {bottomFabStyle, leftFabStyle, rightFabStyle} from "../../../common/buttons/AddFab";
 import {Button, Stack} from "@mui/material";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
-import {getOptimalDishes} from "../../../../store/customer/new_order";
+import {getOptimalDishes} from "../../../../store/order";
 import {OptimalDialog} from "../../../common/dialogs/OptimalDialog";
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import StarIcon from "@mui/icons-material/Star";

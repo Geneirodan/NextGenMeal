@@ -6,5 +6,5 @@ module.exports = {
     },
     locales: ['en', 'uk'],
     output: 'public/locales/$LOCALE/$NAMESPACE.json',
-    input: [ 'src/**/*.js', ],
+    input: ['src/**/*.js'],
 }

@@ -1,6 +1,6 @@
 import React, {memo, useCallback} from 'react'
 import {useTranslation} from 'react-i18next';
-import {AppBar, Stack, Toolbar, Typography} from "@mui/material";
+import {AppBar, Stack, Toolbar} from "@mui/material";
 import Button from "@mui/material/Button";
 import {useNavigate} from "react-router-dom";
 import {LanguageSelect} from "./LanguageSelect";
@@ -34,7 +34,7 @@ export const Header = memo(
         return (
             <AppBar component="header" position="sticky" sx={{display: "flex"}}>
                 <Toolbar>
-                    <img src={logo} alt="NextGenMeal" style={{width:"10%"}} onClick={onLogoClick}/>
+                    <img src={logo} alt="NextGenMeal" style={{width: "10%"}} onClick={onLogoClick}/>
                     <Stack direction="row"
                            ml={3}
                            spacing={3}

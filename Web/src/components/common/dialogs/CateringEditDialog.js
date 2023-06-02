@@ -2,14 +2,12 @@ import {useTranslation} from "react-i18next";
 import {useFormik} from "formik";
 import React, {memo} from "react";
 import {CustomTextField} from "../inputs/CustomTextField";
-import {resetErrors, selector} from "../../../store/service/menu";
 import {EditDialog} from "./EditDialog";
 
-import {useErrors, useReset} from "../../../utils/hook/hooks";
+import {useReset} from "../../../utils/hook/hooks";
 
 export const CateringEditDialog = memo(
     ({catering, open, onClose, onSubmit}) => {
-        const errors = useErrors(selector, resetErrors)
         const {t} = useTranslation()
         const title = catering.id ? t("Edit catering") : t("Add catering")
         let initialValues = {
@@ -28,11 +26,6 @@ export const CateringEditDialog = memo(
 
         ]
         useReset(open, formik.resetForm);
-        return <EditDialog title={title}
-                           open={open}
-                           onClose={onClose}
-                           formik={formik}
-                           errors={errors}
-                           fields={fields}/>
+        return <EditDialog title={title} open={open} onClose={onClose} formik={formik} fields={fields}/>
     }
 )

@@ -4,8 +4,6 @@ import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import React, {memo, useCallback} from "react";
 import {DishListComponent} from "../../../common/buttons/DishListButton";
-import {resetErrors, selector} from "../../../../store/customer/new_order";
-import {useErrors} from "../../../../utils/hook/hooks";
 import {DateTimePicker} from '@mui/x-date-pickers/DateTimePicker';
 import {bottomFabStyle, leftFabStyle, rightFabStyle} from "../../../common/buttons/AddFab";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
@@ -13,7 +11,6 @@ import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 export const Step4 = memo(
     ({formik, backStep}) => {
         const {t, i18n} = useTranslation()
-        const errors = useErrors(selector, resetErrors);
         const reduceCallback = useCallback(
             (s, x) => s + x.dish.price * x.quantity,
             []

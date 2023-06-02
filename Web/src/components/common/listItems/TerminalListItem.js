@@ -2,7 +2,7 @@ import {useTranslation} from "react-i18next";
 import React, {memo} from "react";
 import {Accordion, AccordionDetails, AccordionSummary, Box, Stack} from "@mui/material";
 import {TerminalEditDialog} from "../dialogs/TerminalEditDialog";
-import {deleteTerminal, editTerminal} from "../../../store/service/caterings";
+import {deleteTerminal, editTerminal} from "../../../store/caterings";
 import {EditDialogButton} from "../dialogs/EditDialogButton";
 import {DeleteButton} from "../buttons/DeleteButton";
 import {RenameIconButton} from "../buttons/IconButtons";

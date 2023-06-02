@@ -1,6 +1,6 @@
 import {Box, Card, Stack} from "@mui/material";
 import React, {memo, useCallback} from "react";
-import {deleteDish, editDish} from "../../../store/service/menu";
+import {deleteDish, editDish} from "../../../store/menu";
 import {useMeasurements} from "../../../utils/hook/UseMeasurements";
 import {EditDialogButton} from "../dialogs/EditDialogButton";
 import {DeleteButton} from "../buttons/DeleteButton";

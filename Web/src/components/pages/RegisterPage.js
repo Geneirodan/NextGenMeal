@@ -5,18 +5,16 @@ import {Navigate} from "react-router-dom"
 import {useDispatch, useSelector} from "react-redux"
 import {confirmPasswordValidation, emailValidation, passwordValidation, stringRequired} from "../../utils/validation"
 import * as yup from "yup"
-import {register, resetErrors, selector} from "../../store/auth"
-import {Button, Container, Stack, Typography} from "@mui/material"
-import {Errors} from "../common/Errors"
+import {register, selector} from "../../store/auth"
+import {Button, Container, Dialog, DialogContent, Stack, Typography} from "@mui/material"
 import {CustomTextField} from "../common/inputs/CustomTextField"
-import {useErrors, useReset, useUpdate} from "../../utils/hook/hooks"
-
+import {useReset, useUpdate} from "../../utils/hook/hooks"
+import {ErrorsSnackbar} from "../common/ErrorsSnackbar";
 
 export const RegisterPage = memo(
     () => {
-        const errors = useErrors(selector, resetErrors)
         const role = useSelector(selector("role"))
-        const isRegistered = useUpdate(selector)
+        const isRegistered = useUpdate()
         const {t} = useTranslation();
         const dispatch = useDispatch()
 
@@ -41,7 +39,11 @@ export const RegisterPage = memo(
         const formik = useFormik({initialValues, validationSchema, onSubmit});
         useReset(open, formik.resetForm);
         return isRegistered
-            ? <Navigate to={"/register/confirm"}/>
+            ? <Dialog open={true} onClose={onClose}>
+                <DialogContent>
+                    The confirmation link has been sent on your email.
+                </DialogContent>
+            </Dialog>
             : role
                 ? <Navigate to={"/"}/>
                 : <form onSubmit={formik.handleSubmit}>
@@ -50,7 +52,7 @@ export const RegisterPage = memo(
                             <Typography variant="h3" align="center">
                                 {t("Register")}
                             </Typography>
-                            <Errors errors={errors}/>
+                            <ErrorsSnackbar/>
                             <CustomTextField name="name" formik={formik} label={t("Name")}/>
                             <CustomTextField name="email" formik={formik} label={t("Email")}/>
                             <CustomTextField name="password" type="password" formik={formik} label={t("Password")}/>
@@ -58,7 +60,7 @@ export const RegisterPage = memo(
                                              label={t("Confirm password")}/>
                             <Stack spacing={2}>
                                 <Button variant="contained" type="submit">
-                                    {t("Sign up")}
+                                    {t("Register")}
                                 </Button>
                             </Stack>
                         </Stack>

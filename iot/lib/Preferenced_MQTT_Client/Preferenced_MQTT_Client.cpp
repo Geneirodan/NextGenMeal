@@ -1,21 +1,21 @@
 #include <Preferenced_MQTT_Client.h>
 
-Preferenced_MQTT_Client::Preferenced_MQTT_Client()
+Preferenced_MQTT_Client::Preferenced_MQTT_Client(Preferences* preferences)
 {
-    preferences.begin("MQTT", false);
+    this->preferences = preferences;
 }
 
 void Preferenced_MQTT_Client::saveConfig()
 {
-    preferences.putString("broker", broker);
-    preferences.putInt("port", port);
-    preferences.putString("topic", prefix);
+    preferences->putString("broker", broker);
+    preferences->putInt("port", port);
+    preferences->putString("prefix", prefix);
 }
 bool Preferenced_MQTT_Client::loadConfig()
 {
-    port = preferences.getInt("port", 1883);
-    String brokerValue = preferences.getString("broker", "");
-    String prefixValue = preferences.getString("prefix", "");
+    port = preferences->getInt("port", 1883);
+    String brokerValue = preferences->getString("broker", "");
+    String prefixValue = preferences->getString("prefix", "");
     strcpy(broker, brokerValue.c_str());
     strcpy(prefix, prefixValue.c_str());
     return strlen(broker) + strlen(prefix);

@@ -1,9 +1,31 @@
-import {del, get, patch, post, put} from "../api/api";
+import {del, get, patch, post, put} from "../api";
+import {createSlice} from "@reduxjs/toolkit";
 
-export const commonInitialState = {
-    errors: null,
-    updated: false,
-}
+export const getSelector = name => field => state => state[name][field];
+
+const {actions, name, reducer} = createSlice({
+    name: 'common',
+    initialState: {
+        errors: null,
+        updated: false,
+    },
+    reducers: {
+        resetErrors: (state) => {
+            state.errors = null
+        },
+
+        setErrors: (state, {payload}) => {
+            state.errors = payload.errors
+        },
+
+        setUpdated: (state, {payload}) => {
+            state.updated = payload
+        }
+    },
+});
+export default reducer
+export const selector = getSelector(name)
+export const {setErrors, resetErrors, setUpdated} = actions
 export const handleResponse = async (response, dispatch, setUpdated, setErrors) => {
     if (response.ok)
         dispatch(setUpdated(true))
@@ -12,20 +34,6 @@ export const handleResponse = async (response, dispatch, setUpdated, setErrors) 
         dispatch(setErrors(data))
     }
 };
-export const commonReducers = {
-    resetErrors: (state) => {
-        state.errors = null
-    },
-
-    setErrors: (state, {payload}) => {
-        state.errors = payload.errors
-    },
-
-    setUpdated: (state, {payload}) => {
-        state.updated = payload
-    }
-}
-export const getSelector = name => field => state => state[name][field];
 export const commonGet = (url, filter, action) => async dispatch => {
     const response = await get(url, filter)
     if (response.ok) {

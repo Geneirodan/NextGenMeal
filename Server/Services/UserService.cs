@@ -2,16 +2,21 @@
 using DataAccess.Entities;
 using DataAccess.Entities.Users;
 using FluentResults;
+using Google.Apis.Auth;
+using Google.Apis.Oauth2.v2;
+using Google.Apis.Services;
 using Mapster;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json.Linq;
 using Services.Interfaces;
 using Services.Models;
 using Services.Models.Register;
 using Services.Models.Users;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
@@ -181,29 +186,48 @@ namespace Services
             return signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
         }
 
-        public async Task<Result> GoogleAuth()
+        public async Task<Result> GoogleAuthAsync()
         {
             var info = await signInManager.GetExternalLoginInfoAsync();
+            return await ExternalLoginAsync(info);
+        }
+        public async Task<Result> GoogleAuthAsync(string providerKey, string token)
+        {
+            //var oauthService = new Oauth2Service(new BaseClientService.Initializer { ApiKey = "AIzaSyBieeZnc-CWSNaOZ8uWjO_f9TsYUhkv9w0" });
+            //var tokenInfoRequest = oauthService.Tokeninfo();
+            //tokenInfoRequest.IdToken = token;
+            //var userInfo = await tokenInfoRequest.ExecuteAsync();
+            //var handler = new JwtSecurityTokenHandler();
+            //var jwtSecurityToken = handler.ReadJwtToken(token);
+            //var email = jwtSecurityToken.Claims.First(x => x.Type == "email");
+            var info = new ExternalLoginInfo(new ClaimsPrincipal(), "Google", providerKey, "Google");
+            return await ExternalLoginAsync(info);
+        }
+
+        private async Task<Result> ExternalLoginAsync(ExternalLoginInfo? info, string? email = null, string? firstName = null, string? lastName = null)
+        {
             if (info is not null)
             {
                 var signInResult = await signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, true);
-                var email = info.Principal.FindFirstValue(ClaimTypes.Email);
-                var firstName = info.Principal.FindFirstValue(ClaimTypes.GivenName) ?? info.Principal.FindFirstValue(ClaimTypes.Name);
-                var lastName = info.Principal.FindFirstValue(ClaimTypes.Surname);
+                email ??= info.Principal.FindFirstValue(ClaimTypes.Email);
+                firstName ??= info.Principal.FindFirstValue(ClaimTypes.GivenName) ?? info.Principal.FindFirstValue(ClaimTypes.Name);
+                lastName ??= info.Principal.FindFirstValue(ClaimTypes.Surname);
                 if (!signInResult.Succeeded)
                 {
-                    var user = await userManager.FindByEmailAsync(email!);
+                    if (email is null)
+                        return Result.Fail(string.Empty);
+                    var user = await userManager.FindByEmailAsync(email);
                     if (user is not null)
                     {
                         var result = await userManager.AddLoginAsync(user, info);
                         if (result.Succeeded)
-                            await signInManager.SignInAsync(user, isPersistent: true);
+                            await signInManager.SignInAsync(user, true);
                         return HandleResult(result);
                     }
                     else
                     {
-                         var customer = new Customer
-                         {
+                        var customer = new Customer
+                        {
                             UserName = email,
                             Email = email,
                             Name = $"{firstName} {lastName}",
@@ -215,15 +239,14 @@ namespace Services
                         {
                             result = await userManager.AddLoginAsync(customer, info);
                             if (result.Succeeded)
-                                await signInManager.SignInAsync(customer, isPersistent: true);
+                                await signInManager.SignInAsync(customer, true);
                         }
                         return HandleResult(result);
                     }
                 }
             }
-            return Result.Fail("");
+            return Result.Fail(string.Empty);
         }
-
         private static async Task InitializeAsync(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
         {
             string adminEmail = configuration["Admin:Email"]!;

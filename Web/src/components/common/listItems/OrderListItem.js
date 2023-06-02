@@ -5,8 +5,6 @@ import dayjs from "dayjs/esm";
 import utc from "dayjs/plugin/utc";
 import Inventory2Icon from "@mui/icons-material/Inventory2Outlined";
 import {DishListComponent} from "../buttons/DishListButton";
-import {useOpen} from "../../../utils/hook/hooks";
-import {useDispatch} from "react-redux";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 dayjs.extend(utc)
@@ -23,8 +21,8 @@ const options = {
 export const OrderListItem = memo(
     ({order}) => {
         const {t, i18n} = useTranslation()
-        const dispatch = useDispatch()
         const date = dayjs.utc(order.time).toDate();
+        // noinspection JSUnresolvedReference
         const formattedTime = Intl.DateTimeFormat(i18n.resolvedLanguage, options).format(date)
         const itemCallback = useCallback(
             value => <DishListComponent dish={value.dish} quantity={value.quantity} readonly/>,

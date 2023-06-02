@@ -1,8 +1,8 @@
-import {withRole} from "../../../utils/hoc/withAuth";
+import {withRole} from "../../../utils/hoc/withRole";
 import {useDispatch, useSelector} from "react-redux";
 import React, {memo, useCallback, useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
-import {getEmployees, register, selector, setUpdated} from "../../../store/service/employee";
+import {getEmployees, register, selector} from "../../../store/employee";
 import {SearchComponent} from "../../common/inputs/SearchComponent";
 import {ListContainer} from "../../common/ListContainer";
 import {useTranslation} from "react-i18next";
@@ -12,6 +12,7 @@ import {useUpdate} from "../../../utils/hook/hooks";
 import {EmployeeListItem} from "../../common/listItems/EmployeeListItem";
 import {EmployeeRegisterDialog} from "../../common/dialogs/EmployeeRegisterDialog";
 import {roles} from "../../../utils/constants";
+import {setUpdated} from "../../../store/common";
 
 export const EmployeesPage = memo(
     withRole(roles.Service)(
@@ -19,7 +20,7 @@ export const EmployeesPage = memo(
             const {t} = useTranslation()
             const {cateringId} = useParams()
             const {items, totalCount} = useSelector(selector("employees"))
-            const updated = useUpdate(selector, setUpdated)
+            const updated = useUpdate()
             const dispatch = useDispatch()
             const [filter, setFilter] = useState({cateringId})
             const [loading, setLoading] = useState(false)

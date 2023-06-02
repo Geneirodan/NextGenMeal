@@ -1,46 +1,40 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {authAPI} from "../api/auth-api";
-import {commonInitialState, commonReducers, getSelector, handleResponse} from "./common";
+import {commonGet, getSelector, handleResponse, setErrors, setUpdated} from "./common";
+import {del, get, patch, post} from "../api";
 
 const {actions, name, reducer} = createSlice({
     name: 'auth',
     initialState: {
-        ...commonInitialState,
         confirmed: null,
         info: null,
-        role: null
+        role: null,
+        countries: []
     },
     reducers: {
-        ...commonReducers,
         confirmEmailSuccess: (state, {payload}) => {
             state.confirmed = payload;
         },
         infoSuccess: (state, {payload}) => {
             state.info = payload;
         },
-        logoutSuccess: (state, action) => {
+        logoutSuccess: (state) => {
             state.role = null;
             state.info = null;
         },
         roleSuccess: (state, {payload}) => {
             state.role = payload;
-        }
+        },
+        setCountries: (state, {payload}) => {
+            state.countries = payload;
+        },
     },
 });
 export default reducer
 export const selector = getSelector(name)
-export const {
-    resetErrors,
-    setUpdated,
-    infoSuccess,
-    roleSuccess,
-    setErrors,
-    logoutSuccess,
-    confirmEmailSuccess
-} = actions
+export const {infoSuccess, roleSuccess, logoutSuccess, confirmEmailSuccess, setCountries} = actions
 
 export const getInfo = () => async dispatch => {
-    const response = await authAPI.info()
+    const response = await get(`Account/Info`)
     if (response.ok) {
         const data = await response.json();
         dispatch(infoSuccess(data))
@@ -48,7 +42,7 @@ export const getInfo = () => async dispatch => {
 }
 
 export const getRole = () => async dispatch => {
-    const response = await authAPI.role()
+    const response = await get(`Account/Role`)
     if (response.ok) {
         const data = await response.text();
         dispatch(roleSuccess(data))
@@ -56,12 +50,12 @@ export const getRole = () => async dispatch => {
 }
 
 export const signIn = ({email, password}) => async dispatch => {
-    const response = await authAPI.login(email, password)
+    const response = await post(`Account/Login`, {email, password})
     await handleResponse(response, dispatch, setUpdated, setErrors);
 }
 
 export const signOut = () => async dispatch => {
-    const response = await authAPI.logout()
+    const response = await del(`Account/Logout`)
     if (response.ok) {
         dispatch(logoutSuccess())
         dispatch(setUpdated(false))
@@ -69,16 +63,18 @@ export const signOut = () => async dispatch => {
 }
 
 export const confirmEmail = ({id, code}) => async dispatch => {
-    const response = await authAPI.confirmEmail(id, code)
+    const response = await get(`Account/ConfirmEmail`, {id, code})
     dispatch(confirmEmailSuccess(response.ok))
 }
 export const register = ({name, email, password, confirmPassword}) =>
     async dispatch => {
-        const response = await authAPI.register(name, email, password, confirmPassword)
+        const data = {name, email, password, confirmPassword};
+        const response = await post(`Account/Register`, data, {callbackUrl: `${window.location.origin}/register/confirm`})
         await handleResponse(response, dispatch, setUpdated, setErrors)
     }
 
 export const rename = ({name}) => async dispatch => {
-    const response = await authAPI.changeName(name)
+    const response = await patch(`Account/ChangeName`, {name})
     await handleResponse(response, dispatch, setUpdated, setErrors)
 }
+export const getCountries = () => commonGet('languages', null, setCountries);

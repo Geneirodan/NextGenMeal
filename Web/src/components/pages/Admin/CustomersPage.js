@@ -1,4 +1,4 @@
-import {withRole} from "../../../utils/hoc/withAuth";
+import {withRole} from "../../../utils/hoc/withRole";
 import {useDispatch, useSelector} from "react-redux";
 import React, {memo, useCallback, useEffect, useState} from "react";
 import {SearchComponent} from "../../common/inputs/SearchComponent";
@@ -6,13 +6,14 @@ import {ListContainer} from "../../common/ListContainer";
 import {useUpdate} from "../../../utils/hook/hooks";
 import {roles} from "../../../utils/constants";
 import {UserListItem} from "../../common/listItems/UserListItem";
-import {getCustomers, selector, setUpdated} from "../../../store/admin";
+import {selector} from "../../../store/admin";
+import {setUpdated} from "../../../store/common";
 
 export const CustomersPage = memo(
     withRole(roles.Admin)(
         ({getter}) => {
             const {items, totalCount} = useSelector(selector("users"))
-            const updated = useUpdate(selector, setUpdated)
+            const updated = useUpdate()
             const dispatch = useDispatch()
             const [filter, setFilter] = useState({})
             const [loading, setLoading] = useState(false)

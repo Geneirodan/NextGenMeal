@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name" translatable="false">NextGenMeal</string>
+
+    <string name="settings">Settings</string>
+    <string name="profile">Profile</string>
+    <string name="orders">Orders</string>
+    <string name="new_order">New order</string>
+    <string name="gcp_id" translatable="false">349333509674-ebj6hkkhjk22ij6jrl3gv60mied9ftqv.apps.googleusercontent.com</string>
+    <string name="change_language">Change language</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="log_in">Log in</string>
+</resources>

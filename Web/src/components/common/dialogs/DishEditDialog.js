@@ -3,18 +3,17 @@ import {CustomTextField} from "../inputs/CustomTextField";
 import {CustomSelect} from "../inputs/CustomSelect";
 import React from "react";
 import {useSelector} from "react-redux";
-import {resetErrors, selector} from "../../../store/service/menu";
 import {useFormik} from "formik";
 import {EditDialog} from "./EditDialog";
 import {useMeasurements} from "../../../utils/hook/UseMeasurements";
 import {numberValidation, stringRequired} from "../../../utils/validation";
 import * as yup from "yup";
-import {useErrors, useReset} from "../../../utils/hook/hooks";
+import {useReset} from "../../../utils/hook/hooks";
+import {selector} from "../../../store/menu";
 
 export const DishEditDialog = ({dish, open, onClose, onSubmit}) => {
     const {getUnitSymbol, toUnit} = useMeasurements()
     const types = useSelector(selector("types"))
-    const errors = useErrors(selector, resetErrors)
     const {t} = useTranslation()
     const title = dish.id ? t("Edit dish") : t("Add dish")
     let initialValues = {
@@ -45,10 +44,5 @@ export const DishEditDialog = ({dish, open, onClose, onSubmit}) => {
         <CustomSelect name="type" label={t("Type")} formik={formik} items={types}/>
     ]
     useReset(open, formik.resetForm);
-    return <EditDialog title={title}
-                       open={open}
-                       onClose={onClose}
-                       formik={formik}
-                       errors={errors}
-                       fields={fields}/>;
+    return <EditDialog title={title} open={open} onClose={onClose} formik={formik} fields={fields}/>;
 };

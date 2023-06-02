@@ -3,7 +3,7 @@ import {useNavigate} from "react-router-dom";
 import {Box, Button, Card, IconButton, Stack, Typography} from "@mui/material";
 import {CateringEditDialog} from "../dialogs/CateringEditDialog";
 import {TerminalListItem} from "./TerminalListItem";
-import {addTerminal, deleteCatering, editCatering} from "../../../store/service/caterings";
+import {addTerminal, deleteCatering, editCatering} from "../../../store/caterings";
 import {useTranslation} from "react-i18next";
 import {EditDialogButton} from "../dialogs/EditDialogButton";
 import {DeleteButton} from "../buttons/DeleteButton";
@@ -37,7 +37,7 @@ export const CateringListItem = memo(
             [catering.terminal]
         )
         return (
-            <Card  sx={{padding: 1}}>
+            <Card sx={{padding: 1}}>
                 <Stack direction="row" alignItems="center">
                     <Box flexGrow={1}>
                         <Typography ml={2}>

@@ -181,7 +181,9 @@ namespace Services
 
         public async Task<PagedArrayModel<ServiceModel>> GetServicesAsync(int page, string query, string? country)
         {
-            var enumerable = context.Set<Service>().Where(x => x.Name.Contains(query));
+            var enumerable = context.Set<Service>()
+                                    .Where(x => x.LockoutEnd == null)
+                                    .Where(x => x.Name.Contains(query));
             if (country is not null)
                 enumerable = enumerable.Where(x => x.Country == country);
             var entities = await enumerable.OrderByDescending(x => x.Name)
@@ -204,7 +206,7 @@ namespace Services
             if (order is null)
                 return Result.Fail(Errors.NotFound);
             var user = await userManager.GetUserAsync(principal) as Employee;
-            if (order.CateringId != user!.CateringId || order.Status != oldStatus)
+            if (order.Status != oldStatus)
                 return Result.Fail(Errors.Forbidden);
             if (order.IsBox && newStatus == OrderStatuses.Received)
             {

@@ -1,18 +1,18 @@
-import {withRole} from "../../../utils/hoc/withAuth";
+import {withRole} from "../../../utils/hoc/withRole";
 import React, {memo, useCallback, useEffect, useState} from "react";
-import {Alert, Box, Card, Fab, Paper, Snackbar, Stack, Typography} from "@mui/material";
+import {Alert, Box, Card, Fab, Snackbar, Stack, Typography} from "@mui/material";
 import {useTranslation} from "react-i18next";
 import {useFormik} from "formik";
 import 'dayjs/locale/uk'
 import 'dayjs/locale/en'
 import {useDispatch, useSelector} from "react-redux";
-import {addOrder, resetErrors, selector, setUpdated} from "../../../store/customer/new_order";
+import {addOrder, selector} from "../../../store/order";
 import * as yup from "yup";
-import {useErrors, useOpen, useUpdate} from "../../../utils/hook/hooks";
+import {useUpdate} from "../../../utils/hook/hooks";
 import {ErrorsSnackbar} from "../../common/ErrorsSnackbar";
 import {useNavigate} from "react-router-dom";
 import {roles} from "../../../utils/constants";
-import {getDishes, selector as dishSelector} from "../../../store/service/menu";
+import {getDishes, selector as dishSelector} from "../../../store/menu";
 import {DishListButton} from "../../common/buttons/DishListButton";
 import {ListContainer} from "../../common/ListContainer";
 import {SearchComponent} from "../../common/inputs/SearchComponent";
@@ -20,12 +20,12 @@ import {TypeSelect} from "../../common/inputs/TypeSelect";
 import {selector as authSelector} from "../../../store/auth"
 import dayjs from "dayjs/esm";
 import {rightFabStyle} from "../../common/buttons/AddFab";
+import {setUpdated} from "../../../store/common";
 
 const SuccessSnackbar = memo(
     ({open}) => {
         const {t} = useTranslation()
         const navigate = useNavigate()
-        const dispatch = useDispatch()
         const onClose = useCallback(
             () => navigate("/orders"),
             [navigate]
@@ -52,12 +52,10 @@ export const OrderPage = memo(
             const info = useSelector(authSelector('info'))
             const [filter, setFilter] = useState({cateringId: info.cateringId})
             const [loading, setLoading] = useState(false)
-            const [open, onClick, onClose] = useOpen();
 
             const {items, totalCount} = useSelector(dishSelector("dishes"))
             const orderDishes = useSelector(selector("selectedDishes"))
-            const updated = useUpdate(selector, setUpdated)
-            const errors = useErrors(selector, resetErrors);
+            const updated = useUpdate()
 
 
             useEffect(
@@ -68,11 +66,6 @@ export const OrderPage = memo(
                     })
                 },
                 [orderDishes]
-            )
-            const [alert, setAlert] = useState(false)
-            const onAlertClose = useCallback(
-                () => setAlert(false),
-                []
             )
 
             const initialValues = {
@@ -92,11 +85,6 @@ export const OrderPage = memo(
                 [dispatch]
             )
             const formik = useFormik({initialValues, validationSchema, onSubmit})
-
-            useEffect(
-                () => setAlert(Boolean(errors?.length)),
-                [errors]
-            )
 
             useEffect(
                 () =>
@@ -151,7 +139,7 @@ export const OrderPage = memo(
                                 {t("Finish")}
                             </Fab>
                         </Stack>
-                        <ErrorsSnackbar errors={errors} open={alert} onClose={onAlertClose}/>
+                        <ErrorsSnackbar/>
                         <SuccessSnackbar open={updated}/>
                     </Stack>
                 </form>

@@ -8,7 +8,7 @@ export const Footer = memo(
         return <footer style={{textAlign: "center"}}>
             <Box sx={{backgroundColor: 'primary.main'}} padding={2}>
                 <Typography color="white">
-                    &copy;{t("Geneirodan Jekin. All rights not reserved! For all legal matters contact noone.")}
+                    &copy; {t("Geneirodan Jekin. All rights not reserved! For all legal matters contact noone.")}
                 </Typography>
             </Box>
         </footer>;

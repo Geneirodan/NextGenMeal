@@ -3,6 +3,7 @@ using API.Requests.Account.Register;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Services.Interfaces;
 using Services.Models;
 using Services.Models.Users;
@@ -30,13 +31,13 @@ namespace API.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<UserModel>> RegisterAsync([FromBody] CustomerRegisterRequest request, string callbackUrl) => 
+        public async Task<ActionResult<UserModel>> RegisterAsync([FromBody] CustomerRegisterRequest request, string callbackUrl) =>
             await RegisterAsync<UserModel>(request, callbackUrl);
 
         [HttpPost(Roles.Service)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<ServiceModel>> RegisterAsync([FromBody] ServiceRegisterRequest request, string callbackUrl) => 
+        public async Task<ActionResult<ServiceModel>> RegisterAsync([FromBody] ServiceRegisterRequest request, string callbackUrl) =>
             await RegisterAsync<ServiceModel>(request, callbackUrl);
 
         [HttpPost(Roles.Employee)]
@@ -44,7 +45,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult<EmployeeModel>> RegisterAsync([FromBody] EmployeeRegisterRequest request, string callbackUrl) => 
+        public async Task<ActionResult<EmployeeModel>> RegisterAsync([FromBody] EmployeeRegisterRequest request, string callbackUrl) =>
             await RegisterAsync<EmployeeModel>(request, callbackUrl);
 
         private async Task<ActionResult<TModel>> RegisterAsync<TModel>(RegisterRequest request, string callbackUrl)
@@ -95,7 +96,7 @@ namespace API.Controllers
             var result = await userService.DeleteAsync(User);
             return HandleResult(result);
         }
-        
+
         [HttpDelete("{id}")]
         [Authorize(Roles = Roles.Service)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -170,7 +171,7 @@ namespace API.Controllers
         public IActionResult GoogleAuth(string? returnUrl = null)
         {
             returnUrl ??= Request.Headers["Origin"].FirstOrDefault() ?? Url.Content("/");
-            string? redirectUrl =  Url.Action("GoogleResponse", "Account", new { returnUrl });
+            string? redirectUrl = Url.Action("GoogleResponse", "Account", new { returnUrl });
             AuthenticationProperties properties = userService.ConfigureExternalAuthenticationProperties("Google", redirectUrl!);
             return new ChallengeResult("Google", properties);
         }
@@ -179,8 +180,18 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status302Found)]
         public async Task<IActionResult> GoogleResponseAsync(string returnUrl)
         {
-            await userService.GoogleAuth();
+            await userService.GoogleAuthAsync();
             return Redirect(returnUrl);
+        }
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GoogleAuthAsync(ProviderRequest request)
+        {
+            var result = await userService.GoogleAuthAsync(request.ProviderKey, request.Token);
+            return HandleResult(result);
         }
 
         [HttpGet]

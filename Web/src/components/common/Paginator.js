@@ -9,9 +9,9 @@ export const Paginator = memo(
             () => {
                 console.info(page)
                 page && setFilter({
-                        ...filter,
-                        page
-                    })
+                    ...filter,
+                    page
+                })
             },
             [page]
         )

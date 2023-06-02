@@ -1,5 +1,6 @@
 import {useDispatch, useSelector} from "react-redux";
 import {useCallback, useEffect, useState} from "react";
+import {resetErrors, selector} from "../../store/common";
 
 export const useStepping = () => {
     const [activeStep, setActiveStep] = useState(0)
@@ -13,8 +14,10 @@ export const useStepping = () => {
     )
     return [activeStep, handleNext, handleBack]
 };
-export const useUpdate = (selector, setUpdated) => useSelector(selector("updated"));
-export const useErrors = (selector, resetErrors) => {
+export const useUpdate = () => {
+    return useSelector(selector("updated"));
+};
+export const useErrors = () => {
     const dispatch = useDispatch()
     useEffect(() => () => {
         dispatch(resetErrors());

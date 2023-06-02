@@ -7,15 +7,12 @@ import {TypeSelect} from "../inputs/TypeSelect";
 import {useFormik} from "formik";
 import {numberValidation} from "../../../utils/validation";
 import * as yup from "yup";
-import {Errors} from "../Errors";
-import {useErrors} from "../../../utils/hook/hooks";
-import {resetErrors, selector} from "../../../store/customer/new_order";
+import {ErrorsSnackbar} from "../ErrorsSnackbar";
 
 export const OptimalDialog = memo(
     ({onClose, open, cateringId, onSubmit}) => {
         const {t} = useTranslation()
         const [filter, setFilter] = useState({})
-        const errors = useErrors(selector, resetErrors);
         const [initialValues, setInitialValues] = useState({
             cateringId,
             maxPrice: null
@@ -63,7 +60,7 @@ export const OptimalDialog = memo(
                             {t("Optimal order")}
                         </DialogTitle>
                         <Stack spacing={2} sx={{flexGrow: 1}}>
-                            <Errors errors={errors}/>
+                            <ErrorsSnackbar/>
                             <TypeSelect setFilter={setFilter} filter={filter}/>
                             <CustomTextField formik={formik} name="maxPrice" label={t("Max price")}/>
                             {
