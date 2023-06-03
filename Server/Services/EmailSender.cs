@@ -20,14 +20,14 @@ namespace Services
         {
             try
             {
-                var emailMessage = new MimeMessage();
-
-                emailMessage.From.Add(new MailboxAddress(configuration["EmailConfiguration:UserName"],
-                                                            configuration["EmailConfiguration:From"]));
-                emailMessage.To.Add(new MailboxAddress(string.Empty, email));
-                emailMessage.Subject = template.Subject;
                 BodyBuilder builder = new() { HtmlBody = string.Format(File.ReadAllText($"Templates\\{template.Filename}.html"), parameters) };
-                emailMessage.Body = builder.ToMessageBody();
+                var emailMessage = new MimeMessage
+                {
+                    Subject = template.Subject,
+                    Body = builder.ToMessageBody()
+                };
+                emailMessage.From.Add(new MailboxAddress(configuration["EmailConfiguration:UserName"], configuration["EmailConfiguration:From"]));
+                emailMessage.To.Add(new MailboxAddress(string.Empty, email));
 
                 using var client = new SmtpClient();
                 await client.ConnectAsync(configuration["EmailConfiguration:SmtpServer"],

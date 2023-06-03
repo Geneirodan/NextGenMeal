@@ -3,4 +3,4 @@ package com.geneirodan.nextgenmeal.data
 import kotlinx.serialization.Serializable
 
 @Serializable
-open class Entity(val id: Int)
+data class PaggedArray<T>(val items: List<T>, val totalCount: Int)

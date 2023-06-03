@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId "com.geneirodan.nextgenmeal"
-        minSdk 25
+        minSdk 26
         targetSdk 33
         versionCode 1
         versionName "1.0"
@@ -93,4 +93,6 @@ dependencies {
     implementation 'androidx.core:core-splashscreen:1.0.1'
     implementation "androidx.navigation:navigation-compose:2.7.0-alpha01"
     implementation 'com.google.android.gms:play-services-auth:20.5.0'
+
+    implementation "io.github.vanpra.compose-material-dialogs:datetime:0.8.1-rc"
 }

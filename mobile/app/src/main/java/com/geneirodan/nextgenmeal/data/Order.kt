@@ -5,11 +5,12 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Order(
+    val id: Int,
     val price: Double,
     val status: String,
     val time: LocalDateTime,
     val isBox: Boolean,
-    val userId: String,
+    val customerId: String?,
     val cateringId: Int,
     val orderDishes: List<OrderDish>,
 )

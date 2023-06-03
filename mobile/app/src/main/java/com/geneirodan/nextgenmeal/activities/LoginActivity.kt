@@ -35,8 +35,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.geneirodan.nextgenmeal.NextGenMealApp.Companion.client
-import com.geneirodan.nextgenmeal.NextGenMealApp.Companion.domain
-import com.geneirodan.nextgenmeal.NextGenMealApp.Companion.protocol
 import com.geneirodan.nextgenmeal.R
 import com.geneirodan.nextgenmeal.components.CustomInputField
 import com.geneirodan.nextgenmeal.components.ErrorSnackbar
@@ -44,9 +42,9 @@ import com.geneirodan.nextgenmeal.components.LangDropDown
 import com.geneirodan.nextgenmeal.data.ProblemDetails
 import com.geneirodan.nextgenmeal.events.LoginEvent
 import com.geneirodan.nextgenmeal.forms.LoginFormField
-import com.geneirodan.nextgenmeal.google.AuthResultContract
 import com.geneirodan.nextgenmeal.requests.LoginRequest
 import com.geneirodan.nextgenmeal.requests.ProviderRequest
+import com.geneirodan.nextgenmeal.utils.AuthResultContract
 import com.geneirodan.nextgenmeal.viewmodels.LoginViewModel
 import com.google.android.gms.common.api.ApiException
 import io.ktor.client.call.body
@@ -79,7 +77,7 @@ class LoginActivity : BaseActivity() {
                     account?.let {
                         coroutineScope.launch {
                             val response =
-                                client.post("$protocol://$domain/api/account/GoogleAuth") {
+                                client.post("account/GoogleAuth") {
                                     contentType(ContentType.Application.Json)
                                     setBody(
                                         ProviderRequest(it.id, it.idToken)
@@ -99,7 +97,7 @@ class LoginActivity : BaseActivity() {
             scaffoldState = scaffoldState,
             snackbarHost = { SnackbarHost(it) { data -> ErrorSnackbar(message = data.message) } },
             topBar = {
-                Row(modifier = Modifier.fillMaxWidth() ,horizontalArrangement = Arrangement.End) {
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                     LangDropDown(open = openLangDialog)
                 }
             }
@@ -119,7 +117,7 @@ class LoginActivity : BaseActivity() {
                     with(email) {
                         CustomInputField(
                             value = text,
-                            label = {Text(stringResource(R.string.email))},
+                            label = { Text(stringResource(R.string.email)) },
                             onFocusChange = {
                                 loginViewModel.createEvent(
                                     LoginEvent.FocusChange(
@@ -142,7 +140,7 @@ class LoginActivity : BaseActivity() {
                     with(password) {
                         CustomInputField(
                             value = text,
-                            label = {Text(stringResource(R.string.password))},
+                            label = { Text(stringResource(R.string.password)) },
                             onFocusChange = {
                                 loginViewModel.createEvent(
                                     LoginEvent.FocusChange(
@@ -177,7 +175,7 @@ class LoginActivity : BaseActivity() {
                             if (loginViewModel.state.value.validate())
                                 coroutineScope.launch {
                                     val response =
-                                        client.post("$protocol://$domain/api/account/login") {
+                                        client.post("account/login") {
                                             contentType(ContentType.Application.Json)
                                             setBody(LoginRequest(email.text, password.text))
                                         }
@@ -217,14 +215,13 @@ class LoginActivity : BaseActivity() {
         if (response.status == HttpStatusCode.OK) {
             context.startActivity(Intent(context, ActivityLauncher::class.java))
             (context as BaseActivity).finish()
-        }
-        else {
+        } else {
             val sb = StringBuilder()
             Log.d("Res", response.body())
             response.body<ProblemDetails>().errors?.forEach { (_, v) ->
                 v.forEach { error -> sb.append("$error\n") }
             }
-            if(sb.isNotEmpty())
+            if (sb.isNotEmpty())
                 sb.deleteCharAt(sb.length - 1)
             scaffoldState.snackbarHostState.showSnackbar(sb.toString())
         }

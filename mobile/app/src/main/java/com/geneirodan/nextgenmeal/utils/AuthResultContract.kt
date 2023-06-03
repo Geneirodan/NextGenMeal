@@ -1,4 +1,4 @@
-package com.geneirodan.nextgenmeal.google
+package com.geneirodan.nextgenmeal.utils
 
 import android.app.Activity
 import android.content.Context

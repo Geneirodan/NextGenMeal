@@ -11,4 +11,11 @@
     <string name="password">Password</string>
     <string name="login">Login</string>
     <string name="log_in">Log in</string>
+    <string name="order">Order</string>
+    <string name="time">Time</string>
+    <string name="price">Price</string>
+    <string name="date_format">dd/mm/yyyy, hh:mm a</string>
+    <string name="name">name</string>
+    <string name="portion">Portion</string>
+    <string name="type">Type</string>
 </resources>

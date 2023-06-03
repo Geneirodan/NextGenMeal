@@ -10,6 +10,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.cookies.HttpCookies
+import io.ktor.client.plugins.defaultRequest
 import io.ktor.serialization.kotlinx.json.json
 
 class NextGenMealApp : Application() {
@@ -20,11 +21,10 @@ class NextGenMealApp : Application() {
                 expectSuccess = false
                 install(HttpCookies) { storage = PreferencesCookiesStorage(preferences) }
                 install(ContentNegotiation) { json() }
+                defaultRequest {
+                    url("https://4qrs2kgg-7168.euw.devtunnels.ms/api/")
+                }
             }
-
-        const val protocol = "https"
-        const val domain = "4qrs2kgg-7168.euw.devtunnels.ms"
-        const val AUTH_COOKIE_NAME = ".AspNetCore.Identity.Application"
     }
 
     val storage: Storage by lazy { Storage(this) }

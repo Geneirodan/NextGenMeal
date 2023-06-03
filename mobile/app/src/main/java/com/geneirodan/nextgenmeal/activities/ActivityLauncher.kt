@@ -5,10 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
-import com.geneirodan.nextgenmeal.NextGenMealApp
 import com.geneirodan.nextgenmeal.NextGenMealApp.Companion.client
-import com.geneirodan.nextgenmeal.NextGenMealApp.Companion.domain
-import com.geneirodan.nextgenmeal.NextGenMealApp.Companion.protocol
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.http.HttpStatusCode
@@ -20,7 +17,7 @@ class ActivityLauncher : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         lifecycleScope.launch {
             withContext(Dispatchers.Default) {
-                val response = client.get("$protocol://$domain/api/account/role")
+                val response = client.get("account/role")
                 Log.d("status", response.status.toString())
                 startActivity(
                     if (response.status == HttpStatusCode.OK) {
@@ -35,7 +32,7 @@ class ActivityLauncher : BaseActivity() {
             }
         }
         val splashScreen = installSplashScreen()
-        splashScreen.setKeepOnScreenCondition{true}
+        splashScreen.setKeepOnScreenCondition { true }
         super.onCreate(savedInstanceState)
     }
 }
