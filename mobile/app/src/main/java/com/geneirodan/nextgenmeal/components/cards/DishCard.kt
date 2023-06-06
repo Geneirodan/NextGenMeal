@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.geneirodan.nextgenmeal.R.*
 import com.geneirodan.nextgenmeal.components.AppTheme
 import com.geneirodan.nextgenmeal.data.Dish
+import com.geneirodan.nextgenmeal.utils.Measurements.Companion.m
 
 @Composable
 @Preview
@@ -60,7 +61,7 @@ fun DishCard(
                 ) {
                     Text(text = "${stringResource(string.name)}: $name")
                     Text(text = "${stringResource(string.price)}: $$price")
-                    //Text(text = "${stringResource(string.portion)}: ${m(portion)}")
+                    Text(text = "${stringResource(string.portion)}: ${m(portion)}")
                     Text(text = "${stringResource(string.type)}: $type")
                     Text(text = description, softWrap = true)
                 }

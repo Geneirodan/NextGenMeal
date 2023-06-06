@@ -1,6 +1,7 @@
 package com.geneirodan.nextgenmeal.activities
 
 import android.content.Context
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.compose.material.ScaffoldState
@@ -13,6 +14,7 @@ import com.geneirodan.nextgenmeal.utils.Storage
 open class BaseActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         preferences = getSharedPreferences("NextGenMeal", Context.MODE_PRIVATE)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
         super.onCreate(savedInstanceState)
     }
 
