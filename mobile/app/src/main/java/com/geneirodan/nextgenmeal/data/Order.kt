@@ -1,5 +1,6 @@
 package com.geneirodan.nextgenmeal.data
 
+import androidx.annotation.Keep
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 
@@ -13,4 +14,6 @@ data class Order(
     val customerId: String?,
     val cateringId: Int,
     val orderDishes: List<OrderDish>,
+    val catering: Catering
 )
+

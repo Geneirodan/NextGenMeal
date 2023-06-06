@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import com.geneirodan.nextgenmeal.NextGenMealApp.Companion.client
+import com.geneirodan.nextgenmeal.utils.Role
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.http.HttpStatusCode
@@ -19,15 +20,25 @@ class ActivityLauncher : BaseActivity() {
             withContext(Dispatchers.Default) {
                 val response = client.get("account/role")
                 Log.d("status", response.status.toString())
-                startActivity(
-                    if (response.status == HttpStatusCode.OK) {
-                        when (response.body<String>()) {
-                            "\"Customer\"" -> Intent(context, CustomerActivity::class.java)
-                            "\"Employee\"" -> Intent(context, EmployeeActivity::class.java)
-                            else -> Intent(context, LoginActivity::class.java)
-                        }
-                    } else Intent(context, LoginActivity::class.java)
-                )
+                this@ActivityLauncher.let {
+                    startActivity(
+                        if (response.status == HttpStatusCode.OK) {
+                            when (response.body<String>()) {
+                                "\"Customer\"" -> {
+                                    role = Role.CUSTOMER
+                                    Intent(it, MainActivity::class.java)
+                                }
+
+                                "\"Employee\"" -> {
+                                    role = Role.EMPLOYEE
+                                    Intent(it, MainActivity::class.java)
+                                }
+
+                                else -> Intent(it, LoginActivity::class.java)
+                            }
+                        } else Intent(it, LoginActivity::class.java)
+                    )
+                }
                 finish()
             }
         }

@@ -60,7 +60,7 @@ namespace API.Controllers
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task LogoutAsync() => await userService.LogoutAsync();
+        public async void LogoutAsync() => await userService.LogoutAsync();
 
         [HttpGet]
         [Authorize]

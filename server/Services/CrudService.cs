@@ -26,7 +26,7 @@ namespace Services
             this.userManager = userManager;
         }
 
-        public virtual async Task<PagedArrayModel<TModel>> GetAsync(int page,
+        protected virtual async Task<PagedArrayModel<TModel>> GetAsync(int page,
                                                                 Expression<Func<TEntity, bool>> predicate,
                                                                 Expression<Func<TEntity, object>> keySelector,
                                                                 bool isDesc = false)
@@ -42,9 +42,8 @@ namespace Services
         public virtual async Task<Result<TModel>> AddAsync(ClaimsPrincipal principal, TModel model)
         {
             var userId = userManager.GetUserId(principal);
-            var entity = model.Adapt<TEntity>();
             var proxy = context.Set<TEntity>().CreateProxy();
-            context.Entry(proxy).CurrentValues.SetValues(entity);
+            context.Entry(proxy).CurrentValues.SetValues(model);
             await context.AddAsync(proxy);
             if (proxy.GetOwnerId() != userId)
                 return Result.Fail(Errors.Forbidden);
@@ -69,9 +68,8 @@ namespace Services
         public virtual async Task<Result> EditAsync(ClaimsPrincipal principal, TModel model)
         {
             var userId = userManager.GetUserId(principal);
-            var entity = model.Adapt<TEntity>();
             var proxy = context.Set<TEntity>().CreateProxy();
-            context.Entry(proxy).CurrentValues.SetValues(entity);
+            context.Entry(proxy).CurrentValues.SetValues(model);
             context.Update(proxy);
             if (proxy.GetOwnerId() != userId)
                 return Result.Fail(Errors.Forbidden);

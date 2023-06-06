@@ -34,6 +34,12 @@ namespace API.Controllers
             return await cateringService!.GetAsync(serviceId, page, query);
         }
 
+        [HttpGet(Routes.Action + "/{id}")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<CateringModel?> GetCateringById(int id) => await service.GetByIdAsync(id);
+
         public override Task<ActionResult<CateringModel>> AddAsync([FromBody] CateringRequest request)
         {
             var adaptedRequest = request.Adapt<ServiceCateringRequest>();

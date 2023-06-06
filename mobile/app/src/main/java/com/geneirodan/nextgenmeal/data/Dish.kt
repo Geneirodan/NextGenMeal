@@ -1,8 +1,10 @@
 package com.geneirodan.nextgenmeal.data
 
+import androidx.annotation.Keep
 import kotlinx.serialization.Serializable
 
 @Serializable
+@Keep
 data class Dish(
     val id: Int,
     val price: Double,

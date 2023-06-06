@@ -17,20 +17,11 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ErrorSnackbar(
-    message: String,
-    isRtl: Boolean = false
-) {
+fun ErrorSnackbar(message: String, isRtl: Boolean = false) {
     Snackbar(backgroundColor = Color.Red) {
-        CompositionLocalProvider(
-            LocalLayoutDirection provides
-                    if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr
-        ) {
+        CompositionLocalProvider(LocalLayoutDirection provides if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    Icons.Outlined.ErrorOutline,
-                    contentDescription = null
-                )
+                Icon(Icons.Outlined.ErrorOutline, "")
                 Text(message, Modifier.padding(start = 5.dp))
             }
         }

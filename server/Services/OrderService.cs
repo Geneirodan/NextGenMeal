@@ -35,7 +35,8 @@ namespace Services
                                                                 int page,
                                                                 bool? isBox,
                                                                 DateTime startTime,
-                                                                DateTime endTime)
+                                                                DateTime endTime,
+                                                                string? status)
         {
             var user = await userManager.GetUserAsync(principal);
             Expression<Func<Order, bool>> predicate = user switch
@@ -50,6 +51,8 @@ namespace Services
                                .Where(predicate);
             if (isBox is not null)
                 query = query.Where(x => x.IsBox == isBox);
+            if (status is not null)
+                query = query.Where(x => x.Status == status);
             var entities = await query.OrderByDescending(x => x.Time)
                                       .Skip((page - 1) * Utils.ItemsPerPage)
                                       .Take(Utils.ItemsPerPage)
@@ -93,7 +96,7 @@ namespace Services
             await context.AddRangeAsync(orderDishes);
             if (proxy.IsBox)
             {
-                var terminal = proxy.Catering.Terminal;
+                var terminal = proxy.Catering!.Terminal;
                 var index = Array.IndexOf(terminal.Cells, string.Empty);
                 if (index == -1)
                     return Result.Fail("No cells available");
@@ -232,6 +235,12 @@ namespace Services
             var index = Array.IndexOf(terminal.Cells, order.Id.ToString());
             terminal.Cells[index] = string.Empty;
             context.Update(terminal);
+        }
+
+        public async Task<OrderModel?> GetOrderById(int id)
+        {
+            var order = await context.Orders.FindAsync(id);
+            return order?.Adapt<OrderModel>();
         }
     }
 }

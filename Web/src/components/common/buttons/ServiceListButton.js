@@ -1,7 +1,6 @@
 import React, {memo} from "react";
 import {Card, CardActionArea, Typography} from "@mui/material";
 
-// noinspection JSUnresolvedReference
 export const ServiceListButton = memo(
     ({service, onClick}) =>
         <Card>

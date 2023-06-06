@@ -9,6 +9,7 @@
 
         public string? CustomerId { get; set; }
         public int CateringId { get; set; }
+        public CateringModel Catering { get; set; } = null!;
         public List<OrderDishModel> OrderDishes { get; set; } = null!;
     }
 }

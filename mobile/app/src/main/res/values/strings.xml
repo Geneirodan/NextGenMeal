@@ -2,11 +2,9 @@
     <string name="app_name" translatable="false">NextGenMeal</string>
 
     <string name="settings">Settings</string>
-    <string name="profile">Profile</string>
     <string name="orders">Orders</string>
     <string name="new_order">New order</string>
     <string name="gcp_id" translatable="false">349333509674-ebj6hkkhjk22ij6jrl3gv60mied9ftqv.apps.googleusercontent.com</string>
-    <string name="change_language">Change language</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
@@ -14,8 +12,49 @@
     <string name="order">Order</string>
     <string name="time">Time</string>
     <string name="price">Price</string>
-    <string name="date_format">dd/mm/yyyy, hh:mm a</string>
-    <string name="name">name</string>
+    <string name="date_format">MM/dd/yyyy</string>
+    <string name="time_format">hh:mm a</string>
+    <string name="name">Name</string>
     <string name="portion">Portion</string>
     <string name="type">Type</string>
+    <string name="city">City</string>
+    <string name="state">State</string>
+    <string name="street">Street</string>
+    <string name="your_price">Your price</string>
+    <string name="your_dishes">Your dishes</string>
+    <string name="pack_in_box">Pack in box</string>
+    <string name="finish">Finish</string>
+    <string name="next">Next</string>
+    <string name="log_out">Log out</string>
+    <string name="username">Name</string>
+    <string name="gram">gram</string>
+    <string name="ounce">ounce</string>
+    <string name="measure_unit">Measure unit</string>
+    <string name="gram_symbol">g</string>
+    <string name="ounce_symbol">oz</string>
+    <string name="datetime_format">MM/dd/yyyy, hh:mm a</string>
+    <string name="try_optimal">Try optimal</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm">Confirm</string>
+    <string name="register">Register</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="new_name">New name</string>
+    <string name="account_successfully_created">Account successfully created</string>
+    <string name="ok" translatable="false">OK</string>
+    <string name="choose_service">Choose service</string>
+    <string name="choose_catering">Choose catering</string>
+    <string name="choose_dishes">Choose dishes</string>
+    <string name="submit_order">Submit order</string>
+    <string name="choose_date">Choose date</string>
+    <string name="choose_time">Choose time</string>
+    <string name="password_should_be_of_minimum_8_characters_length">Password should be of minimum 8 characters length</string>
+    <string name="password_should_contain_at_least_1_lowercase_letter">Password should contain at least 1 lowercase letter</string>
+    <string name="password_should_contain_at_least_1_uppercase_letter">Password should contain at least 1 uppercase letter</string>
+    <string name="password_should_contain_at_least_1_digit">Password should contain at least 1 digit</string>
+    <string name="invalid_number">Invalid number</string>
+    <string name="required">Required</string>
+    <string name="invalid_email">Invalid Email</string>
+    <string name="search">Search</string>
+    <string name="choose_start_date">Choose start date</string>
+    <string name="choose_end_date">Choose end date</string>
 </resources>

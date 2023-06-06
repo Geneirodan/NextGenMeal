@@ -14,6 +14,7 @@ namespace API.Controllers
     [Route(Routes.CrudRoute)]
     [Authorize(Roles = Roles.CustomerEmployee)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public class OrderController : BaseController
     {
         private readonly IOrderService orderService;
@@ -24,8 +25,14 @@ namespace API.Controllers
         public async Task<ActionResult<PagedArrayModel<OrderModel>>> GetAsync(DateTime? startTime,
                                                                               DateTime? endTime,
                                                                               int page = 1,
-                                                                              bool? isBox = null) =>
-            await orderService.GetAsync(User, page, isBox, startTime ?? DateTime.MinValue, endTime ?? DateTime.MaxValue);
+                                                                              bool? isBox = null,
+                                                                              string? status = null) =>
+            await orderService.GetAsync(User,
+                                        page,
+                                        isBox,
+                                        startTime ?? DateTime.MinValue,
+                                        endTime ?? DateTime.MaxValue,
+                                        status);
 
         [HttpGet(Routes.Action)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -43,7 +50,6 @@ namespace API.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async virtual Task<ActionResult<OrderModel>> AddAsync([FromBody] OrderRequest request)
         {
@@ -55,7 +61,6 @@ namespace API.Controllers
         [HttpPatch(Routes.Action)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async virtual Task<IActionResult> DoAsync([Required] int id)
         {
@@ -66,7 +71,6 @@ namespace API.Controllers
         [HttpPatch(Routes.Action)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async virtual Task<IActionResult> ReceiveAsync([Required] int id)
         {
@@ -77,7 +81,6 @@ namespace API.Controllers
         [HttpDelete]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async virtual Task<IActionResult> DeleteAsync([Required] int id)
         {
@@ -91,5 +94,9 @@ namespace API.Controllers
                                                                                      string query = "",
                                                                                      string? country = null) =>
             await orderService.GetServicesAsync(page, query, country);
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult<OrderModel?>> GetById(int id) => await orderService.GetOrderById(id);
     }
 }

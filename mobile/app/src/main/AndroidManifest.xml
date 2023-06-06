@@ -16,9 +16,10 @@
         android:windowSoftInputMode="adjustResize"
         tools:targetApi="31">
 
-        <activity android:name=".activities.CustomerActivity" />
-        <activity android:name=".activities.EmployeeActivity" />
+        <activity android:name=".activities.MainActivity" />
+        <activity android:name=".activities.OrderActivity" />
         <activity android:name=".activities.LoginActivity" />
+        <activity android:name=".activities.RegisterActivity" />
         <activity
             android:name=".activities.ActivityLauncher"
             android:exported="true" >
