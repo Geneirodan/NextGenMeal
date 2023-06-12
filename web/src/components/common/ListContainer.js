@@ -5,8 +5,8 @@ import {Preloader} from "./Preloader";
 import React, {memo} from "react";
 
 export const ListContainer = memo(
-    ({filter, items, loading, itemCallback, setFilter, totalCount, filters, emptyLabel}) =>
-        <Container>
+    ({filter, items, loading, itemCallback, setFilter, totalCount, filters, emptyLabel, ...restProps}) =>
+        <Container {...restProps}>
             <Stack spacing={2}>
                 {filters}
                 {

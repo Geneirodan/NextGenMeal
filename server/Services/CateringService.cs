@@ -1,5 +1,4 @@
-﻿using Azure;
-using DataAccess;
+﻿using DataAccess;
 using DataAccess.Entities;
 using DataAccess.Entities.Users;
 using Microsoft.AspNetCore.Identity;

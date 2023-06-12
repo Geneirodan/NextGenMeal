@@ -6,6 +6,6 @@
         public string[] Cells { get; set; } = null!;
         public virtual Catering Catering { get; set;} = null!;
 
-        public override string? GetOwnerId() => Catering?.GetOwnerId();
+        public override string GetOwnerId() => Catering.GetOwnerId();
     }
 }

@@ -21,8 +21,8 @@ const options = {
 export const OrderListItem = memo(
     ({order}) => {
         const {t, i18n} = useTranslation()
+        console.log(order);
         const date = dayjs.utc(order.time).toDate();
-        // noinspection JSUnresolvedReference
         const formattedTime = Intl.DateTimeFormat(i18n.resolvedLanguage, options).format(date)
         const itemCallback = useCallback(
             value => <DishListComponent dish={value.dish} quantity={value.quantity} readonly/>,

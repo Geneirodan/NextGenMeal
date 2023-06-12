@@ -128,8 +128,8 @@ export const OrderPage = memo(
                                            totalCount={totalCount}
                                            emptyLabel={t("No dishes found")}/>
                         </Box>
-                        <Stack justifyContent="space-between" spacing={2} sx={rightFabStyle} color="primary"
-                               alignItems="stretch">
+                        <Stack direction={"row"} justifyContent="space-between" spacing={2} sx={rightFabStyle} color="primary"
+                               alignItems="stretch" p={2}>
                             <Card sx={{padding: 1}}>
                                 <Typography>
                                     {t("Your price")}: ${formik.values.orderDishes.reduce(reduceCallback, 0)}

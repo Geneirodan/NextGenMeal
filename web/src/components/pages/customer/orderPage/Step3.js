@@ -13,7 +13,7 @@ import {getOptimalDishes} from "../../../../store/order";
 import {OptimalDialog} from "../../../common/dialogs/OptimalDialog";
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import StarIcon from "@mui/icons-material/Star";
-import {useOpen} from "../../../../utils/hook/hooks";
+import {useOpen, useUpdate} from "../../../../utils/hook/hooks";
 
 
 export const Step3 = memo(
@@ -23,6 +23,7 @@ export const Step3 = memo(
         const [filter, setFilter] = useState({cateringId: formik.values.cateringId})
         const [loading, setLoading] = useState(false)
         const dispatch = useDispatch()
+        const updated = useUpdate()
         const [open, onClick, onClose] = useOpen();
         const itemCallback = useCallback(
             dish => <DishListButton key={dish.id} dish={dish} formik={formik}/>,

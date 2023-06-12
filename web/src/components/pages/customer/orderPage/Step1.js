@@ -5,6 +5,7 @@ import React, {memo, useCallback, useEffect, useState} from "react";
 import {ServiceListButton} from "../../../common/buttons/ServiceListButton";
 import {SearchComponent} from "../../../common/inputs/SearchComponent";
 import {ListContainer} from "../../../common/ListContainer";
+import {useUpdate} from "../../../../utils/hook/hooks";
 
 export const Step1 = memo(
     ({nextStep, formik}) => {
@@ -12,6 +13,7 @@ export const Step1 = memo(
         const {items, totalCount} = useSelector(selector("services"))
         const [filter, setFilter] = useState({})
         const [loading, setLoading] = useState(false)
+        const updated = useUpdate()
         const dispatch = useDispatch()
         const onClick = useCallback(
             service =>

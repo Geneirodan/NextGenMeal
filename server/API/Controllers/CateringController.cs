@@ -9,7 +9,7 @@ using Utils.Constants;
 namespace API.Controllers
 {
     [ApiController]
-    [Route(Routes.CrudRoute)]
+    [Route(Routes.CRUD_ROUTE)]
     [Authorize(Roles = Roles.Service)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public class CateringController : CrudController<CateringModel, CateringRequest>
@@ -34,7 +34,7 @@ namespace API.Controllers
             return await cateringService!.GetAsync(serviceId, page, query);
         }
 
-        [HttpGet(Routes.Action + "/{id}")]
+        [HttpGet(Routes.ACTION + "/{id}")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

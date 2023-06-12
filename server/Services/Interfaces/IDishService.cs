@@ -4,6 +4,6 @@ namespace Services.Interfaces
 {
     public interface IDishService : ICrudService<DishModel>
     {
-        public PagedArrayModel<DishModel> Get(int cateringId, IEnumerable<string>? types, int page, string query);
+        public Task<PagedArrayModel<DishModel>> GetAsync(int cateringId, string[]? types, int page, string query);
     }
 }

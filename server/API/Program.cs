@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Services;
 using Services.Interfaces;
 using Services.Logging;
@@ -32,25 +31,27 @@ services.AddMqttClient($"{prefix}/Server", "broker.emqx.io");
 var connectionString = configuration.GetConnectionString("DefaultConnection");
 services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connectionString));
 
-Action<IdentityOptions> setupAction = options =>
+void SetupAction(IdentityOptions options)
 {
     options.Password.RequireNonAlphanumeric = false;
     options.SignIn.RequireConfirmedEmail = true;
-};
-services.AddIdentity<User, IdentityRole>(setupAction)
+}
+
+services.AddIdentity<User, IdentityRole>(SetupAction)
         .AddEntityFrameworkStores<ApplicationContext>()
         .AddDefaultTokenProviders();
 
-Action<GoogleOptions> googleConfig = options =>
+void GoogleConfig(GoogleOptions options)
 {
     options.ClientId = configuration["Authentication:Google:ClientId"]!;
     options.ClientSecret = configuration["Authentication:Google:ClientSecret"]!;
     options.SaveTokens = true;
     options.SignInScheme = IdentityConstants.ExternalScheme;
-};
+}
+
 services.AddAuthentication()
         .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
-        .AddGoogle(GoogleDefaults.AuthenticationScheme, googleConfig)
+        .AddGoogle(GoogleDefaults.AuthenticationScheme, GoogleConfig)
 ;
 
 services.ConfigureApplicationCookie(options =>
@@ -90,10 +91,10 @@ if (app.Environment.IsDevelopment())
 }
 app.UseExceptionHandler()
 //   .UseHttpsRedirection()
-   .UseCors(builder => builder.WithOrigins("https://localhost:3000")
-                              .AllowAnyHeader()
-                              .AllowAnyMethod()
-                              .AllowCredentials())
+   .UseCors(corsPolicyBuilder => corsPolicyBuilder.WithOrigins("https://localhost:3000")
+                                                  .AllowAnyHeader()
+                                                  .AllowAnyMethod()
+                                                  .AllowCredentials())
    .UseAuthentication()
    .UseAuthorization();
 

@@ -2,12 +2,12 @@
 {
     public class TerminalModel : EntityModel
     {
-        private int cellCount = 0;
+        private int cellCount;
 
         public string SerialNumber { get; set; } = null!;
         public int CellCount
         {
-            get => cellCount == 0 ? Cells?.Length ?? 0 : cellCount;
+            get => cellCount == 0 ? Cells.Length : cellCount;
             set => cellCount = value;
         }
         public string[] Cells { get; set; } = null!;

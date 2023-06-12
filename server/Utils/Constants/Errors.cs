@@ -2,14 +2,13 @@
 {
     public static class Errors
     {
-        public const string Common = "Common";
-        public const string NotFound = "Not found";
-        public const string Forbidden = "Forbidden";
-        public const string SmthWentWrong = "Something went wrong";
-        public const string PasswordAreNotTheSame = "Passwords are not same";
-        public const string InvalidCredentials = "Invalid email and/or password";
-        public const string IsLockedOut = "Account is locked out";
-        public const string IsNotAllowed = "Login is not allowed";
-        public const string InvalidDishes = "Invalid dishes";
+        public const string COMMON = "Common";
+        public const string NOT_FOUND = "Not found";
+        public const string FORBIDDEN = "Forbidden";
+        public const string PASSWORD_ARE_NOT_THE_SAME = "Passwords are not same";
+        public const string INVALID_CREDENTIALS = "Invalid email and/or password";
+        public const string IS_LOCKED_OUT = "Account is locked out";
+        public const string IS_NOT_ALLOWED = "Login is not allowed";
+        public const string INVALID_DISHES = "Invalid dishes";
     }
 }

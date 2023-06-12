@@ -1,7 +1,7 @@
 import React, {memo, useCallback} from 'react'
 import {useFormik} from 'formik'
 import {useTranslation} from "react-i18next"
-import {Navigate} from "react-router-dom"
+import {Navigate, useNavigate} from "react-router-dom"
 import {useDispatch, useSelector} from "react-redux"
 import {confirmPasswordValidation, emailValidation, passwordValidation, stringRequired} from "../../utils/validation"
 import * as yup from "yup"
@@ -10,6 +10,7 @@ import {Button, Container, Dialog, DialogContent, Stack, Typography} from "@mui/
 import {CustomTextField} from "../common/inputs/CustomTextField"
 import {useReset, useUpdate} from "../../utils/hook/hooks"
 import {ErrorsSnackbar} from "../common/ErrorsSnackbar";
+import {setUpdated} from "../../store/common";
 
 export const RegisterPage = memo(
     () => {
@@ -38,6 +39,14 @@ export const RegisterPage = memo(
         )
         const formik = useFormik({initialValues, validationSchema, onSubmit});
         useReset(open, formik.resetForm);
+        const navigate = useNavigate();
+        const onClose = useCallback(
+            () => {
+                navigate("/");
+                dispatch(setUpdated(false));
+            },
+            []
+        )
         return isRegistered
             ? <Dialog open={true} onClose={onClose}>
                 <DialogContent>

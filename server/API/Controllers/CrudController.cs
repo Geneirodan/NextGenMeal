@@ -10,20 +10,20 @@ namespace API.Controllers
     [ApiController]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [Route(Routes.CrudRoute)]
+    [Route(Routes.CRUD_ROUTE)]
     public abstract class CrudController<TModel, TRequest> : BaseController
         where TModel : EntityModel
         where TRequest : IRequestBody
     {
         protected readonly ICrudService<TModel> service;
 
-        public CrudController(ICrudService<TModel> service) => this.service = service;
+        protected CrudController(ICrudService<TModel> service) => this.service = service;
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async virtual Task<ActionResult<TModel>> AddAsync([FromBody] TRequest request)
+        public virtual async Task<ActionResult<TModel>> AddAsync([FromBody] TRequest request)
         {
             var model = request.Adapt<TModel>();
             var result = await service.AddAsync(User, model);
@@ -34,7 +34,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async virtual Task<IActionResult> EditAsync(int id, [FromBody] TRequest request)
+        public virtual async Task<IActionResult> EditAsync(int id, [FromBody] TRequest request)
         {
             var model = request.Adapt<TModel>();
             model.Id = id;
@@ -46,7 +46,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async virtual Task<IActionResult> DeleteAsync(int id)
+        public virtual async Task<IActionResult> DeleteAsync(int id)
         {
             var result = await service.DeleteAsync(User, id);
             return HandleResult(result);

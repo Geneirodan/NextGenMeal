@@ -9,9 +9,9 @@ namespace API.Requests.Account
         public string Email { get; set; } = null!;
 
         [DataType(DataType.Password), Required]
-        public string Password { get; set; } = null!;
+        public string Password { get; init; } = null!;
 
-        [DataType(DataType.Password), Required, Compare(nameof(Password), ErrorMessage = Errors.PasswordAreNotTheSame)]
+        [DataType(DataType.Password), Required, Compare(nameof(Password), ErrorMessage = Errors.PASSWORD_ARE_NOT_THE_SAME)]
         public string ConfirmPassword { get; set; } = null!;
 
         [Required]

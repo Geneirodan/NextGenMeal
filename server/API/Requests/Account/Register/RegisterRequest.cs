@@ -16,7 +16,7 @@ namespace API.Requests.Account.Register
         [Required, DataType(DataType.Password)]
         public string Password { get; set; } = null!;
 
-        [Required, DataType(DataType.Password), Compare(nameof(Password), ErrorMessage = Errors.PasswordAreNotTheSame)]
+        [Required, DataType(DataType.Password), Compare(nameof(Password), ErrorMessage = Errors.PASSWORD_ARE_NOT_THE_SAME)]
         public string ConfirmPassword { get; set; } = null!;
         protected T CreateModel<T>() => this.Adapt<T>();
         public abstract RegisterModel CreateModel();

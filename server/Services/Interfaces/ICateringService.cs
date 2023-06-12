@@ -1,5 +1,4 @@
-﻿using DataAccess.Entities;
-using Services.Models;
+﻿using Services.Models;
 using System.Security.Claims;
 
 namespace Services.Interfaces

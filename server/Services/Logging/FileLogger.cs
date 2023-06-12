@@ -9,7 +9,7 @@ namespace Services.Logging
 
         public FileLogger(string path) => filePath = path;
 
-        public IDisposable? BeginScope<TState>(TState state) where TState : notnull => this;
+        public IDisposable BeginScope<TState>(TState state) where TState : notnull => this;
 
         public void Dispose() => GC.SuppressFinalize(this);
 

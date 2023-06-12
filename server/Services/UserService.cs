@@ -1,22 +1,15 @@
 ﻿using DataAccess;
-using DataAccess.Entities;
 using DataAccess.Entities.Users;
 using FluentResults;
-using Google.Apis.Auth;
-using Google.Apis.Oauth2.v2;
-using Google.Apis.Services;
 using Mapster;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json.Linq;
 using Services.Interfaces;
 using Services.Models;
 using Services.Models.Register;
 using Services.Models.Users;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
@@ -37,7 +30,7 @@ namespace Services
                            IEmailSender emailSender,
                            RoleManager<IdentityRole> roleManager,
                            IConfiguration configuration,
-                           ApplicationContext context) : base()
+                           ApplicationContext context)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
@@ -64,7 +57,7 @@ namespace Services
         {
             var user = await userManager.FindByIdAsync(id);
             if (user is null)
-                return Result.Fail(Errors.NotFound);
+                return Result.Fail(Errors.NOT_FOUND);
             var result = await userManager.ConfirmEmailAsync(user, code);
             return HandleResult(result);
         }
@@ -81,10 +74,10 @@ namespace Services
             var userId = userManager.GetUserId(principal);
             var user = await context.Employees.FindAsync(id);
             if(user is null)
-                return Result.Fail(Errors.NotFound);
+                return Result.Fail(Errors.NOT_FOUND);
             if (user.GetOwnerId() != userId)
-                return Result.Fail(Errors.Forbidden);
-            var result = await userManager.DeleteAsync(user!);
+                return Result.Fail(Errors.FORBIDDEN);
+            var result = await userManager.DeleteAsync(user);
             return HandleResult(result);
         }
 
@@ -101,9 +94,9 @@ namespace Services
             var userId = userManager.GetUserId(principal);
             var user = await context.Employees.FindAsync(id);
             if (user is null)
-                return Result.Fail(Errors.NotFound);
+                return Result.Fail(Errors.NOT_FOUND);
             if (user.GetOwnerId() != userId)
-                return Result.Fail(Errors.Forbidden);
+                return Result.Fail(Errors.FORBIDDEN);
             user.Name = name;
             var result = await userManager.UpdateAsync(user);
             return HandleResult(result);
@@ -119,17 +112,17 @@ namespace Services
                 _ = emailSender.SendEmailAsync(email, EmailTemplates.ForgotPassword, callbackUrl);
                 return Result.Ok();
             }
-            return Result.Fail(Errors.NotFound);
+            return Result.Fail(Errors.NOT_FOUND);
         }
 
         public async Task<Result> LoginAsync(string email, string password)
         {
             var result = await signInManager.PasswordSignInAsync(email, password, true, false);
             if (result.IsLockedOut)
-                return Result.Fail(Errors.IsLockedOut);
+                return Result.Fail(Errors.IS_LOCKED_OUT);
             if (result.IsNotAllowed)
-                return Result.Fail(Errors.IsNotAllowed);
-            return result.Succeeded ? Result.Ok() : Result.Fail(Errors.InvalidCredentials);
+                return Result.Fail(Errors.IS_NOT_ALLOWED);
+            return result.Succeeded ? Result.Ok() : Result.Fail(Errors.INVALID_CREDENTIALS);
         }
 
         public async Task LogoutAsync() => await signInManager.SignOutAsync();
@@ -147,7 +140,7 @@ namespace Services
                 {
                     var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
                     callbackUrl += $"?id={user.Id}&code={UrlEncoder.Default.Encode(code)}";
-                    _ = emailSender.SendEmailAsync(model.Email!, EmailTemplates.Register, callbackUrl);
+                    _ = emailSender.SendEmailAsync(model.Email, EmailTemplates.Register, callbackUrl);
                     return Result.Ok(user.Adapt<TModel>());
                 }
             }
@@ -158,7 +151,7 @@ namespace Services
         {
             var user = await userManager.FindByEmailAsync(email);
             if (user is null)
-                return Result.Fail(Errors.NotFound);
+                return Result.Fail(Errors.NOT_FOUND);
             var result = await userManager.ResetPasswordAsync(user, token, password);
             return HandleResult(result);
         }
@@ -193,13 +186,6 @@ namespace Services
         }
         public async Task<Result> GoogleAuthAsync(string providerKey, string token)
         {
-            //var oauthService = new Oauth2Service(new BaseClientService.Initializer { ApiKey = "AIzaSyBieeZnc-CWSNaOZ8uWjO_f9TsYUhkv9w0" });
-            //var tokenInfoRequest = oauthService.Tokeninfo();
-            //tokenInfoRequest.IdToken = token;
-            //var userInfo = await tokenInfoRequest.ExecuteAsync();
-            //var handler = new JwtSecurityTokenHandler();
-            //var jwtSecurityToken = handler.ReadJwtToken(token);
-            //var email = jwtSecurityToken.Claims.First(x => x.Type == "email");
             var info = new ExternalLoginInfo(new ClaimsPrincipal(), "Google", providerKey, "Google");
             return await ExternalLoginAsync(info);
         }
@@ -320,7 +306,7 @@ namespace Services
         {
             var user = await userManager.FindByIdAsync(id);
             if (user is null)
-                return Result.Fail(Errors.NotFound);
+                return Result.Fail(Errors.NOT_FOUND);
             var result = await userManager.SetLockoutEndDateAsync(user, lockoutEnd);
             return HandleResult(result);
         }

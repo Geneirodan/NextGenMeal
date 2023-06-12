@@ -14,20 +14,21 @@ namespace API.Controllers
         {
             return result.Errors[0].Message switch
             {
-                Errors.NotFound => NotFound(result.Errors),
-                Errors.Forbidden => Forbid(result.Errors),
+                Errors.NOT_FOUND => NotFound(result.Errors),
+                Errors.FORBIDDEN => Forbid(result.Errors),
                 _ => BadRequest(result.Errors)
             };
         }
-        protected ActionResult<T> Created<T>(T value) => CreatedAtAction(null, value);
-        protected ActionResult BadRequest(IEnumerable<IError> errors) => Error(errors, StatusCodes.Status400BadRequest);
-        protected ActionResult Forbid(IEnumerable<IError> errors) => Error(errors, StatusCodes.Status403Forbidden);
-        protected ActionResult NotFound(IEnumerable<IError> errors) => Error(errors, StatusCodes.Status404NotFound);
+
+        private ActionResult<T> Created<T>(T value) => CreatedAtAction(null, value);
+        private ActionResult BadRequest(IEnumerable<IError> errors) => Error(errors, StatusCodes.Status400BadRequest);
+        private ActionResult Forbid(IEnumerable<IError> errors) => Error(errors, StatusCodes.Status403Forbidden);
+        private ActionResult NotFound(IEnumerable<IError> errors) => Error(errors, StatusCodes.Status404NotFound);
         private ActionResult Error(IEnumerable<IError> errors, int statusCode)
         {
             ModelStateDictionary pairs = new();
             foreach (var error in errors)
-                pairs.AddModelError(Errors.Common, error.Message);
+                pairs.AddModelError(Errors.COMMON, error.Message);
             return ValidationProblem(statusCode: statusCode, modelStateDictionary: pairs);
         }
     }

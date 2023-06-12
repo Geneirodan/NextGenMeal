@@ -16,11 +16,13 @@ namespace Services
             this.configuration = configuration;
             this.logger = logger;
         }
-        public async Task SendEmailAsync(string email, EmailTemplate template, params string[] parameters)
+        public async Task SendEmailAsync(string email, EmailTemplate template, params object?[] parameters)
         {
+            foreach (var parameter in parameters)
+                logger.LogInformation("Parameter: {0}", parameter);
             try
             {
-                BodyBuilder builder = new() { HtmlBody = string.Format(File.ReadAllText($"Templates\\{template.Filename}.html"), parameters) };
+                BodyBuilder builder = new() { HtmlBody = string.Format(await File.ReadAllTextAsync($"Templates\\{template.Filename}.html"), parameters) };
                 var emailMessage = new MimeMessage
                 {
                     Subject = template.Subject,
@@ -33,8 +35,8 @@ namespace Services
                 await client.ConnectAsync(configuration["EmailConfiguration:SmtpServer"],
                                             int.Parse(configuration["EmailConfiguration:Port"]!),
                                             useSsl: true);
-                client.Authenticate(configuration["EmailConfiguration:From"],
-                                    configuration["EmailConfiguration:Password"]);
+                await client.AuthenticateAsync(configuration["EmailConfiguration:From"],
+                    configuration["EmailConfiguration:Password"]);
                 await client.SendAsync(emailMessage);
                 await client.DisconnectAsync(true);
                 logger.LogInformation("File '{file}' was sent on {email}", template.Filename, email);

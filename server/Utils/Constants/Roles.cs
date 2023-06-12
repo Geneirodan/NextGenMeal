@@ -6,7 +6,7 @@
         public const string Customer = nameof(Customer);
         public const string Service = nameof(Service);
         public const string Employee = nameof(Employee);
-        public const string CustomerService = $"{Customer},{Service}";
-        public const string CustomerEmployee = $"{Customer},{Employee}";
+        public const string CUSTOMER_SERVICE = $"{Customer},{Service}";
+        public const string CUSTOMER_EMPLOYEE = $"{Customer},{Employee}";
     }
 }

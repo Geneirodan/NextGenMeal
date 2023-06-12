@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Services.Interfaces;
 using Services.Models;
-using System;
 using System.Security.Claims;
 using Utils.Constants;
 
@@ -30,7 +29,7 @@ namespace Services
         {
             var terminal = await context.Terminals.AsNoTracking().FirstOrDefaultAsync(t => t.Id == model.Id);
             if (terminal is null)
-                return Result.Fail(Errors.NotFound);
+                return Result.Fail(Errors.NOT_FOUND);
             model.Cells = terminal.Cells;
             if(model.CellCount > 0)
             {

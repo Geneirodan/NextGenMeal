@@ -17,13 +17,13 @@ namespace API.Controllers
         [HttpGet]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public ActionResult<PagedArrayModel<DishModel>> Get(int cateringId,
+        public async Task<ActionResult<PagedArrayModel<DishModel>>> GetAsync(int cateringId,
                                                             string? types = null,
                                                             int page = 1,
                                                             string query = "")
         {
             var dishService = service as IDishService;
-            return dishService!.Get(cateringId, types?.Split(','), page, query);
+            return await dishService!.GetAsync(cateringId, types?.Split(','), page, query);
         }
 
         [HttpGet("Types")]

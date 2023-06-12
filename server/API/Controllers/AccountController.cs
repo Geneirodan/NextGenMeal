@@ -3,7 +3,6 @@ using API.Requests.Account.Register;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Formatters;
 using Services.Interfaces;
 using Services.Models;
 using Services.Models.Users;
@@ -12,7 +11,7 @@ using Utils.Constants;
 namespace API.Controllers
 {
     [ApiController]
-    [Route(Routes.DefaultRoute)]
+    [Route(Routes.DEFAULT_ROUTE)]
     public class AccountController : BaseController
     {
         private readonly IUserService userService;
@@ -85,7 +84,7 @@ namespace API.Controllers
         }
 
         [HttpDelete]
-        [Authorize(Roles = Roles.CustomerService)]
+        [Authorize(Roles = Roles.CUSTOMER_SERVICE)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -111,7 +110,7 @@ namespace API.Controllers
         }
 
         [HttpPatch]
-        [Authorize(Roles = Roles.CustomerService)]
+        [Authorize(Roles = Roles.CUSTOMER_SERVICE)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -155,7 +154,7 @@ namespace API.Controllers
         }
 
         [HttpPatch]
-        [Authorize(Roles = Roles.CustomerService)]
+        [Authorize(Roles = Roles.CUSTOMER_SERVICE)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

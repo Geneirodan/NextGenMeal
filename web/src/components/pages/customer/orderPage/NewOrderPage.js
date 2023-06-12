@@ -40,27 +40,6 @@ const StepperComponent = memo(
 )
 
 
-const SuccessSnackbar = memo(
-    ({open}) => {
-        const {t} = useTranslation()
-        const navigate = useNavigate()
-        const onClose = useCallback(
-            () => navigate("/my_orders"),
-            []
-        )
-        return (
-            <Snackbar open={open}
-                      autoHideDuration={6000}
-                      onClose={onClose}
-                      anchorOrigin={{vertical: "bottom", horizontal: "right"}}>
-                <Alert onClose={onClose} severity="success">
-                    {t("Successfully created")}
-                </Alert>
-            </Snackbar>
-        )
-    }
-)
-
 export const NewOrderPage = memo(
     withRole(roles.Customer)(
         () => {
@@ -68,7 +47,6 @@ export const NewOrderPage = memo(
             const dispatch = useDispatch()
 
             const orderDishes = useSelector(selector("selectedDishes"))
-            const updated = useUpdate()
 
             const [step, handleNext, handleBack] = useStepping();
 
@@ -121,7 +99,6 @@ export const NewOrderPage = memo(
                             {stepsComponents[step]}
                         </Box>
                         <ErrorsSnackbar/>
-                        <SuccessSnackbar open={updated}/>
                     </Stack>
                 </form>
             )

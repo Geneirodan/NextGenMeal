@@ -1,5 +1,5 @@
 import {useTranslation} from "react-i18next";
-import {Button, Container, FormControlLabel, Stack, Switch, Typography} from "@mui/material";
+import {Alert, Button, Container, FormControlLabel, Snackbar, Stack, Switch, Typography} from "@mui/material";
 import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import React, {memo, useCallback} from "react";
@@ -7,10 +7,34 @@ import {DishListComponent} from "../../../common/buttons/DishListButton";
 import {DateTimePicker} from '@mui/x-date-pickers/DateTimePicker';
 import {bottomFabStyle, leftFabStyle, rightFabStyle} from "../../../common/buttons/AddFab";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
+import {useUpdate} from "../../../../utils/hook/hooks";
+import {useNavigate} from "react-router-dom";
+
+const SuccessSnackbar = memo(
+    ({open}) => {
+        const {t} = useTranslation()
+        const navigate = useNavigate()
+        const onClose = useCallback(
+            () => navigate("/my_orders"),
+            []
+        )
+        return (
+            <Snackbar open={open}
+                      autoHideDuration={6000}
+                      onClose={onClose}
+                      anchorOrigin={{vertical: "bottom", horizontal: "right"}}>
+                <Alert onClose={onClose} severity="success">
+                    {t("Successfully created")}
+                </Alert>
+            </Snackbar>
+        )
+    }
+)
 
 export const Step4 = memo(
     ({formik, backStep}) => {
         const {t, i18n} = useTranslation()
+        const updated = useUpdate()
         const reduceCallback = useCallback(
             (s, x) => s + x.dish.price * x.quantity,
             []
@@ -32,15 +56,15 @@ export const Step4 = memo(
                     </Typography>
                     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={i18n.resolvedLanguage}>
                         <DateTimePicker disablePast
-                                              label={t("Choose date and time")}
-                                              value={formik.values.time}
-                                              onChange={onChange}
-                                              slotProps={{
-                                                  textField: {
-                                                      error: formik.touched.time && Boolean(formik.errors.time),
-                                                      helperText: formik.touched.time && formik.errors.time
-                                                  }
-                                              }}/>
+                                        label={t("Choose date and time")}
+                                        value={formik.values.time}
+                                        onChange={onChange}
+                                        slotProps={{
+                                            textField: {
+                                                error: formik.touched.time && Boolean(formik.errors.time),
+                                                helperText: formik.touched.time && formik.errors.time
+                                            }
+                                        }}/>
                     </LocalizationProvider>
                     <Typography>
                         {t("Your dishes")}:
@@ -59,6 +83,7 @@ export const Step4 = memo(
                     {t("Finish")}
                 </Button>
             </Stack>
+            <SuccessSnackbar open={updated}/>
         </>
     }
 )

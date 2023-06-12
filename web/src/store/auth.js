@@ -69,7 +69,7 @@ export const confirmEmail = ({id, code}) => async dispatch => {
 export const register = ({name, email, password, confirmPassword}) =>
     async dispatch => {
         const data = {name, email, password, confirmPassword};
-        const response = await post(`Account/Register`, data, {callbackUrl: `${window.location.origin}/register/confirm`})
+        const response = await post(`Account/Register`, data, {callbackUrl: `${window.location.origin}/confirm`})
         await handleResponse(response, dispatch, setUpdated, setErrors)
     }
 

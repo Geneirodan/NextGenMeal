@@ -11,8 +11,8 @@ using Utils.Constants;
 namespace API.Controllers
 {
     [ApiController]
-    [Route(Routes.CrudRoute)]
-    [Authorize(Roles = Roles.CustomerEmployee)]
+    [Route(Routes.CRUD_ROUTE)]
+    [Authorize(Roles = Roles.CUSTOMER_EMPLOYEE)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public class OrderController : BaseController
@@ -34,7 +34,7 @@ namespace API.Controllers
                                         endTime ?? DateTime.MaxValue,
                                         status);
 
-        [HttpGet(Routes.Action)]
+        [HttpGet(Routes.ACTION)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<List<OrderDishModel>> Optimal(int cateringId,
@@ -51,28 +51,28 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async virtual Task<ActionResult<OrderModel>> AddAsync([FromBody] OrderRequest request)
+        public async Task<ActionResult<OrderModel>> AddAsync([FromBody] OrderRequest request)
         {
             var model = request.Adapt<OrderModel>();
             var result = await orderService.AddAsync(User, model);
             return HandleCreatedResult(result);
         }
 
-        [HttpPatch(Routes.Action)]
+        [HttpPatch(Routes.ACTION)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async virtual Task<IActionResult> DoAsync([Required] int id)
+        public async Task<IActionResult> DoAsync([Required] int id)
         {
             var result = await orderService.DoAsync(User, id);
             return HandleResult(result);
         }
 
-        [HttpPatch(Routes.Action)]
+        [HttpPatch(Routes.ACTION)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async virtual Task<IActionResult> ReceiveAsync([Required] int id)
+        public async Task<IActionResult> ReceiveAsync([Required] int id)
         {
             var result = await orderService.ReceiveAsync(User, id);
             return HandleResult(result);
@@ -82,13 +82,13 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async virtual Task<IActionResult> DeleteAsync([Required] int id)
+        public async Task<IActionResult> DeleteAsync([Required] int id)
         {
             var result = await orderService.DeleteAsync(User, id);
             return HandleResult(result);
         }
 
-        [HttpGet(Routes.Action)]
+        [HttpGet(Routes.ACTION)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<PagedArrayModel<ServiceModel>>> ServicesAsync(int page = 1,
                                                                                      string query = "",

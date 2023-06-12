@@ -1,5 +1,4 @@
 ﻿using FluentResults;
-using Services.Models;
 using System.Security.Claims;
 
 namespace Services.Interfaces

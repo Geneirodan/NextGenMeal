@@ -63,16 +63,16 @@ namespace Services
 
         public async Task<Result<OrderModel>> AddAsync(ClaimsPrincipal principal, OrderModel model)
         {
-            using var transaction = context.Database.BeginTransaction();
-            model.Status = OrderStatuses.Undone;
+            await using var transaction = await context.Database.BeginTransactionAsync();
+            model.Status = OrderStatuses.UNDONE;
             var b = model.OrderDishes.All(od => context.Set<Dish>().Any(d => d.Id == od.DishId));
             if (!b)
-                return Result.Fail(Errors.InvalidDishes);
+                return Result.Fail(Errors.INVALID_DISHES);
             var entity = model.Adapt<Order>();
             var user = await userManager.GetUserAsync(principal);
             switch (user)
             {
-                case Customer customer:
+                case Customer:
                     entity.CustomerId = user.Id;
                     break;
                 case Employee employee:
@@ -106,7 +106,7 @@ namespace Services
             proxy.Price = orderDishes.Sum(od => od.Quantity * od.Dish.Price);
             context.Update(proxy);
             await context.SaveChangesAsync();
-            transaction.Commit();
+            await transaction.CommitAsync();
             var response = proxy.Adapt<OrderModel>();
             return Result.Ok(response);
         }
@@ -115,16 +115,16 @@ namespace Services
         {
             var order = await context.FindAsync<Order>(id);
             if (order is null)
-                return Result.Fail(Errors.NotFound);
+                return Result.Fail(Errors.NOT_FOUND);
             var user = await userManager.GetUserAsync(principal);
             if (order.GetOwnerId() != user!.Id)
-                return Result.Fail(Errors.Forbidden);
+                return Result.Fail(Errors.FORBIDDEN);
             if (user is Customer)
             {
                 var timeoutMins = double.Parse(configuration["Order:DeleteTimeout"]!);
                 var timeout = TimeSpan.FromMinutes(timeoutMins);
                 if (order.Time - timeout < DateTime.UtcNow)
-                    return Result.Fail(Errors.Forbidden);
+                    return Result.Fail(Errors.FORBIDDEN);
             }
             if (order.IsBox)
                 RemoveFromCell(order);
@@ -165,7 +165,7 @@ namespace Services
                 }
                 invariant.AddRange(tagDishes);
                 if (maxPrice < 0)
-                    return Result.Fail(Errors.NotFound);
+                    return Result.Fail(Errors.NOT_FOUND);
                 return invariant.Select(i =>
                 {
                     Dish dish = i.Dishes.First();
@@ -174,10 +174,11 @@ namespace Services
             }
             catch (InvalidOperationException)
             {
-                return Result.Fail(Errors.NotFound);
+                return Result.Fail(Errors.NOT_FOUND);
             }
         }
-        internal record TagDish(KeyValuePair<string, int> Type)
+
+        private record TagDish(KeyValuePair<string, int> Type)
         {
             public IOrderedQueryable<Dish> Dishes { get; set; } = null!;
         }
@@ -186,7 +187,7 @@ namespace Services
         {
             var enumerable = context.Set<Service>()
                                     .Where(x => x.LockoutEnd == null)
-                                    .Where(x => x.Name.Contains(query));
+                                    .Where(x => x.Name.Contains(query) || x.Country.Contains(query));
             if (country is not null)
                 enumerable = enumerable.Where(x => x.Country == country);
             var entities = await enumerable.OrderByDescending(x => x.Name)
@@ -198,20 +199,19 @@ namespace Services
         }
 
         public async Task<Result> DoAsync(ClaimsPrincipal principal, int id) =>
-            await SetStatus(principal, id, OrderStatuses.Undone, OrderStatuses.Done);
+            await SetStatus(id, OrderStatuses.UNDONE, OrderStatuses.DONE);
 
         public async Task<Result> ReceiveAsync(ClaimsPrincipal principal, int id) =>
-            await SetStatus(principal, id, OrderStatuses.Done, OrderStatuses.Received);
+            await SetStatus(id, OrderStatuses.DONE, OrderStatuses.RECEIVED);
 
-        private async Task<Result> SetStatus(ClaimsPrincipal principal, int id, string oldStatus, string newStatus)
+        private async Task<Result> SetStatus(int id, string oldStatus, string newStatus)
         {
             var order = await context.FindAsync<Order>(id);
             if (order is null)
-                return Result.Fail(Errors.NotFound);
-            var user = await userManager.GetUserAsync(principal) as Employee;
+                return Result.Fail(Errors.NOT_FOUND);
             if (order.Status != oldStatus)
-                return Result.Fail(Errors.Forbidden);
-            if (order.IsBox && newStatus == OrderStatuses.Received)
+                return Result.Fail(Errors.FORBIDDEN);
+            if (order.IsBox && newStatus == OrderStatuses.RECEIVED)
             {
                 var terminal = order.Catering!.Terminal;
                 var cellId = Array.IndexOf(terminal.Cells, order.Id.ToString());
@@ -231,7 +231,7 @@ namespace Services
 
         private void RemoveFromCell(Order order)
         {
-            var terminal = order.Catering.Terminal;
+            var terminal = order.Catering!.Terminal;
             var index = Array.IndexOf(terminal.Cells, order.Id.ToString());
             terminal.Cells[index] = string.Empty;
             context.Update(terminal);

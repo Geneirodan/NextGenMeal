@@ -9,7 +9,7 @@ namespace API.Requests.Account
         [DataType(DataType.Password), Required]
         public string NewPassword { get; set; } = null!;
 
-        [DataType(DataType.Password), Required, Compare(nameof(NewPassword), ErrorMessage = Errors.PasswordAreNotTheSame)]
+        [DataType(DataType.Password), Required, Compare(nameof(NewPassword), ErrorMessage = Errors.PASSWORD_ARE_NOT_THE_SAME)]
         public string ConfirmNewPassword { get; set; } = null!;
     }
 }

@@ -8,6 +8,8 @@ import {ListContainer} from "../../../common/ListContainer";
 import {leftFabStyle} from "../../../common/buttons/AddFab";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import Button from "@mui/material/Button";
+import {useUpdate} from "../../../../utils/hook/hooks";
+import {Stack} from "@mui/material";
 
 export const Step2 = memo(
     ({nextStep, backStep, formik}) => {
@@ -16,6 +18,7 @@ export const Step2 = memo(
         const [filter, setFilter] = useState({serviceId: formik.values.serviceId})
         const [loading, setLoading] = useState(false)
         const dispatch = useDispatch()
+        const updated = useUpdate()
         const onClick = useCallback(
             catering =>
                 () => {
@@ -42,7 +45,7 @@ export const Step2 = memo(
                 },
             []
         )
-        return <>
+        return <Stack spacing={2}>
             <ListContainer filter={filter}
                            filters={<SearchComponent filter={filter} setFilter={setFilter}/>}
                            setFilter={setFilter}
@@ -51,9 +54,11 @@ export const Step2 = memo(
                            itemCallback={itemCallback}
                            totalCount={totalCount}
                            emptyLabel={t("No caterings found")}/>
-            <Button variant="contained" onClick={backStep} sx={leftFabStyle}>
-                <KeyboardArrowLeft/> {t("Back")}
-            </Button>
-        </>
+            <Stack direction="row">
+                <Button variant="contained" onClick={backStep} sx={leftFabStyle}>
+                    <KeyboardArrowLeft/> {t("Back")}
+                </Button>
+            </Stack>
+        </Stack>
     }
 )

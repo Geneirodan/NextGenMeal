@@ -20,7 +20,7 @@ namespace Services
         protected readonly ApplicationContext context;
         protected readonly UserManager<User> userManager;
 
-        public CrudService(ApplicationContext context, UserManager<User> userManager)
+        protected CrudService(ApplicationContext context, UserManager<User> userManager)
         {
             this.context = context;
             this.userManager = userManager;
@@ -46,7 +46,7 @@ namespace Services
             context.Entry(proxy).CurrentValues.SetValues(model);
             await context.AddAsync(proxy);
             if (proxy.GetOwnerId() != userId)
-                return Result.Fail(Errors.Forbidden);
+                return Result.Fail(Errors.FORBIDDEN);
             await context.SaveChangesAsync();
             var response = proxy.Adapt<TModel>();
             return Result.Ok(response);
@@ -57,9 +57,9 @@ namespace Services
             var userId = userManager.GetUserId(principal);
             var entity = await context.FindAsync<TEntity>(id);
             if (entity is null)
-                return Result.Fail(Errors.NotFound);
+                return Result.Fail(Errors.NOT_FOUND);
             if (entity.GetOwnerId() != userId)
-                return Result.Fail(Errors.Forbidden);
+                return Result.Fail(Errors.FORBIDDEN);
             context.Remove(entity);
             await context.SaveChangesAsync();
             return Result.Ok();
@@ -72,7 +72,7 @@ namespace Services
             context.Entry(proxy).CurrentValues.SetValues(model);
             context.Update(proxy);
             if (proxy.GetOwnerId() != userId)
-                return Result.Fail(Errors.Forbidden);
+                return Result.Fail(Errors.FORBIDDEN);
             await context.SaveChangesAsync();
             return Result.Ok();
         }
