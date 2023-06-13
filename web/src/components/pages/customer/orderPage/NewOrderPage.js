@@ -1,6 +1,6 @@
 import {withRole} from "../../../../utils/hoc/withRole";
 import React, {memo, useCallback, useEffect} from "react";
-import {Alert, Box, Snackbar, Stack, Step, StepLabel, Stepper} from "@mui/material";
+import {Box, Stack, Step, StepLabel, Stepper} from "@mui/material";
 import {useTranslation} from "react-i18next";
 import {useFormik} from "formik";
 import 'dayjs/locale/uk'
@@ -13,9 +13,8 @@ import {useDispatch, useSelector} from "react-redux";
 import {addOrder, selector} from "../../../../store/order";
 import * as yup from "yup";
 import {stringRequired} from "../../../../utils/validation";
-import {useStepping, useUpdate} from "../../../../utils/hook/hooks";
+import {useStepping} from "../../../../utils/hook/hooks";
 import {ErrorsSnackbar} from "../../../common/ErrorsSnackbar";
-import {useNavigate} from "react-router-dom";
 import {roles} from "../../../../utils/constants";
 import {setUpdated} from "../../../../store/common";
 

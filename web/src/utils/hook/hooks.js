@@ -14,9 +14,7 @@ export const useStepping = () => {
     )
     return [activeStep, handleNext, handleBack]
 };
-export const useUpdate = () => {
-    return useSelector(selector("updated"));
-};
+export const useUpdate = (n = "") => useSelector(selector(`updated${n}`));
 export const useErrors = () => {
     const dispatch = useDispatch()
     useEffect(() => () => {

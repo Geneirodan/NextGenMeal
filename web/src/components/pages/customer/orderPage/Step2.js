@@ -8,7 +8,6 @@ import {ListContainer} from "../../../common/ListContainer";
 import {leftFabStyle} from "../../../common/buttons/AddFab";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import Button from "@mui/material/Button";
-import {useUpdate} from "../../../../utils/hook/hooks";
 import {Stack} from "@mui/material";
 
 export const Step2 = memo(
@@ -18,7 +17,6 @@ export const Step2 = memo(
         const [filter, setFilter] = useState({serviceId: formik.values.serviceId})
         const [loading, setLoading] = useState(false)
         const dispatch = useDispatch()
-        const updated = useUpdate()
         const onClick = useCallback(
             catering =>
                 () => {

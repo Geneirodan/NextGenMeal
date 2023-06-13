@@ -26,12 +26,11 @@ export const SearchComponent = memo(
             query: query || ''
         }
         const formik = useFormik({initialValues, onSubmit})
-        return <form onSubmit={formik.handleSubmit}>
-            <CustomTextField
+        return <CustomTextField
                 name="query"
                 InputProps={{
                     endAdornment: (
-                        <IconButton variant="contained" position="start" type="submit">
+                        <IconButton variant="contained" position="start" onClick={formik.handleSubmit}>
                             <SearchIcon/>
                         </IconButton>
                     )
@@ -39,6 +38,5 @@ export const SearchComponent = memo(
                 formik={formik}
                 label={t("Search")}
                 sx={{width: "100%"}}/>
-        </form>;
     }
 )
