@@ -64,7 +64,7 @@ namespace Services
         public async Task<Result<OrderModel>> AddAsync(ClaimsPrincipal principal, OrderModel model)
         {
             await using var transaction = await context.Database.BeginTransactionAsync();
-            model.Status = OrderStatuses.UNDONE;
+            model.Status = OrderStatuses.Undone;
             var b = model.OrderDishes.All(od => context.Set<Dish>().Any(d => d.Id == od.DishId));
             if (!b)
                 return Result.Fail(Errors.INVALID_DISHES);
@@ -199,10 +199,10 @@ namespace Services
         }
 
         public async Task<Result> DoAsync(ClaimsPrincipal principal, int id) =>
-            await SetStatus(id, OrderStatuses.UNDONE, OrderStatuses.DONE);
+            await SetStatus(id, OrderStatuses.Undone, OrderStatuses.Done);
 
         public async Task<Result> ReceiveAsync(ClaimsPrincipal principal, int id) =>
-            await SetStatus(id, OrderStatuses.DONE, OrderStatuses.RECEIVED);
+            await SetStatus(id, OrderStatuses.Done, OrderStatuses.Received);
 
         private async Task<Result> SetStatus(int id, string oldStatus, string newStatus)
         {
@@ -211,7 +211,7 @@ namespace Services
                 return Result.Fail(Errors.NOT_FOUND);
             if (order.Status != oldStatus)
                 return Result.Fail(Errors.FORBIDDEN);
-            if (order.IsBox && newStatus == OrderStatuses.RECEIVED)
+            if (order.IsBox && newStatus == OrderStatuses.Received)
             {
                 var terminal = order.Catering!.Terminal;
                 var cellId = Array.IndexOf(terminal.Cells, order.Id.ToString());

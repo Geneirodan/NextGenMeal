@@ -2,8 +2,8 @@
 {
     public static class OrderStatuses
     {
-        public const string UNDONE = nameof(UNDONE);
-        public const string DONE = nameof(DONE);
-        public const string RECEIVED = nameof(RECEIVED);
+        public const string Undone = nameof(Undone);
+        public const string Done = nameof(Done);
+        public const string Received = nameof(Received);
     }
 }

@@ -39,11 +39,6 @@ export const LoginPage = memo(
                         <ErrorsSnackbar/>
                         <CustomTextField name="email" formik={formik} label={t("Email")}/>
                         <CustomTextField name="password" type="password" formik={formik} label={t("Password")}/>
-                        <Typography variant="body1" align="center">
-                            <NavLink to="/forgot">
-                                {t("Forgot password?")}
-                            </NavLink>
-                        </Typography>
                         <Stack spacing={2}>
                             <Button variant="contained" type="submit">
                                 {t("Log in")}

@@ -56,7 +56,7 @@ class UserViewModel : FormViewModel() {
                 val response = Api.patch(
                     "Account/ChangeName", body = ChangeNameRequest(newName.value.text)
                 )
-                if (response.status == HttpStatusCode.OK) user.value.name = newName.value.text
+                if (response.status == HttpStatusCode.OK) user.value = user.value.copy(name = newName.value.text)
                 else Api.handleError(response, BaseActivity.scaffoldState)
             }
         }
