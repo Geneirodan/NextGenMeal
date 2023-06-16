@@ -40,4 +40,4 @@ export const getOptimalDishes = (filter = null) => async dispatch => {
     dispatch(action(data))
     return response.ok
 }
-export const addOrder = order => commonPost('Order', order, setUpdated, setErrors)
+export const addOrder = order => commonPost('Order', order)

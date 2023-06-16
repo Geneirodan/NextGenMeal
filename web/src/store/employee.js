@@ -20,13 +20,13 @@ export const {employeesSuccess} = actions
 export const getEmployees = (filter = null) => commonGet('Account/GetEmployees', filter, employeesSuccess)
 export const register = data => async dispatch => {
     const response = await post(`Account/Register/Employee`, data, {callbackUrl: "/register/confirm"});
-    await handleResponse(response, dispatch, setUpdated, setErrors);
+    await handleResponse(response, dispatch);
 }
 export const rename = ({name, id}) => async dispatch => {
     const response = await patch(`Account/ChangeName/${id}`, {name});
-    await handleResponse(response, dispatch, setUpdated, setErrors);
+    await handleResponse(response, dispatch);
 }
 export const deleteEmployee = id => async dispatch => {
     const response = await del(`Account/Delete/${id}`)
-    await handleResponse(response, dispatch, setUpdated, setErrors);
+    await handleResponse(response, dispatch);
 }

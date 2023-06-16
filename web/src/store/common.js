@@ -41,19 +41,19 @@ export const commonGet = (url, filter, action) => async dispatch => {
         dispatch(action(data))
     }
 }
-export const commonPut = (url, data, setUpdated, setErrors) => async dispatch => {
+export const commonPut = (url, data) => async dispatch => {
     const response = await put(url, data, {id: data.id})
     await handleResponse(response, dispatch, setUpdated, setErrors);
 }
-export const commonPatch = (url, data, setUpdated, setErrors) => async dispatch => {
+export const commonPatch = (url, data) => async dispatch => {
     const response = await patch(url, data, {id: data.id})
     await handleResponse(response, dispatch, setUpdated, setErrors);
 }
-export const commonDelete = (url, id, setUpdated, setErrors) => async dispatch => {
+export const commonDelete = (url, id) => async dispatch => {
     const response = await del(url, {id})
     await handleResponse(response, dispatch, setUpdated, setErrors);
 }
-export const commonPost = (url, data, setUpdated, setErrors) => async dispatch => {
+export const commonPost = (url, data) => async dispatch => {
     const response = await post(url, data)
     await handleResponse(response, dispatch, setUpdated, setErrors);
 }

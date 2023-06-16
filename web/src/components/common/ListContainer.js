@@ -12,7 +12,6 @@ export const ListContainer = memo(
                 {
                     totalCount
                         ? <>
-                            <Paginator totalCount={totalCount} filter={filter} setFilter={setFilter}/>
                             {
                                 loading
                                     ? <Preloader/>

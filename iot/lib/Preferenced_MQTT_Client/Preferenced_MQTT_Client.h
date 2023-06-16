@@ -14,7 +14,7 @@ private:
     unsigned short port;
 
 public:
-    Preferenced_MQTT_Client(Preferences* preferences);
+    Preferenced_MQTT_Client(Preferences* preferences){ this->preferences = preferences;}
     char *getBroker() { return broker; }
     int getPort() { return port; }
     char *getPrefix() { return prefix; }

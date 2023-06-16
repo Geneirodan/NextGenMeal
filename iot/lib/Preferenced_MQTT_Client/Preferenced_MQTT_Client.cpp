@@ -1,10 +1,5 @@
 #include <Preferenced_MQTT_Client.h>
 
-Preferenced_MQTT_Client::Preferenced_MQTT_Client(Preferences* preferences)
-{
-    this->preferences = preferences;
-}
-
 void Preferenced_MQTT_Client::saveConfig()
 {
     preferences->putString("broker", broker);

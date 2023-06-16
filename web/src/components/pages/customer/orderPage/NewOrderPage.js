@@ -13,10 +13,11 @@ import {useDispatch, useSelector} from "react-redux";
 import {addOrder, selector} from "../../../../store/order";
 import * as yup from "yup";
 import {stringRequired} from "../../../../utils/validation";
-import {useStepping} from "../../../../utils/hook/hooks";
+import {useStepping, useUpdate} from "../../../../utils/hook/hooks";
 import {ErrorsSnackbar} from "../../../common/ErrorsSnackbar";
 import {roles} from "../../../../utils/constants";
 import {setUpdated} from "../../../../store/common";
+import {SuccessSnackbar} from "../../../common/SuccessSnackbar"
 
 const StepperComponent = memo(
     ({activeStep}) => {
@@ -44,6 +45,7 @@ export const NewOrderPage = memo(
         () => {
             const {t} = useTranslation()
             const dispatch = useDispatch()
+            const updated = useUpdate()
 
             const orderDishes = useSelector(selector("selectedDishes"))
 
@@ -91,15 +93,14 @@ export const NewOrderPage = memo(
                 []
             )
             return (
-                <form onSubmit={formik.handleSubmit}>
-                    <Stack spacing={2}>
-                        <StepperComponent activeStep={step}/>
-                        <Box flexGrow="1">
-                            {stepsComponents[step]}
-                        </Box>
-                        <ErrorsSnackbar/>
-                    </Stack>
-                </form>
+                <Stack spacing={2}>
+                    <StepperComponent activeStep={step}/>
+                    <Box flexGrow="1">
+                        {stepsComponents[step]}
+                    </Box>
+                    <ErrorsSnackbar/>
+                    <SuccessSnackbar open={updated}/>
+                </Stack>
             )
         }
     )

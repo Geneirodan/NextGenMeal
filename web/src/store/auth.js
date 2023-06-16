@@ -51,7 +51,7 @@ export const getRole = () => async dispatch => {
 
 export const signIn = ({email, password}) => async dispatch => {
     const response = await post(`Account/Login`, {email, password})
-    await handleResponse(response, dispatch, setUpdated, setErrors);
+    await handleResponse(response, dispatch);
 }
 
 export const signOut = () => async dispatch => {
@@ -70,11 +70,11 @@ export const register = ({name, email, password, confirmPassword}) =>
     async dispatch => {
         const data = {name, email, password, confirmPassword};
         const response = await post(`Account/Register`, data, {callbackUrl: `${window.location.origin}/confirm`})
-        await handleResponse(response, dispatch, setUpdated, setErrors)
+        await handleResponse(response, dispatch)
     }
 
 export const rename = ({name}) => async dispatch => {
     const response = await patch(`Account/ChangeName`, {name})
-    await handleResponse(response, dispatch, setUpdated, setErrors)
+    await handleResponse(response, dispatch)
 }
 export const getCountries = () => commonGet('languages', null, setCountries);
