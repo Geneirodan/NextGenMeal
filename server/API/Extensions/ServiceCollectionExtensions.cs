@@ -46,16 +46,19 @@ public static class ServiceCollectionExtensions
         return services.AddSingleton(client);
     }
 
-    public static IdentityBuilder AddIdentity(this IServiceCollection serviceCollection) =>
-        serviceCollection.AddIdentity<User, IdentityRole>(options =>
+    public static IServiceCollection AddIdentity(this IServiceCollection services)
+    {
+        services.AddIdentity<User, IdentityRole>(options =>
             {
                 options.Password.RequireNonAlphanumeric = false;
                 options.SignIn.RequireConfirmedEmail = true;
             })
             .AddEntityFrameworkStores<ApplicationContext>()
             .AddDefaultTokenProviders();
+        return services;
+    }
 
-    public static void AddAuth(this IServiceCollection services)
+    public static IServiceCollection AddAuth(this IServiceCollection services)
     {
         var googleAuthOptions = services.BuildServiceProvider().GetRequiredService<IOptions<GoogleAuthOptions>>().Value;
         services.AddAuthentication()
@@ -68,6 +71,7 @@ public static class ServiceCollectionExtensions
                     options.SaveTokens = true;
                     options.SignInScheme = IdentityConstants.ExternalScheme;
                 });
+        return services;
     }
 
     public static IServiceCollection AddServicesOptions(this IServiceCollection services, IConfiguration configuration) =>
@@ -77,6 +81,7 @@ public static class ServiceCollectionExtensions
             .Configure<EmailOptions>(configuration.GetSection(EmailOptions.Section))
             .Configure<OrderOptions>(configuration.GetSection(OrderOptions.Section))
             .Configure<PaginationOptions>(configuration.GetSection(PaginationOptions.Section));
+   
     public static IServiceCollection AddBusinessLogicServices(this IServiceCollection services) =>
         services
             .AddTransient<IEmailSender, EmailSender>()

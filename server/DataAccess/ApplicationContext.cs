@@ -36,6 +36,11 @@ public class ApplicationContext : IdentityDbContext<User>
             .Property(t => t.Id)
             .ValueGeneratedNever();
 
+        builder.Entity<Catering>()
+            .HasOne(x => x.Terminal)
+            .WithOne(x => x.Catering)
+            .HasForeignKey<Catering>(x => x.Id);
+        
         builder.Entity<OrderDish>()
             .HasKey(od => new { od.OrderId, od.DishId });
 
