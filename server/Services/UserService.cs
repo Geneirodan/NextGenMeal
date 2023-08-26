@@ -30,7 +30,7 @@ public class UserService : BaseService, IUserService
         SignInManager<User> signInManager,
         IEmailSender emailSender,
         RoleManager<IdentityRole> roleManager,
-        IConfiguration configuration,
+        IOptions<AdminOptions> configuration,
         ApplicationContext context,
         IOptions<PaginationOptions> paginationOptions) : base(paginationOptions)
     {
@@ -38,7 +38,7 @@ public class UserService : BaseService, IUserService
         this.signInManager = signInManager;
         this.emailSender = emailSender;
         this.context = context;
-        InitializeAsync(userManager, roleManager, configuration).Wait();
+        InitializeAsync(userManager, roleManager, configuration.Value).Wait();
     }
 
     public async Task<Result> AddPasswordAsync(string password, ClaimsPrincipal principal)
@@ -238,10 +238,10 @@ public class UserService : BaseService, IUserService
             return HandleIdentityResult(result);
         }
     }
-    private static async Task InitializeAsync(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+    private static async Task InitializeAsync(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, AdminOptions configuration)
     {
-        var adminEmail = configuration["Admin:Email"]!;
-        var adminPassword = configuration["Admin:Password"]!;
+        var adminEmail = configuration.Email;
+        var adminPassword = configuration.Password;
         await AddRole(roleManager, Roles.Admin);
         await AddRole(roleManager, Roles.Customer);
         await AddRole(roleManager, Roles.Employee);

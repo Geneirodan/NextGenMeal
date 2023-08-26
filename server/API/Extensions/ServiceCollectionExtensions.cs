@@ -80,6 +80,7 @@ public static class ServiceCollectionExtensions
             .Configure<MqttOptions>(configuration.GetSection(MqttOptions.Section))
             .Configure<EmailOptions>(configuration.GetSection(EmailOptions.Section))
             .Configure<OrderOptions>(configuration.GetSection(OrderOptions.Section))
+            .Configure<AdminOptions>(configuration.GetSection(AdminOptions.Section))
             .Configure<PaginationOptions>(configuration.GetSection(PaginationOptions.Section));
    
     public static IServiceCollection AddBusinessLogicServices(this IServiceCollection services) =>
@@ -88,6 +89,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IUserService, UserService>()
             .AddScoped<IDishService, DishService>()
             .AddScoped<ICateringService, CateringService>()
+            .AddScoped<IDishTypeService, DishTypeService>()
             .AddScoped<IOrderService, OrderService>()
             .AddScoped<ITerminalService, TerminalService>();
 }

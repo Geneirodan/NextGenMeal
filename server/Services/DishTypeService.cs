@@ -8,11 +8,18 @@ using Services.Options;
 
 namespace Services;
 
-public class DishTypeService : BaseService
+public interface IDishTypeService
+{
+    Task<Result<string>> AddAsync(string type);
+    Task<Result> DeleteAsync(string type);
+    Task<List<string>> GetAsync();
+}
+
+public class DishTypeService : BaseService, IDishTypeService
 {
     private readonly ApplicationContext context;
 
-    protected DishTypeService(ApplicationContext context, IOptions<PaginationOptions> paginationOptions) 
+    public DishTypeService(ApplicationContext context, IOptions<PaginationOptions> paginationOptions) 
         : base(paginationOptions) => this.context = context;
 
     public async Task<Result<string>> AddAsync(string type)
@@ -35,5 +42,5 @@ public class DishTypeService : BaseService
         return Result.Ok();
     }
 
-    protected async Task<List<string>> GetAsync() => await context.DishTypes.Select(x => x.Name).ToListAsync();
+    public async Task<List<string>> GetAsync() => await context.DishTypes.Select(x => x.Name).ToListAsync();
 }

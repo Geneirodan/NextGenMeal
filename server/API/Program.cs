@@ -12,10 +12,11 @@ var path = Path.Combine(currentDirectory, "main.log");
 var provider = new FileLoggerProvider(path);
 builder.Logging.AddProvider(provider);
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = builder.Configuration.GetConnectionString("PostgreSQL");
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 builder.Services
-    .AddDbContext<ApplicationContext>(options => options.UseSqlite(connectionString))
+    .AddDbContext<ApplicationContext>(options => options.UseNpgsql(connectionString))
     .AddServicesOptions(builder.Configuration)
     .AddMqttClient()
     .AddIdentity()
