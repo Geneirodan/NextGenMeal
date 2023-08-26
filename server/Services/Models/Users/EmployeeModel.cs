@@ -1,7 +1,6 @@
-﻿namespace Services.Models.Users
+﻿namespace Services.Models.Users;
+
+public class EmployeeModel : UserModel
 {
-    public class EmployeeModel : UserModel
-    {
-        public int CateringId { get; set; }
-    }
+    public int CateringId { get; init; }
 }

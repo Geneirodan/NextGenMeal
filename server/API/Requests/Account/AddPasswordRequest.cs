@@ -1,15 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Utils.Constants;
+﻿using Services.Constants;
+using System.ComponentModel.DataAnnotations;
 
-namespace API.Requests.Account
+namespace API.Requests.Account;
+
+public class AddPasswordRequest
 {
-    public class AddPasswordRequest
-    {
 
-        [DataType(DataType.Password), Required]
-        public string NewPassword { get; set; } = null!;
+    [DataType(DataType.Password)]
+    [Required]
+    public string NewPassword { get; init; } = null!;
 
-        [DataType(DataType.Password), Required, Compare(nameof(NewPassword), ErrorMessage = Errors.PASSWORD_ARE_NOT_THE_SAME)]
-        public string ConfirmNewPassword { get; set; } = null!;
-    }
+    [DataType(DataType.Password)]
+    [Required]
+    [Compare(nameof(NewPassword), ErrorMessage = Errors.PasswordAreNotTheSame)]
+    public string ConfirmNewPassword { get; init; } = null!;
 }

@@ -1,7 +1,6 @@
-﻿namespace DataAccess.Entities.Users
+﻿namespace DataAccess.Entities.Users;
+
+public class Customer : User
 {
-    public class Customer : User
-    {
-        public virtual List<Order> Orders { get; set; } = null!;
-    }
+    public virtual List<Order> Orders { get; set; } = null!;
 }

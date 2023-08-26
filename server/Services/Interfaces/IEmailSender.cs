@@ -1,8 +1,7 @@
-﻿namespace Services.Interfaces
+﻿namespace Services.Interfaces;
+
+public interface IEmailSender
 {
-    public interface IEmailSender
-    {
-        public record struct EmailTemplate(string Subject, string Filename);
-        public Task SendEmailAsync(string email, EmailTemplate template, params object?[] parameters);
-    }
+    public Task SendEmailAsync(string email, EmailTemplate template, params object?[] parameters);
+    public record struct EmailTemplate(string Subject, string Filename);
 }

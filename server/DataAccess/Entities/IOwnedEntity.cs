@@ -1,7 +1,6 @@
-﻿namespace DataAccess.Entities
+﻿namespace DataAccess.Entities;
+
+public interface IOwnedEntity
 {
-    public interface IOwnedEntity
-    {
-        public string? GetOwnerId();
-    }
+    public string? GetOwnerId();
 }

@@ -1,15 +1,13 @@
-﻿namespace Services.Models
-{
-    public class TerminalModel : EntityModel
-    {
-        private int cellCount;
+﻿namespace Services.Models;
 
-        public string SerialNumber { get; set; } = null!;
-        public int CellCount
-        {
-            get => cellCount == 0 ? Cells.Length : cellCount;
-            set => cellCount = value;
-        }
-        public string[] Cells { get; set; } = null!;
+public class TerminalModel : EntityModel
+{
+    private int cellCount;
+    public int CellCount
+    {
+        get => cellCount == 0 ? Cells.Length : cellCount;
+        set => cellCount = value;
     }
+    public string SerialNumber { get; init; } = null!;
+    public string[] Cells { get; set; } = null!;
 }

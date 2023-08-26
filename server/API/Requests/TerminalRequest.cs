@@ -1,14 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace API.Requests
+namespace API.Requests;
+
+public class TerminalRequest : IRequestBody
 {
-    public class TerminalRequest : IRequestBody
-    {
-        [Required]
-        public string SerialNumber { get; set; } = null!;
-        [Required]
-        public int Id { get; set; }
-        [Required]
-        public int CellCount { get; set; }
-    }
+    [Required]
+    public string SerialNumber { get; set; } = null!;
+    [Required]
+    public int Id { get; set; }
+    [Required]
+    public int CellCount { get; set; }
 }

@@ -1,15 +1,13 @@
-﻿namespace Services.Models
-{
-    public class OrderModel : EntityModel
-    {
-        public decimal Price { get; set; }
-        public string Status { get; set; } = null!;
-        public DateTime Time { get; set; }
-        public bool IsBox { get; set; }
+﻿namespace Services.Models;
 
-        public string? CustomerId { get; set; }
-        public int CateringId { get; set; }
-        public CateringModel Catering { get; set; } = null!;
-        public List<OrderDishModel> OrderDishes { get; set; } = null!;
-    }
+public class OrderModel : EntityModel
+{
+    public decimal Price { get; init; }
+    public string Status { get; set; } = null!;
+    public DateTime Time { get; init; }
+    public bool IsBox { get; init; }
+    public string? CustomerId { get; init; }
+    public int CateringId { get; init; }
+    public CateringModel Catering { get; init; } = null!;
+    public List<OrderDishModel> OrderDishes { get; init; } = null!;
 }

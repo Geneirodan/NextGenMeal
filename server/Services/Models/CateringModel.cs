@@ -1,13 +1,11 @@
-﻿namespace Services.Models
-{
-    public class CateringModel : EntityModel
-    {
-        public string Name { get; set; } = null!;
-        public string Street { get; set; } = null!;
-        public string City { get; set; } = null!;
-        public string State { get; set; } = null!;
+﻿namespace Services.Models;
 
-        public string ServiceId { get; set; } = null!;
-        public TerminalModel? Terminal { get; set; }
-    }
+public class CateringModel : EntityModel
+{
+    public string Name { get; init; } = null!;
+    public string Street { get; init; } = null!;
+    public string City { get; init; } = null!;
+    public string State { get; init; } = null!;
+    public string ServiceId { get; init; } = null!;
+    public TerminalModel? Terminal { get; init; }
 }

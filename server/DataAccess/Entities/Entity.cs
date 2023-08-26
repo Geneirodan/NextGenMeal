@@ -1,9 +1,8 @@
-﻿namespace DataAccess.Entities
-{
-    public abstract class Entity : IOwnedEntity
-    {
-        public int Id { get; set; }
+﻿namespace DataAccess.Entities;
 
-        public abstract string? GetOwnerId();
-    }
+public abstract class Entity : IOwnedEntity
+{
+    public int Id { get; set; }
+
+    public abstract string? GetOwnerId();
 }

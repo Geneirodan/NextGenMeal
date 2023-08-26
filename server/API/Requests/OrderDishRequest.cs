@@ -1,8 +1,7 @@
-﻿namespace API.Requests
+﻿namespace API.Requests;
+
+public class OrderDishRequest : IRequestBody
 {
-    public class OrderDishRequest : IRequestBody
-    {
-        public int Quantity { get; set; }
-        public int DishId { get; set; }
-    }
+    public int Quantity { get; set; }
+    public int DishId { get; set; }
 }

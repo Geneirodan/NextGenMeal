@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Services\Servic
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\DataAccess.csproj", "{67DB186C-B7A5-4EBB-90F6-6205069C03AC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utils", "Utils\Utils.csproj", "{65FC8404-F833-4B0B-8E07-6E648B118A48}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +27,6 @@ Global
 		{67DB186C-B7A5-4EBB-90F6-6205069C03AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{67DB186C-B7A5-4EBB-90F6-6205069C03AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{67DB186C-B7A5-4EBB-90F6-6205069C03AC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{65FC8404-F833-4B0B-8E07-6E648B118A48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{65FC8404-F833-4B0B-8E07-6E648B118A48}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{65FC8404-F833-4B0B-8E07-6E648B118A48}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{65FC8404-F833-4B0B-8E07-6E648B118A48}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

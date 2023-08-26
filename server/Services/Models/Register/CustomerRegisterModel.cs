@@ -1,13 +1,12 @@
 ﻿using DataAccess.Entities.Users;
 using Mapster;
-using Utils.Constants;
+using Services.Constants;
 
-namespace Services.Models.Register
+namespace Services.Models.Register;
+
+public class CustomerRegisterModel : RegisterModel
 {
-    public class CustomerRegisterModel : RegisterModel
-    {
-        public override Customer Create() => this.Adapt<Customer>();
+    public override Customer Create() => this.Adapt<Customer>();
 
-        public override string GetRole() => Roles.Customer;
-    }
+    public override string GetRole() => Roles.Customer;
 }

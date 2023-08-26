@@ -1,6 +1,5 @@
-﻿namespace API.Requests
+﻿namespace API.Requests;
+
+public interface IRequestBody
 {
-    public interface IRequestBody
-    {
-    }
 }

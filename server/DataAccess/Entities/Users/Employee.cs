@@ -1,9 +1,8 @@
-﻿namespace DataAccess.Entities.Users
+﻿namespace DataAccess.Entities.Users;
+
+public class Employee : User, IOwnedEntity
 {
-    public class Employee : User, IOwnedEntity
-    {
-        public int CateringId { get; set; }
-        public virtual Catering Catering { get; set; } = null!;
-        public string? GetOwnerId() => Catering.GetOwnerId();
-    }
+    public int CateringId { get; set; }
+    public virtual Catering Catering { get; set; } = null!;
+    public string GetOwnerId() => Catering.GetOwnerId();
 }

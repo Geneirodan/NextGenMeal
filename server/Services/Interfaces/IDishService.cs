@@ -1,9 +1,8 @@
 ﻿using Services.Models;
 
-namespace Services.Interfaces
+namespace Services.Interfaces;
+
+public interface IDishService : ICrudService<DishModel>
 {
-    public interface IDishService : ICrudService<DishModel>
-    {
-        public Task<PagedArrayModel<DishModel>> GetAsync(int cateringId, string[]? types, int page, string query);
-    }
+    public Task<PagedArrayModel<DishModel>> GetAsync(int cateringId, string[]? types, int page, string query);
 }

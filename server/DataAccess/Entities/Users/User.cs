@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace DataAccess.Entities.Users
+namespace DataAccess.Entities.Users;
+
+public class User : IdentityUser
 {
-    public class User : IdentityUser
-    {
-        public string Name { get; set; } = null!;
-    }
+    public string Name { get; set; } = null!;
 }

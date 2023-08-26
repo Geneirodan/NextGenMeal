@@ -26,7 +26,7 @@ const {actions, name, reducer} = createSlice({
 export default reducer
 export const selector = getSelector(name)
 export const {setErrors, resetErrors, setUpdated} = actions
-export const handleResponse = async (response, dispatch, setUpdated, setErrors) => {
+export const handleResponse = async (response, dispatch) => {
     if (response.ok)
         dispatch(setUpdated(true))
     else {

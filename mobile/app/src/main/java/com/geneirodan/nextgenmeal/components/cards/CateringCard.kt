@@ -27,13 +27,14 @@ fun CateringCard(catering: Catering, onClick: () -> Unit) {
             Column(modifier = Modifier.padding(5.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(text = "${stringResource(R.string.name)}: $name ")
-                    if (terminal != null)
+                    terminal?.apply{
                         Icon(
                             Icons.Outlined.Inventory2,
                             "",
                             modifier = Modifier.size(16.dp),
                             tint = MaterialTheme.colors.primary
                         )
+                    }
                 }
                 Text(text = "${stringResource(R.string.city)}: $city")
                 Text(text = "${stringResource(R.string.state)}: $state")

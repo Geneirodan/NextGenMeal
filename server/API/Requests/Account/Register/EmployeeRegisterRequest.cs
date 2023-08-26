@@ -1,12 +1,11 @@
 ﻿using Services.Models.Register;
 using System.ComponentModel.DataAnnotations;
 
-namespace API.Requests.Account.Register
+namespace API.Requests.Account.Register;
+
+public class EmployeeRegisterRequest : RegisterRequest
 {
-    public class EmployeeRegisterRequest : RegisterRequest
-    {
-        [Required]
-        public int CateringId { get; set; }
-        public override EmployeeRegisterModel CreateModel() => CreateModel<EmployeeRegisterModel>();
-    }
+    [Required]
+    public int CateringId { get; init; }
+    public override EmployeeRegisterModel CreateModel() => CreateModel<EmployeeRegisterModel>();
 }

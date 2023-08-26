@@ -1,8 +1,7 @@
-﻿namespace DataAccess.Entities.Users
+﻿namespace DataAccess.Entities.Users;
+
+public class Service : User
 {
-    public class Service : User
-    {
-        public string Country { get; set; } = null!;
-        public virtual List<Catering> Caterings { get; set; } = null!;
-    }
+    public string Country { get; set; } = null!;
+    public virtual List<Catering> Caterings { get; set; } = null!;
 }
