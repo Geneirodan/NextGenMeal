@@ -24,13 +24,4 @@ public class DishController : CrudController<DishModel, DishRequest>
         var dishService = service as IDishService;
         return await dishService!.GetAsync(cateringId, types?.Split(','), page, query);
     }
-
-    // [HttpGet("Types")]
-    // [AllowAnonymous]
-    // [ProducesResponseType(StatusCodes.Status200OK)]
-    // public ActionResult<string?[]> GetTypes() => configuration.GetSection("Dish:Types")
-    //     .GetChildren()
-    //     .AsEnumerable()
-    //     .Select(x => x.Value)
-    //     .ToArray();
 }

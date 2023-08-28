@@ -72,13 +72,13 @@ public abstract class CrudService<TModel, TEntity> : BaseService, ICrudService<T
     }
 
     protected async Task<PagedArrayModel<TModel>> GetAsync(int page,
-        Expression<Func<TEntity, bool>> predicate,
         Expression<Func<TEntity, object>> keySelector,
-        bool isDesc = false)
+        params Expression<Func<TEntity, bool>>[] predicates)
     {
-        var query = context.Set<TEntity>().Where(predicate);
-        query = isDesc ? query.OrderByDescending(keySelector) : query.OrderBy(keySelector);
-        var entities = await query.Skip((page - 1) * ItemsPerPage)
+        IQueryable<TEntity> query = context.Set<TEntity>();
+        query = predicates.Aggregate(query, (current, expression) => current.Where(expression));
+        var entities = await query.OrderBy(keySelector)
+            .Skip((page - 1) * ItemsPerPage)
             .Take(ItemsPerPage)
             .ToListAsync();
         var models = entities.Adapt<List<TModel>>();

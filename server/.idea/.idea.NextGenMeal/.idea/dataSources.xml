@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="database" uuid="52db964a-53e3-4dc6-a0f6-337388e59085">
-      <driver-ref>sqlite.xerial</driver-ref>
+    <data-source source="LOCAL" name="NextGenMeal@localhost" uuid="8d0b6e86-1285-4894-b258-174d819e63fc">
+      <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
-      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:D:\Source\NextGenMeal\server\API\database.db</jdbc-url>
+      <configured-by-url>true</configured-by-url>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://localhost:5432/NextGenMeal?password=930228&amp;user=postgres</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>

@@ -27,7 +27,7 @@ public abstract class CrudController<TModel, TRequest> : BaseController
     {
         var model = request.Adapt<TModel>();
         var result = await service.AddAsync(User, model);
-        return HandleResult(result);
+        return HandleCreatedResult(result);
     }
 
     [HttpPut]

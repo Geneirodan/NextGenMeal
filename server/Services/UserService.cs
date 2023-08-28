@@ -5,7 +5,6 @@ using Mapster;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Services.Constants;
 using Services.Interfaces;
@@ -116,9 +115,9 @@ public class UserService : BaseService, IUserService
     {
         var result = await signInManager.PasswordSignInAsync(email, password, true, false);
         if (result.IsLockedOut)
-            return Result.Fail(Errors.IsLockedOut);
+            return Result.Fail(Errors.Forbidden).WithError(Errors.IsLockedOut);
         if (result.IsNotAllowed)
-            return Result.Fail(Errors.IsNotAllowed);
+            return Result.Fail(Errors.Forbidden).WithError(Errors.IsNotAllowed);
         return result.Succeeded ? Result.Ok() : Result.Fail(Errors.InvalidCredentials);
     }
 
@@ -130,9 +129,9 @@ public class UserService : BaseService, IUserService
 
         var user = model.Create();
         var result = await userManager.CreateAsync(user, model.Password);
-        if (!result.Succeeded) Fail(result);
+        if (!result.Succeeded) return Fail(result);
         result = await userManager.AddToRoleAsync(user, model.GetRole());
-        if (!result.Succeeded) Fail(result);
+        if (!result.Succeeded) return Fail(result);
         var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
         callbackUrl += $"?id={user.Id}&code={UrlEncoder.Default.Encode(code)}";
         _ = emailSender.SendEmailAsync(model.Email, EmailTemplates.Register, callbackUrl);
@@ -246,7 +245,8 @@ public class UserService : BaseService, IUserService
         await AddRole(roleManager, Roles.Customer);
         await AddRole(roleManager, Roles.Employee);
         await AddRole(roleManager, Roles.Service);
-        if (await userManager.FindByEmailAsync(adminEmail) is not null) return;
+        var user = await userManager.FindByEmailAsync(adminEmail);
+        if (user is not null) return;
         var admin = new User
         {
             Email = adminEmail,

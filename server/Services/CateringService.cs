@@ -18,12 +18,12 @@ public class CateringService : CrudService<CateringModel, Catering>, ICateringSe
     }
     public async Task<PagedArrayModel<CateringModel>> GetAsync(string serviceId, int page, string query) =>
         await base.GetAsync(page,
+            x => x.Id,
             x => x.ServiceId == serviceId
                  && (x.Name.Contains(query)
                      || x.City.Contains(query)
                      || x.State.Contains(query)
-                     || x.Street.Contains(query)),
-            x => x.Id);
+                     || x.Street.Contains(query)));
 
     public async Task<PagedArrayModel<CateringModel>> GetAsync(ClaimsPrincipal principal, int page, string query)
     {

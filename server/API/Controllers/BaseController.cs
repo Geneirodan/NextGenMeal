@@ -14,8 +14,8 @@ public abstract class BaseController : ControllerBase
     {
         return result.Errors[0].Message switch
         {
-            Errors.NotFound => NotFound(result.Errors),
-            Errors.Forbidden => Forbid(result.Errors),
+            Errors.NotFound => NotFound(result.Errors.Skip(1)),
+            Errors.Forbidden => Forbid(result.Errors.Skip(1)),
             _ => BadRequest(result.Errors)
         };
     }
